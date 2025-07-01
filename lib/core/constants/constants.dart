@@ -1,0 +1,23 @@
+import 'dart:ui';
+
+const String fontFamilyEN = "Poppins";
+const String fontFamilyAR = "AR_GE_SS";
+bool isSelectedLocalEn = true;
+String userToken = '';
+bool showSplash = true;
+bool isServicesLoaded = false;
+String appVersion = '';
+Size screenSize = const Size(550, 730);
+int selectedSideBarIndex = 0;
+const String userID = '118';
+// const String username = 'sudheer.akula';
+//const String username = 'mooza.binyeem';
+//const String username ='shaikha.almuheiri';
+//const String username ='shaikha.bintook';
+const String username = 'syed.ibrahim';
+//const String username = 'noora.bolasly';
+//const String username = 'noushad.kolliyath';
+//const String username = 'asma.alraee';
+//const String username = 'prathap.rajendiran';
+//const String username = 'akbar.shaik';
+//const String username = 'sahil.ahmed';
