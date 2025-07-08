@@ -51,7 +51,6 @@ class OutreachCampFormScreen extends BaseScreenWidget {
     final step5formFields = List<FormEntity>.empty(growable: true);
     final step6formFields = List<FormEntity>.empty(growable: true);
     final step7formFields = List<FormEntity>.empty(growable: true);
-    final step8formFields = List<FormEntity>.empty(growable: true);
     step1formFields.addAll([
       FormEntity()
         ..name = 'integratedoutreachcampform'
@@ -137,7 +136,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
     step2formFields.addAll([
       FormEntity()
         ..name = 'step2Header'
-        ..labelEn = 'Personal Details'
+        ..labelEn = 'Demographic Details'
         ..labelTe = 'Personal Details'
         ..type = 'labelheader',
       FormEntity()
@@ -218,6 +217,17 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           'doSort': false,
         }
         ..onDatachnage = (value) {
+          final childs =
+              step4formFields
+                  .where(
+                    (item) =>
+                        ['breastcancer', 'cervicalcancer'].contains(item.name),
+                  )
+                  .toList();
+          for (var child in childs) {
+            child.isHidden = value.id != 2;
+            child.fieldValue = null;
+          }
           _onDataChanged(false);
         },
       FormEntity()
@@ -399,6 +409,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       FormEntity()
         ..name = 'ontreatmentknowndiabetes'
         ..type = 'confirmcheck'
+        ..verticalSpace = 0
+        ..horizontalSpace = 25
         ..labelEn = 'On Treatment'
         ..labelTe = 'On Treatment'
         ..isHidden = true
@@ -424,6 +436,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       FormEntity()
         ..name = 'ontreatmentknownhtn'
         ..type = 'confirmcheck'
+        ..verticalSpace = 0
+        ..horizontalSpace = 25
         ..labelEn = 'On Treatment'
         ..labelTe = 'On Treatment'
         ..isHidden = true
@@ -449,27 +463,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       FormEntity()
         ..name = 'ontreatmentknownhepatitis'
         ..type = 'confirmcheck'
+        ..verticalSpace = 5
+        ..horizontalSpace = 25
         ..labelEn = 'On Treatment'
         ..labelTe = 'On Treatment'
         ..isHidden = true
-        ..onDatachnage = (value) {
-          _onDataChanged(false);
-        },
-    ]);
-    step4formFields.addAll([
-      FormEntity()
-        ..name = 'step4header'
-        ..labelEn = 'Other Comorbidity'
-        ..labelTe = 'Other Comorbidity'
-        ..type = 'labelheader',
-      FormEntity()
-        ..name = 'othercomorbidity'
-        ..type = 'text'
-        ..validation = (FormValidationEntity()..required = true)
-        ..labelEn = 'Specify'
-        ..labelTe = 'Specify'
-        ..placeholderEn = 'Specify'
-        ..placeholderTe = 'Specify'
         ..onDatachnage = (value) {
           _onDataChanged(false);
         },
@@ -490,15 +488,15 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           _onDataChanged(false);
         },
     ]);
-    step5formFields.addAll([
+    step4formFields.addAll([
       FormEntity()
-        ..name = 'step5header'
+        ..name = 'step4header'
         ..labelEn = 'NCD Screening'
         ..labelTe = 'NCD Screening'
         ..type = 'labelheader',
       FormEntity()
         ..name = 'hypertension'
-        ..type = 'listcheckbox'
+        ..type = 'ncdscreening'
         ..labelEn = 'Hypertension'
         ..labelTe = 'Hypertension'
         ..inputFieldData = [
@@ -508,7 +506,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ],
       FormEntity()
         ..name = 'diabetes'
-        ..type = 'listcheckbox'
+        ..type = 'ncdscreening'
         ..labelEn = 'Diabetes'
         ..labelTe = 'Diabetes'
         ..inputFieldData = [
@@ -518,7 +516,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ],
       FormEntity()
         ..name = 'oralcancer'
-        ..type = 'listcheckbox'
+        ..type = 'ncdscreening'
         ..labelEn = 'Oral Cancer'
         ..labelTe = 'Oral Cancer'
         ..inputFieldData = [
@@ -528,7 +526,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ],
       FormEntity()
         ..name = 'breastcancer'
-        ..type = 'listcheckbox'
+        ..type = 'ncdscreening'
         ..labelEn = 'Breast Cancer'
         ..labelTe = 'Breast Cancer'
         ..inputFieldData = [
@@ -538,7 +536,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ],
       FormEntity()
         ..name = 'cervicalcancer'
-        ..type = 'listcheckbox'
+        ..type = 'ncdscreening'
         ..labelEn = 'Cervical Cancer'
         ..labelTe = 'Cervical Cancer'
         ..inputFieldData = [
@@ -547,9 +545,9 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           {'label': 'Referred', 'value': false},
         ],
     ]);
-    step6formFields.addAll([
+    step5formFields.addAll([
       FormEntity()
-        ..name = 'step6header'
+        ..name = 'step5header'
         ..labelEn = 'HIV Screening'
         ..labelTe = 'HIV Screening'
         ..type = 'labelheader',
@@ -560,7 +558,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ..labelTe = 'Rapid Screening Offered'
         ..onDatachnage = (value) {
           final child =
-              step6formFields
+              step5formFields
                   .where((item) => item.name == 'hiveresult')
                   .firstOrNull;
           if (child != null) {
@@ -576,7 +574,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ..type = 'collection'
         ..isHidden = true
         ..validation = (FormValidationEntity()..required = true)
-        ..placeholderEn = 'Select Resuly'
+        ..placeholderEn = 'Select Result'
         ..inputFieldData = {
           'items':
               [
@@ -595,7 +593,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         }
         ..onDatachnage = (value) {
           final child =
-              step6formFields
+              step5formFields
                   .where((item) => item.name == 'referredtoICTC')
                   .firstOrNull;
           if (child != null) {
@@ -617,14 +615,49 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ..isHidden = true
         ..onDatachnage = (value) {
           final child =
-              step6formFields
+              step5formFields
                   .where((item) => item.name == 'confirmedatICTC')
+                  .firstOrNull;
+          final child2 =
+              step5formFields
+                  .where((item) => item.name == 'ictcnames')
                   .firstOrNull;
           if (child != null) {
             child.isHidden = !value;
             child.fieldValue = null;
           }
+          if (child2 != null) {
+            child2.isHidden = !value;
+            child2.fieldValue = null;
+          }
           _onDataChanged(true);
+        },
+      FormEntity()
+        ..name = 'ictcnames'
+        ..labelEn = 'ICTC Names'
+        ..labelTe = 'ICTC Names'
+        ..type = 'collection'
+        ..isHidden = true
+        ..validation = (FormValidationEntity()..required = true)
+        ..placeholderEn = 'Select ICTC Names'
+        ..inputFieldData = {
+          'items':
+              [
+                    {'id': '1', 'name': 'Reactive'},
+                    {'id': '2', 'name': 'Non‑Reactive'},
+                    {'id': '3', 'name': 'Not Done'},
+                  ]
+                  .map(
+                    (item) =>
+                        NameIDModel.fromDistrictsJson(
+                          item as Map<String, dynamic>,
+                        ).toEntity(),
+                  )
+                  .toList(),
+          'doSort': false,
+        }
+        ..onDatachnage = (value) {
+          _onDataChanged(false);
         },
       FormEntity()
         ..name = 'confirmedatICTC'
@@ -633,7 +666,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ..labelTe = 'Confirmed at ICTC?'
         ..isHidden = true
         ..onDatachnage = (value) {
-          final childs = step6formFields.where(
+          final childs = step5formFields.where(
             (item) =>
                 ['referredtoART', 'partnertestingdone'].contains(item.name),
           );
@@ -659,11 +692,15 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ..labelTe = 'Partner Testing Done?'
         ..isHidden = true
         ..onDatachnage = (value) {
-          final child =
-              step6formFields
-                  .where((item) => item.name == 'partnerresult')
-                  .firstOrNull;
-          if (child != null) {
+          final childs = step5formFields.where(
+            (item) => [
+              'partnerresult',
+              'partnername',
+              'partnerdistrict',
+              'partnermandal',
+            ].contains(item.name),
+          );
+          for (var child in childs) {
             child.isHidden = !value;
             child.fieldValue = null;
           }
@@ -695,11 +732,75 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ..onDatachnage = (value) {
           _onDataChanged(false);
         },
+      FormEntity()
+        ..name = 'partnername'
+        ..isHidden = true
+        ..labelEn = 'Partner Name'
+        ..labelTe = 'Partner Name'
+        ..type = 'text'
+        ..validation =
+            (FormValidationEntity()
+              ..required = true
+              ..regex = nameRegExp)
+        ..messages =
+            (FormMessageEntity()
+              ..requiredEn = 'Please Enter Partner Name'
+              ..requiredTe = 'Please Enter Partner Name'
+              ..regexEn = 'Please Enter Valid Partner Name'
+              ..regexTe = 'Please Enter Valid Partner Name')
+        ..placeholderEn = 'Partner Name'
+        ..placeholderTe = 'Partner Name'
+        ..onDatachnage = (value) {
+          _onDataChanged(false);
+        },
+      FormEntity()
+        ..name = 'partnerdistrict'
+        ..isHidden = true
+        ..labelEn = 'Partner District'
+        ..labelTe = 'Partner District'
+        ..type = 'collection'
+        ..validation = (FormValidationEntity()..required = true)
+        ..placeholderEn = 'Select Partner District'
+        ..inputFieldData = {
+          'items':
+              districts
+                  .map(
+                    (item) =>
+                        NameIDModel.fromDistrictsJson(
+                          item as Map<String, dynamic>,
+                        ).toEntity(),
+                  )
+                  .toList(),
+        }
+        ..onDatachnage = (value) {
+          final child =
+              step5formFields
+                  .where((item) => item.name == 'partnermandal')
+                  .firstOrNull;
+          if (child != null) {
+            child.url = mandalListApiUrl;
+            child.urlInputData = {'dist_id': value.id};
+            child.inputFieldData = null;
+            child.fieldValue = null;
+          }
+          _onDataChanged(true);
+        },
+      FormEntity()
+        ..name = 'partnermandal'
+        ..isHidden = true
+        ..labelEn = 'Partner Mandal'
+        ..labelTe = 'Partner Mandal'
+        ..type = 'collection'
+        ..validation = (FormValidationEntity()..required = true)
+        ..placeholderEn = 'Select Partner Mandal'
+        ..onDatachnage = (value) {
+          _onDataChanged(false);
+        },
     ]);
-    step7formFields.addAll([
+    step6formFields.addAll([
       FormEntity()
         ..name = 'step7header'
-        ..labelEn = 'STI Screening'
+        ..labelEn = 'Other Screening'
         ..labelTe = 'STI Screening'
         ..type = 'labelheader',
       FormEntity()
@@ -712,35 +813,37 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           {'label': 'Result', 'value': false, 'type': 'collection'},
         ],
       FormEntity()
-        ..name = 'diabetes'
+        ..name = 'hepatitisB'
         ..type = 'listcheckbox'
-        ..labelEn = 'Diabetes'
-        ..labelTe = 'Diabetes'
+        ..labelEn = 'Hepatitis-B'
+        ..labelTe = 'Hepatitis-B'
         ..inputFieldData = [
           {'label': 'Done', 'value': false},
           {'label': 'Result', 'value': false, 'type': 'collection'},
         ],
       FormEntity()
-        ..name = 'oralcancer'
+        ..name = 'hepatitisC'
         ..type = 'listcheckbox'
-        ..labelEn = 'Oral Cancer'
-        ..labelTe = 'Oral Cancer'
+        ..labelEn = 'Hepatitis-C'
+        ..labelTe = 'Hepatitis-C'
         ..inputFieldData = [
           {'label': 'Done', 'value': false},
           {'label': 'Result', 'value': false, 'type': 'collection'},
         ],
     ]);
-    step8formFields.addAll([
+    step7formFields.addAll([
       FormEntity()
         ..name = 'step8header'
         ..labelEn = 'Aditional Details'
         ..labelTe = 'Aditional Details'
         ..type = 'labelheader',
       FormEntity()
-        ..name = 'reports'
+        ..name = 'campphotos'
         ..type = 'file'
-        ..labelEn = 'Reports'
-        ..labelTe = 'Reports'
+        ..labelEn = 'Upload Camp Photos'
+        ..labelTe = 'Upload Camp Photos'
+        ..placeholderEn = 'Upload Camp Photos'
+        ..placeholderTe = 'Upload Camp Photos'
         ..onDatachnage = (value) {
           _onDataChanged(false);
         },
@@ -763,7 +866,6 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       step5formFields,
       step6formFields,
       step7formFields,
-      step8formFields,
     ];
   }
 
@@ -896,17 +998,20 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                         ],
                         InkWell(
                           onTap: () async {
-                            if (!isDataValid||_formKey.currentState?.validate()!=true) {
+                            if (!isDataValid ||
+                                _formKey.currentState?.validate() != true) {
                               return;
                             }
                             if (_stepNotifier.value == 2) {
                               final fieldAdhar =
                                   formFields[1]
-                                      .where((item) => item.name == 'consent')
+                                      .where(
+                                        (item) => item.name == 'mobilenumber',
+                                      )
                                       .firstOrNull;
                               final fieldNumber =
                                   formFields[1]
-                                      .where((item) => item.name == 'consent')
+                                      .where((item) => item.name == 'adhar')
                                       .firstOrNull;
                               if ((fieldAdhar?.fieldValue ?? '').isEmpty ==
                                       true &&

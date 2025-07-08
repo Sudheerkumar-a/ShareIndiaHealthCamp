@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
@@ -14,6 +13,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/checkbox_list
 import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/location_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/multi_select_dropdown_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/ncd_screening_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/radio_items_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/right_icon_text_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/upload_attachment_widget.dart';
@@ -69,7 +69,10 @@ extension FieldEntityExtension on FormEntity {
             return Visibility(
               visible: isVisible,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                padding: EdgeInsets.symmetric(
+                  vertical: verticalSpace ?? 10.0,
+                  horizontal: horizontalSpace ?? 0.0,
+                ),
                 child:
                     multi == true
                         ? MultiSelectDropDownWidget<NameIDEntity>(
@@ -109,7 +112,10 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: RightIconTextWidget(
               isEnabled: isEnabled ?? true,
               height: resources.dimen.dp27,
@@ -153,7 +159,10 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: CheckboxListTile(
               contentPadding: const EdgeInsets.all(0),
               title: Text(getLabel, style: context.textFontWeight400),
@@ -170,7 +179,10 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +211,10 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +244,10 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: InkWell(
               onTap: () {
                 if (timeOnly == true) {
@@ -298,10 +316,14 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: UploadAttachmentWidget(
               height: resources.dimen.dp27,
               labelText: getLabel,
+              hintText: placeholder,
               errorMessage: isMandetory ? getLabel : '',
               isMandetory: isMandetory,
               allowedExtensions:
@@ -326,7 +348,10 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: Text(
               getLabel,
               style: context.textFontWeight600.onColor(
@@ -348,7 +373,10 @@ extension FieldEntityExtension on FormEntity {
 
       case 'button':
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          padding: EdgeInsets.symmetric(
+            vertical: verticalSpace ?? 10.0,
+            horizontal: horizontalSpace ?? 0.0,
+          ),
           child: Align(
             alignment: Alignment.topLeft,
             child: InkWell(
@@ -373,7 +401,10 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: LocationWidget(
               locationData: data,
               onDataChanged: (data) {
@@ -386,7 +417,10 @@ extension FieldEntityExtension on FormEntity {
         return Visibility(
           visible: isVisible,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
             child: Row(
               children: [
                 Checkbox(
@@ -447,10 +481,13 @@ extension FieldEntityExtension on FormEntity {
           return Visibility(
             visible: isVisible,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              padding: EdgeInsets.symmetric(
+                vertical: verticalSpace ?? 10.0,
+                horizontal: horizontalSpace ?? 0.0,
+              ),
               child: YesNoconfirmWidget(
                 question: getLabel,
-                isMandetory: validation?.required??false,
+                isMandetory: validation?.required ?? false,
                 selectedValue: fieldValue,
                 onSelected: (value) {
                   fieldValue = value;
@@ -465,11 +502,35 @@ extension FieldEntityExtension on FormEntity {
           return Visibility(
             visible: isVisible,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              padding: EdgeInsets.symmetric(
+                vertical: verticalSpace ?? 10.0,
+                horizontal: horizontalSpace ?? 0.0,
+              ),
               child: CheckboxListInputWidget(
                 inputData: inputFieldData,
                 title: getLabel,
-                isMandetory: validation?.required??false,
+                isMandetory: validation?.required ?? false,
+                onSelected: (value) {
+                  fieldValue = value;
+                  onDatachnage?.call(value);
+                },
+              ),
+            ),
+          );
+        }
+      case 'ncdscreening':
+        {
+          return Visibility(
+            visible: isVisible,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: verticalSpace ?? 10.0,
+                horizontal: horizontalSpace ?? 0.0,
+              ),
+              child: NcdScreeningWidget(
+                inputData: inputFieldData,
+                title: getLabel,
+                isMandetory: validation?.required ?? false,
                 onSelected: (value) {
                   fieldValue = value;
                   onDatachnage?.call(value);

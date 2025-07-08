@@ -19,20 +19,18 @@ class UserDashboard extends BaseScreenWidget {
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-  final districtsData =   districts
-                                    .map(
-                                      (item) =>
-                                          DashboardEntity()
-                                            ..district = item['name']
-                                            ..totalScreened = '30'
-                                            ..hiv =
-                                                (HivEntity()..reactive = '10')
-                                            ..iecParticipants = '20'
-                                            ..partners =
-                                                (PartnersEntity()
-                                                  ..reactive = '32'),
-                                    )
-                                    .toList();
+    final districtsData =
+        districts
+            .map(
+              (item) =>
+                  DashboardEntity()
+                    ..district = item['name']
+                    ..totalScreened = '30'
+                    ..hiv = (HivEntity()..reactive = '10')
+                    ..iecParticipants = '20'
+                    ..partners = (PartnersEntity()..reactive = '32'),
+            )
+            .toList();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
       child: Column(
@@ -68,8 +66,7 @@ class UserDashboard extends BaseScreenWidget {
                                           .map(
                                             (item) =>
                                                 NameIDModel.fromDistrictsJson(
-                                                  item
-                                                      as Map<String, dynamic>,
+                                                  item as Map<String, dynamic>,
                                                 ).toEntity(),
                                           )
                                           .toList()
@@ -93,14 +90,13 @@ class UserDashboard extends BaseScreenWidget {
                                     ),
                                     decoration:
                                         BackgroundBoxDecoration(
-                                          boxColor:
-                                              resources.color.colorWhite,
+                                          boxColor: resources.color.colorWhite,
                                           radious: resources.dimen.dp10,
                                         ).roundedCornerBox,
                                     child: Text.rich(
                                       textAlign: TextAlign.end,
                                       TextSpan(
-                                        text: 'Total Screened\n\n',
+                                        text: 'Total Screened\n',
                                         style: context.textFontWeight600,
                                         children: [
                                           TextSpan(
@@ -130,14 +126,13 @@ class UserDashboard extends BaseScreenWidget {
                                     ),
                                     decoration:
                                         BackgroundBoxDecoration(
-                                          boxColor:
-                                              resources.color.colorWhite,
+                                          boxColor: resources.color.colorWhite,
                                           radious: resources.dimen.dp10,
                                         ).roundedCornerBox,
                                     child: Text.rich(
                                       textAlign: TextAlign.end,
                                       TextSpan(
-                                        text: 'IEC Participants\n\n',
+                                        text: 'HIV Reactive\n',
                                         style: context.textFontWeight600,
                                         children: [
                                           TextSpan(
@@ -173,14 +168,13 @@ class UserDashboard extends BaseScreenWidget {
                                     ),
                                     decoration:
                                         BackgroundBoxDecoration(
-                                          boxColor:
-                                              resources.color.colorWhite,
+                                          boxColor: resources.color.colorWhite,
                                           radious: resources.dimen.dp10,
                                         ).roundedCornerBox,
                                     child: Text.rich(
                                       textAlign: TextAlign.end,
                                       TextSpan(
-                                        text: 'HIV Reactive\n\n',
+                                        text: 'Hypertension\n',
                                         style: context.textFontWeight600,
                                         children: [
                                           TextSpan(
@@ -211,14 +205,13 @@ class UserDashboard extends BaseScreenWidget {
                                     ),
                                     decoration:
                                         BackgroundBoxDecoration(
-                                          boxColor:
-                                              resources.color.colorWhite,
+                                          boxColor: resources.color.colorWhite,
                                           radious: resources.dimen.dp10,
                                         ).roundedCornerBox,
                                     child: Text.rich(
                                       textAlign: TextAlign.end,
                                       TextSpan(
-                                        text: 'Partners Reactive\n\n',
+                                        text: 'Diabetes\n',
                                         style: context.textFontWeight600,
                                         children: [
                                           TextSpan(
@@ -244,16 +237,98 @@ class UserDashboard extends BaseScreenWidget {
                             ),
                           ),
                           SizedBox(height: resources.dimen.dp10),
-                          (FormEntity()
-                                ..type = 'labelheader'
-                                ..labelEn = 'Distric Wise Data'.toUpperCase()
-                                ..labelTe = 'Distric Wise Data'.toUpperCase())
-                              .getWidget(context),
+                          IntrinsicHeight(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: double.infinity,
+                                    padding: EdgeInsets.all(
+                                      resources.dimen.dp10,
+                                    ),
+                                    decoration:
+                                        BackgroundBoxDecoration(
+                                          boxColor: resources.color.colorWhite,
+                                          radious: resources.dimen.dp10,
+                                        ).roundedCornerBox,
+                                    child: Text.rich(
+                                      textAlign: TextAlign.end,
+                                      TextSpan(
+                                        text: 'Cancer Abnormal\n',
+                                        style: context.textFontWeight600,
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                dashboardEntity
+                                                    ?.hiv
+                                                    ?.reactive ??
+                                                '',
+                                            style: context.textFontWeight600
+                                                .onFontSize(
+                                                  resources.fontSize.dp18,
+                                                )
+                                                .onColor(
+                                                  resources.color.viewBgColor,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: resources.dimen.dp10),
+                                Expanded(child: SizedBox()),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: resources.dimen.dp10),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: (FormEntity()
+                                      ..type = 'labelheader'
+                                      ..labelEn =
+                                          'Distric Wise Data'.toUpperCase()
+                                      ..labelTe =
+                                          'Distric Wise Data'.toUpperCase())
+                                    .getWidget(context),
+                              ),
+                              SizedBox(width: resources.dimen.dp10),
+                              Expanded(
+                                flex: 1,
+                                child: (FormEntity()
+                                      ..type = 'collection'
+                                      ..fieldValue = months.firstWhere(
+                                        (m) => m.id == DateTime.now().month,
+                                      )
+                                      ..inputFieldData = {
+                                        'items': months,
+                                        'doSort': false,
+                                      })
+                                    .getWidget(context),
+                              ),
+                            ],
+                          ),
                           ReportListWidget(
-                            ticketsHeaderData: ['Distric','HIV','IEC','Total'],
-                            totalPagecount: (districtsData.length/10).ceil(),
-                            reportData:
-                                districtsData.sublist(1,10),
+                            ticketsHeaderData: [
+                              'Distric',
+                              'HIV',
+                              'Cancer',
+                              'Diabetes',
+                              'Hypertension',
+                              'Total',
+                            ],
+                            ticketsTableColunwidths: {
+                              0: const FlexColumnWidth(4),
+                              1: const FlexColumnWidth(2),
+                              2: const FlexColumnWidth(2),
+                              3: const FlexColumnWidth(2),
+                              4: const FlexColumnWidth(2),
+                              5: const FlexColumnWidth(2),
+                            },
+                            totalPagecount: (districtsData.length / 10).ceil(),
+                            reportData: districtsData.sublist(1, 10),
                           ),
                         ],
                       ),

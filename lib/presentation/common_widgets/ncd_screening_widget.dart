@@ -5,12 +5,12 @@ import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
-class CheckboxListInputWidget extends StatelessWidget {
+class NcdScreeningWidget extends StatelessWidget {
   final List<Map<String, dynamic>> inputData;
   final String title;
   final bool isMandetory;
   final Function(Map) onSelected;
-  CheckboxListInputWidget({
+  NcdScreeningWidget({
     required this.title,
     required this.inputData,
     required this.onSelected,
@@ -80,6 +80,69 @@ class CheckboxListInputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     data = inputData;
+    final items = List<FormEntity>.empty(growable: true);
+    items.addAll([
+      FormEntity()
+        ..name = 'screened'
+        ..type = 'confirmcheck'
+        ..verticalSpace = 5
+        ..labelEn = 'Screened'
+        ..labelTe = 'Screened'
+        ..onDatachnage = (value) {
+          final child =
+              items.where((item) => item.name == 'result').firstOrNull;
+          if (child != null) {
+            child.isHidden = !value;
+            child.fieldValue = null;
+          }
+          _onDataChanged.value = !_onDataChanged.value;
+        },
+      FormEntity()
+        ..name = 'result'
+        ..type = 'collection'
+        ..verticalSpace = 5
+        ..isHidden = true
+        ..validation = (FormValidationEntity()..required = true)
+        ..placeholderEn = 'Select Result'
+        ..inputFieldData = {
+          'items':
+              [
+                    {'id': '1', 'name': 'Normal'},
+                    {'id': '2', 'name': 'Abnormal'},
+                    {'id': '3', 'name': 'Known'},
+                  ]
+                  .map(
+                    (item) =>
+                        NameIDModel.fromDistrictsJson(
+                          item as Map<String, dynamic>,
+                        ).toEntity(),
+                  )
+                  .toList(),
+          'doSort': false,
+        }
+        ..onDatachnage = (value) {
+          final child =
+              items.where((item) => item.name == 'referred').firstOrNull;
+          if (child != null) {
+            if (value.id == 2) {
+              child.isHidden = false;
+              child.fieldValue = null;
+            } else {
+              child.isHidden = true;
+              child.fieldValue = null;
+            }
+          }
+          _onDataChanged.value = !_onDataChanged.value;
+        },
+      FormEntity()
+        ..name = 'referred'
+        ..type = 'confirmcheck'
+        ..verticalSpace = 5
+        ..isHidden = true
+        ..labelEn = 'Referred'
+        ..labelTe = 'Referred'
+        ..onDatachnage = (value) {},
+    ]);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -103,11 +166,16 @@ class CheckboxListInputWidget extends StatelessWidget {
         ValueListenableBuilder(
           valueListenable: _onDataChanged,
           builder: (context, value, child) {
-            return Column(
-              children: [
-                for (int r = 0; r < inputData.length / 2; r++)
-                  Row(children: _getWidgetsByData(context, r)),
-              ],
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  items[0].getWidget(context),
+                  SizedBox(width: 200, child: items[1].getWidget(context)),
+                  items[2].getWidget(context),
+                ],
+              ),
             );
           },
         ),

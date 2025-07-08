@@ -42,7 +42,11 @@ class _MainScreenState extends State<UserMainScreen> {
   int activeTab = 0;
   double sideBarWidth = 200;
   late SideBar sideBar;
-  final titles = ['Dashboard', 'Health campaign screening', 'Profile'];
+  final titles = [
+    'Integrated Health Services (IHS)',
+    'Health campaign screening',
+    'Profile',
+  ];
 
   void _onItemTapped(int index) {
     if (_selectedIndex.value == index) {
@@ -113,7 +117,7 @@ class _MainScreenState extends State<UserMainScreen> {
             child: SideBar(
               onItemSelected: (p0) {
                 _onItemTapped(p0);
-                selectedSideBarIndex=p0;
+                selectedSideBarIndex = p0;
               },
               seletedItem: selectedSideBarIndex,
             ),

@@ -14,7 +14,9 @@ class DashboardEntity extends BaseEntity {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['district'] = district;
     data['hiv'] = hiv?.reactive ?? '';
-    data['iecParticipants'] = iecParticipants;
+    data['cancer'] = iecParticipants;
+    data['diabities'] = iecParticipants;
+    data['hypertension'] = iecParticipants;
     data['totalScreened'] = totalScreened;
     return data;
   }

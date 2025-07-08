@@ -93,7 +93,7 @@ class DropDownWidget<T> extends StatelessWidget {
                   filled: true,
                   isDense: true,
                   contentPadding: EdgeInsets.symmetric(
-                    vertical: context.resources.dimen.dp8,
+                    vertical: context.resources.dimen.dp4,
                     horizontal: context.resources.dimen.dp10,
                   ),
                   fillColor: fillColor ?? const Color(0xFFFFFFFF),

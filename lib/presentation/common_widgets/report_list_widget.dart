@@ -38,7 +38,7 @@ class ReportListWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
             child: Text(
               '$value',
-              textAlign: TextAlign.left,
+              textAlign: list.isEmpty ? TextAlign.left : TextAlign.center,
               style: context.textFontWeight600.onFontSize(
                 context.resources.fontSize.dp10,
               ),
@@ -90,7 +90,7 @@ class ReportListWidget extends StatelessWidget {
                   ),
                   child: Text(
                     ticketsHeaderData[index].toString(),
-                    textAlign: TextAlign.left,
+                    textAlign: index == 0 ? TextAlign.left : TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     style: context.textFontWeight600
                         .onColor(resources.color.colorWhite)

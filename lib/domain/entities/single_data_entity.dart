@@ -20,7 +20,7 @@ class NameIDEntity extends BaseEntity {
 
   NameIDEntity();
   @override
-  List<Object?> get props => [id,name];
+  List<Object?> get props => [id, name];
   @override
   String toString() {
     return name ?? '';
@@ -48,6 +48,8 @@ class FormEntity extends BaseEntity {
   bool? hasTime;
   int? priority;
   int? cols;
+  double? verticalSpace;
+  double? horizontalSpace;
   dynamic fieldValue;
   dynamic inputFieldData;
   Function(dynamic)? onDatachnage;
@@ -161,11 +163,11 @@ class DropdownItemEntity extends BaseEntity {
   String get name => (isSelectedLocalEn ? nameEn : nameAr) ?? '';
 
   Map<String, dynamic> toJson() => {
-        "id": id ?? '',
-        "valueEn": textEn ?? '',
-        "valueAr": textAr ?? '',
-        "url": url ?? '',
-      };
+    "id": id ?? '',
+    "valueEn": textEn ?? '',
+    "valueAr": textAr ?? '',
+    "url": url ?? '',
+  };
 }
 
 class GooglePlaceEntity {
