@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/image_widget.dart';
@@ -13,7 +14,7 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    _selectedIndex.value = seletedItem;
+    _selectedIndex.value = selectedSideBarIndex;
     return Drawer(
       backgroundColor: resources.color.colorWhite,
       elevation: 1,
@@ -29,6 +30,7 @@ class SideBar extends StatelessWidget {
                   onTap: () {
                     _selectedIndex.value = 0;
                     onItemSelected(0);
+                    Scaffold.of(context).closeDrawer();
                   },
                   child:
                       ImageWidget(
@@ -42,6 +44,7 @@ class SideBar extends StatelessWidget {
                 onTap: () {
                   _selectedIndex.value = 0;
                   onItemSelected(0);
+                  Scaffold.of(context).closeDrawer();
                 },
                 selected: true,
                 leading: SizedBox(
@@ -71,6 +74,7 @@ class SideBar extends StatelessWidget {
                 onTap: () {
                   _selectedIndex.value = 1;
                   onItemSelected(1);
+                  Scaffold.of(context).closeDrawer();
                 },
                 leading: SizedBox(
                   width: 40,
@@ -99,6 +103,7 @@ class SideBar extends StatelessWidget {
                 onTap: () {
                   _selectedIndex.value = 2;
                   onItemSelected(2);
+                  Scaffold.of(context).closeDrawer();
                 },
                 leading: SizedBox(
                   width: 40,

@@ -17,6 +17,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/action_button
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
+import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/share_india/patient_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import '../../core/constants/constants.dart';
@@ -307,7 +308,7 @@ class ReportsScreen extends BaseScreenWidget {
           SizedBox(width: resources.dimen.dp10),
           InkWell(
             onTap: () async {
-              PatientFormScreen.start(context);
+              OutreachCampFormScreen.start(context);
             },
             child: ActionButtonWidget(
               text: 'Add New Record',
@@ -376,6 +377,13 @@ class ReportsScreen extends BaseScreenWidget {
         _updateTickets(context);
       }
     });
+    final ticketsHeaderData = ['District', 'Mandal', 'Name', 'Action'];
+    final ticketsTableColunwidths = {
+      0: const FlexColumnWidth(4),
+      1: const FlexColumnWidth(4),
+      2: const FlexColumnWidth(4),
+      3: const FlexColumnWidth(4),
+    };
     return Padding(
       padding: EdgeInsets.all(resources.dimen.dp20),
       child: SingleChildScrollView(
@@ -395,6 +403,8 @@ class ReportsScreen extends BaseScreenWidget {
                   builder: (context, value, child) {
                     return ReportListWidget(
                       reportData: reportData?.reportList ?? [],
+                      ticketsHeaderData: ticketsHeaderData,
+                      ticketsTableColunwidths: ticketsTableColunwidths,
                       page: reportData?.page ?? 1,
                       totalPagecount: reportData?.pages ?? 0,
                       onTicketSelected: (ticket) {},

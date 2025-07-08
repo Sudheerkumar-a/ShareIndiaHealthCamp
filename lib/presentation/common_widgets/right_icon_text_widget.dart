@@ -117,7 +117,7 @@ class RightIconTextWidget extends StatelessWidget {
               isDense: true,
               counterText: '',
               contentPadding: EdgeInsets.symmetric(
-                vertical: context.resources.dimen.dp10,
+                vertical: context.resources.dimen.dp12,
                 horizontal: context.resources.dimen.dp10,
               ),
               hintText: hintText,

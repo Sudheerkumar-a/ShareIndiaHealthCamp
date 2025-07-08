@@ -12,7 +12,7 @@ class ThemePeach extends ApplicationTheme {
 
   String? _fontFamily;
   @override
-  fontFamily(String fontFamily) {
+  fontFamily(String? fontFamily) {
     _fontFamily = fontFamily;
   }
 

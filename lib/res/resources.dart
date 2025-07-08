@@ -66,14 +66,14 @@ class Resources {
         AppSettingsDB.appLocalKey,
         defaultValue: LocalEnum.en.name,
       );
-      (local == LocalEnum.ar.name)
+      (local == LocalEnum.te.name)
           ? context.appSettingsDB.put(
             AppSettingsDB.appLocalKey,
             LocalEnum.en.name,
           )
           : context.appSettingsDB.put(
             AppSettingsDB.appLocalKey,
-            LocalEnum.ar.name,
+            LocalEnum.te.name,
           );
     }
     Phoenix.rebirth(context);

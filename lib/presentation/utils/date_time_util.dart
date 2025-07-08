@@ -61,7 +61,11 @@ Future<dynamic> selectDate(
             ),
             child: child!,
           ),
-    );
+    ).then((value){
+      if(value!=null) {
+        callBack?.call(value);
+      }
+    });
   }
 }
 

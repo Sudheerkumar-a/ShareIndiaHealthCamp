@@ -57,3 +57,21 @@ const districts = [
   {"id": "10", "name": "WEST GODAVARI"},
   {"id": "23", "name": "YSR"},
 ];
+
+const occupation = [
+  {"id": "1", "name": "Agriculture Labourer"},
+  {"id": "2", "name": "Agricultural Cultivator / Landholder"},
+  {"id": "3", "name": "Housewife"},
+  {"id": "4", "name": "Student"},
+  {"id": "5", "name": "Business"},
+  {"id": "6", "name": "Govt / Pvt Employee"},
+  {"id": "7", "name": "Truck Driver / Helper"},
+  {"id": "8", "name": "Hotel Staff"},
+  {"id": "9", "name": "Unemployed / Retired"},
+  {"id": "10", "name": "Others (Specify…)"},
+  ];
+const gender = [
+  {"id": "1", "name": "M"},
+  {"id": "2", "name": "F"},
+  {"id": "3", "name": "TG"},
+  ];

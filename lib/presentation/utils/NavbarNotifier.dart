@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shareindia_health_camp/presentation/home/user_home_navigator_screen.dart';
 import 'package:shareindia_health_camp/presentation/profile/profile_navigator_screen.dart';
+import 'package:shareindia_health_camp/presentation/reports/reports_navigator_screen.dart';
 
 class NavbarNotifier extends ChangeNotifier {
   int _index = 0;
@@ -34,6 +35,11 @@ class NavbarNotifier extends ChangeNotifier {
         }
         break;
       case 1:
+      if (ReportsNavigatorScreen.reportKey.currentState != null &&
+            ReportsNavigatorScreen.reportKey.currentState!.canPop()) {
+          ReportsNavigatorScreen.reportKey.currentState!.maybePop();
+          exitingApp = false;
+        }
         break;
       case 2:
         break;

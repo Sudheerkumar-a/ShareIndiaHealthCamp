@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
+import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/data/local/app_settings_db.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
@@ -71,13 +72,11 @@ class _MainScreenState extends State<UserMainScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex.value = context.appSettingsDB.get(
-      AppSettingsDB.selectedSideBarIndex,
-      defaultValue: 0,
-    );
+    _selectedIndex.value = 0;
     sideBar = SideBar(
       onItemSelected: (p0) {
         _onItemTapped(p0);
+        selectedSideBarIndex = p0;
       },
       seletedItem: _selectedIndex.value,
     );
@@ -114,7 +113,9 @@ class _MainScreenState extends State<UserMainScreen> {
             child: SideBar(
               onItemSelected: (p0) {
                 _onItemTapped(p0);
+                selectedSideBarIndex=p0;
               },
+              seletedItem: selectedSideBarIndex,
             ),
           ),
           body: ValueListenableBuilder(

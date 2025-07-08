@@ -53,6 +53,12 @@ class NameIDModel extends BaseModel {
   String? name;
 
   NameIDModel();
+  factory NameIDModel.fromIdNameJson(Map<String, dynamic> json) {
+    var nameIDModel = NameIDModel();
+    nameIDModel.id = int.tryParse(json['id']);
+    nameIDModel.name = json['name'];
+    return nameIDModel;
+  }
   factory NameIDModel.fromDistrictsJson(Map<String, dynamic> json) {
     var nameIDModel = NameIDModel();
     nameIDModel.id = int.tryParse(json['id']);

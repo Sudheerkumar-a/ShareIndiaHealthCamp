@@ -8,13 +8,17 @@ import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 
 class ReportListWidget extends StatelessWidget {
-  final List<ReportEntity> reportData;
+  final List<dynamic> reportData;
+  final List<String> ticketsHeaderData;
+  final Map<int, FlexColumnWidth>? ticketsTableColunwidths;
   final int page;
   final int? totalPagecount;
   final Function(int)? onPageChange;
   final Function(dynamic)? onTicketSelected;
   const ReportListWidget({
     required this.reportData,
+    required this.ticketsHeaderData,
+    this.ticketsTableColunwidths,
     this.onTicketSelected,
     this.page = 1,
     this.totalPagecount,
@@ -22,7 +26,7 @@ class ReportListWidget extends StatelessWidget {
     super.key,
   });
 
-  List<Widget> _getTicketData(BuildContext context, ReportEntity ticketEntity) {
+  List<Widget> _getTicketData(BuildContext context, dynamic ticketEntity) {
     final list = List<Widget>.empty(growable: true);
     ticketEntity.toJson().forEach((key, value) {
       list.add(
@@ -50,13 +54,13 @@ class ReportListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final resources = context.resources;
 
-    final ticketsHeaderData = ['District', 'Mandal', 'Name', 'Action'];
-    final ticketsTableColunwidths = {
-      0: const FlexColumnWidth(4),
-      1: const FlexColumnWidth(4),
-      2: const FlexColumnWidth(4),
-      3: const FlexColumnWidth(4),
-    };
+    //final ticketsHeaderData = ['District', 'Mandal', 'Name', 'Action'];
+    // final ticketsTableColunwidths = {
+    //   0: const FlexColumnWidth(4),
+    //   1: const FlexColumnWidth(4),
+    //   2: const FlexColumnWidth(4),
+    //   3: const FlexColumnWidth(4),
+    // };
     return Column(
       children: [
         Table(

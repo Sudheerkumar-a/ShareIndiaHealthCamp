@@ -9,6 +9,15 @@ class DashboardEntity extends BaseEntity {
   StiEntity? sti;
   TbEntity? tb;
   String? iecParticipants;
+  String? district;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['district'] = district;
+    data['hiv'] = hiv?.reactive ?? '';
+    data['iecParticipants'] = iecParticipants;
+    data['totalScreened'] = totalScreened;
+    return data;
+  }
 }
 
 class HivEntity extends BaseEntity {

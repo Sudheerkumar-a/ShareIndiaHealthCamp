@@ -15,7 +15,7 @@ class App extends StatelessWidget {
     isSelectedLocalEn = (locale.languageCode == LocalEnum.en.name);
     var theme = context.resources.theme;
     theme.fontFamily(
-      locale.languageCode == LocalEnum.ar.name ? fontFamilyAR : fontFamilyEN,
+      locale.languageCode == LocalEnum.te.name ? locale.languageCode : fontFamilyEN,
     );
     userToken = context.userDataDB.get(UserDataDB.userToken, defaultValue: '');
     return MaterialApp(
@@ -28,7 +28,7 @@ class App extends StatelessWidget {
       onGenerateTitle:
           (BuildContext context) => context.resources.string.appTitle,
       initialRoute:
-          userToken.isNotEmpty ? AppRoutes.userMainRoute : AppRoutes.loginRoute,
+          AppRoutes.initialRoute,
       routes: AppRoutes.getRoutes(),
     );
   }

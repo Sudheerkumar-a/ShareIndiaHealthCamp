@@ -79,6 +79,25 @@ class ServicesBloc extends Cubit<ServicesState> {
     return responseState;
   }
 
+  Future<ServicesState> getFieldInputData({
+    required String apiUrl,
+    required Map<String, dynamic> requestParams,
+   required dynamic Function(Map<String, dynamic>) requestModel,
+  }) async {
+    final result = await servicesUseCase.getFieldData(
+      apiUrl: apiUrl,
+      requestParams: requestParams,
+      responseModel: requestModel
+    );
+    final responseState = result.fold(
+      (l) => ServicesStateApiError(message: _getErrorMessage(l)),
+      (r) {
+        return ServicesStateSuccess(responseEntity: r);
+      },
+    );
+    return responseState;
+  }
+
   String _getErrorMessage(Failure failure) {
     return failure.errorMessage;
   }

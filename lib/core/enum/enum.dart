@@ -12,9 +12,16 @@ enum ThemeEnum {
   const ThemeEnum(this.name);
 }
 
+enum FormType {
+  header('header'),;
+
+  final String name;
+  const FormType(this.name);
+}
+
 enum LocalEnum {
   en('en'),
-  ar('ar');
+  te('te');
 
   final String name;
   const LocalEnum(this.name);

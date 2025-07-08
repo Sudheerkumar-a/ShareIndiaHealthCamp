@@ -207,8 +207,6 @@ logout(BuildContext context) {
   Phoenix.rebirth(context);
 }
 
-mixin userFullNameUsKey {}
-
 bool isImage(String path) {
   final mimeType = lookupMimeType(path);
 

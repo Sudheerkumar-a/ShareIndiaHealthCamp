@@ -1,167 +1,269 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
+import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
+import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/dashboard_entity.dart';
+import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 
 class UserDashboard extends BaseScreenWidget {
   const UserDashboard({super.key});
 
-  Future<String> _getDashboradData() {
-    return Future.delayed(Duration(seconds: 1), () {
-      return "test";
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    return Column(
-      children: [
-        SizedBox(height: resources.dimen.dp20),
-        Expanded(
-          child: FutureBuilder(
-            future: sl<ServicesBloc>().getDashboardData(requestParams: {}),
-            builder: (context, snapshot) {
-              final data = snapshot.data;
-              DashboardEntity? dashboardEntity = DashboardEntity();
-              if (snapshot.hasData && data is ServicesStateSuccess) {
-                dashboardEntity = cast<DashboardEntity?>(
-                  data.responseEntity.entity,
-                );
-              }
-              return snapshot.hasData
-                  ? Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: resources.dimen.dp20,
-                        ),
-                        padding: EdgeInsets.all(resources.dimen.dp20),
-                        decoration:
-                            BackgroundBoxDecoration(
-                              boxColor: resources.color.colorWhite,
-                              radious: resources.dimen.dp10,
-                            ).roundedCornerBox,
-                        child: Column(
-                          children: [
-                            Row(
+  final districtsData =   districts
+                                    .map(
+                                      (item) =>
+                                          DashboardEntity()
+                                            ..district = item['name']
+                                            ..totalScreened = '30'
+                                            ..hiv =
+                                                (HivEntity()..reactive = '10')
+                                            ..iecParticipants = '20'
+                                            ..partners =
+                                                (PartnersEntity()
+                                                  ..reactive = '32'),
+                                    )
+                                    .toList();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+      child: Column(
+        children: [
+          Expanded(
+            child: FutureBuilder(
+              future: sl<ServicesBloc>().getDashboardData(requestParams: {}),
+              builder: (context, snapshot) {
+                final data = snapshot.data;
+                DashboardEntity? dashboardEntity = DashboardEntity();
+                if (snapshot.hasData && data is ServicesStateSuccess) {
+                  dashboardEntity = cast<DashboardEntity?>(
+                    data.responseEntity.entity,
+                  );
+                }
+                return snapshot.hasData
+                    ? SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          (FormEntity()
+                                ..type = 'labelheader'
+                                ..labelEn = 'Andhra Pradesh'.toUpperCase()
+                                ..labelTe = 'Andhra Pradesh'.toUpperCase())
+                              .getWidget(context),
+                          (FormEntity()
+                                ..type = 'collection'
+                                ..placeholderEn = 'Select Distric'
+                                ..placeholderTe = 'Select Distric'
+                                ..inputFieldData = {
+                                  'items':
+                                      districts
+                                          .map(
+                                            (item) =>
+                                                NameIDModel.fromDistrictsJson(
+                                                  item
+                                                      as Map<String, dynamic>,
+                                                ).toEntity(),
+                                          )
+                                          .toList()
+                                        ..add(
+                                          NameIDEntity()
+                                            ..id = 0
+                                            ..name = 'ALL',
+                                        ),
+                                }
+                                ..onDatachnage = (value) {})
+                              .getWidget(context),
+                          SizedBox(height: resources.dimen.dp10),
+                          IntrinsicHeight(
+                            child: Row(
                               children: [
                                 Expanded(
-                                  child: Text.rich(
-                                    TextSpan(
-                                      text: 'Total Screened',
-                                      style: context.textFontWeight600,
+                                  child: Container(
+                                    height: double.infinity,
+                                    padding: EdgeInsets.all(
+                                      resources.dimen.dp10,
+                                    ),
+                                    decoration:
+                                        BackgroundBoxDecoration(
+                                          boxColor:
+                                              resources.color.colorWhite,
+                                          radious: resources.dimen.dp10,
+                                        ).roundedCornerBox,
+                                    child: Text.rich(
+                                      textAlign: TextAlign.end,
+                                      TextSpan(
+                                        text: 'Total Screened\n\n',
+                                        style: context.textFontWeight600,
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                dashboardEntity
+                                                    ?.totalScreened ??
+                                                '',
+                                            style: context.textFontWeight600
+                                                .onFontSize(
+                                                  resources.fontSize.dp18,
+                                                )
+                                                .onColor(
+                                                  resources.color.viewBgColor,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                                Text(
-                                  dashboardEntity?.totalScreened ?? '',
-                                  style: context.textFontWeight600.onColor(
-                                    resources.color.viewBgColor,
+                                SizedBox(width: resources.dimen.dp20),
+                                Expanded(
+                                  child: Container(
+                                    height: double.infinity,
+                                    padding: EdgeInsets.all(
+                                      resources.dimen.dp10,
+                                    ),
+                                    decoration:
+                                        BackgroundBoxDecoration(
+                                          boxColor:
+                                              resources.color.colorWhite,
+                                          radious: resources.dimen.dp10,
+                                        ).roundedCornerBox,
+                                    child: Text.rich(
+                                      textAlign: TextAlign.end,
+                                      TextSpan(
+                                        text: 'IEC Participants\n\n',
+                                        style: context.textFontWeight600,
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                dashboardEntity
+                                                    ?.iecParticipants ??
+                                                '',
+                                            style: context.textFontWeight600
+                                                .onFontSize(
+                                                  resources.fontSize.dp18,
+                                                )
+                                                .onColor(
+                                                  resources.color.viewBgColor,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: resources.dimen.dp10),
-                            Row(
+                          ),
+                          SizedBox(height: resources.dimen.dp10),
+                          IntrinsicHeight(
+                            child: Row(
                               children: [
                                 Expanded(
-                                  child: Text(
-                                    'IEC Participants',
-                                    style: context.textFontWeight600,
+                                  child: Container(
+                                    height: double.infinity,
+                                    padding: EdgeInsets.all(
+                                      resources.dimen.dp10,
+                                    ),
+                                    decoration:
+                                        BackgroundBoxDecoration(
+                                          boxColor:
+                                              resources.color.colorWhite,
+                                          radious: resources.dimen.dp10,
+                                        ).roundedCornerBox,
+                                    child: Text.rich(
+                                      textAlign: TextAlign.end,
+                                      TextSpan(
+                                        text: 'HIV Reactive\n\n',
+                                        style: context.textFontWeight600,
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                dashboardEntity
+                                                    ?.hiv
+                                                    ?.reactive ??
+                                                '',
+                                            style: context.textFontWeight600
+                                                .onFontSize(
+                                                  resources.fontSize.dp18,
+                                                )
+                                                .onColor(
+                                                  resources.color.viewBgColor,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                Text(
-                                  dashboardEntity?.iecParticipants ?? '',
-                                  style: context.textFontWeight600.onColor(
-                                    resources.color.viewBgColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: resources.dimen.dp10),
-                            Row(
-                              children: [
+                                SizedBox(width: resources.dimen.dp10),
                                 Expanded(
-                                  child: Text(
-                                    'HIV Reactive',
-                                    style: context.textFontWeight600,
-                                  ),
-                                ),
-                                Text(
-                                  dashboardEntity?.hiv?.reactive ?? '',
-                                  style: context.textFontWeight600.onColor(
-                                    resources.color.viewBgColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: resources.dimen.dp10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    'Partners Reactive',
-                                    style: context.textFontWeight600,
-                                  ),
-                                ),
-                                Text(
-                                  dashboardEntity?.partners?.reactive ?? '',
-                                  style: context.textFontWeight600.onColor(
-                                    resources.color.viewBgColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: resources.dimen.dp10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    'TB Presumptive',
-                                    style: context.textFontWeight600,
-                                  ),
-                                ),
-                                Text(
-                                  dashboardEntity?.tb?.presumptive ?? '',
-                                  style: context.textFontWeight600.onColor(
-                                    resources.color.viewBgColor,
+                                  child: Container(
+                                    height: double.infinity,
+                                    padding: EdgeInsets.all(
+                                      resources.dimen.dp10,
+                                    ),
+                                    decoration:
+                                        BackgroundBoxDecoration(
+                                          boxColor:
+                                              resources.color.colorWhite,
+                                          radious: resources.dimen.dp10,
+                                        ).roundedCornerBox,
+                                    child: Text.rich(
+                                      textAlign: TextAlign.end,
+                                      TextSpan(
+                                        text: 'Partners Reactive\n\n',
+                                        style: context.textFontWeight600,
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                dashboardEntity
+                                                    ?.partners
+                                                    ?.reactive ??
+                                                '',
+                                            style: context.textFontWeight600
+                                                .onFontSize(
+                                                  resources.fontSize.dp18,
+                                                )
+                                                .onColor(
+                                                  resources.color.viewBgColor,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: resources.dimen.dp10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    'TB Diagnosed',
-                                    style: context.textFontWeight600,
-                                  ),
-                                ),
-                                Text(
-                                  dashboardEntity?.tb?.diagnosed ?? '',
-                                  style: context.textFontWeight600.onColor(
-                                    resources.color.viewBgColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: resources.dimen.dp10),
+                          (FormEntity()
+                                ..type = 'labelheader'
+                                ..labelEn = 'Distric Wise Data'.toUpperCase()
+                                ..labelTe = 'Distric Wise Data'.toUpperCase())
+                              .getWidget(context),
+                          ReportListWidget(
+                            ticketsHeaderData: ['Distric','HIV','IEC','Total'],
+                            totalPagecount: (districtsData.length/10).ceil(),
+                            reportData:
+                                districtsData.sublist(1,10),
+                          ),
+                        ],
                       ),
-                    ],
-                  )
-                  : Center(child: CircularProgressIndicator.adaptive());
-            },
+                    )
+                    : Center(child: CircularProgressIndicator.adaptive());
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
