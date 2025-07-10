@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
+import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/image_widget.dart';
+import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
 
 class SideBar extends StatelessWidget {
@@ -23,20 +25,36 @@ class SideBar extends StatelessWidget {
         builder: (context, index, child) {
           return ListView(
             children: <Widget>[
-              SizedBox(height: resources.dimen.dp20),
-              SizedBox(
-                height: 50,
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration:
+                    BackgroundBoxDecoration(
+                      gradientStartColor: resources.color.viewBgColor,
+                      gradientEndColor: resources.color.iconTintColor,
+                    ).gradientColorBg,
                 child: InkWell(
                   onTap: () {
                     _selectedIndex.value = 0;
                     onItemSelected(0);
                     Scaffold.of(context).closeDrawer();
                   },
-                  child:
-                      ImageWidget(
-                        path: DrawableAssets.icLogo,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                      ).loadImageWithMoreTapArea,
+                  child: Text.rich(
+                    TextSpan(
+                      text: UserCredentialsEntity.details(context).user?.name,
+                      style: context.textFontWeight600.onColor(
+                        resources.color.colorWhite,
+                      ),
+                      children: [
+                        TextSpan(
+                          text:
+                              '\n${UserCredentialsEntity.details(context).user?.email}',
+                          style: context.textFontWeight600.onColor(
+                            resources.color.colorWhite,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: resources.dimen.dp20),
@@ -55,7 +73,7 @@ class SideBar extends StatelessWidget {
                         path: DrawableAssets.icHome,
                         backgroundTint:
                             index == 0
-                                ? resources.color.sideBarItemSelected
+                                ? resources.color.viewBgColorLight
                                 : resources.color.sideBarItemUnselected,
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                       ).loadImageWithMoreTapArea,
@@ -84,7 +102,7 @@ class SideBar extends StatelessWidget {
                         path: DrawableAssets.icReport,
                         backgroundTint:
                             index == 1
-                                ? resources.color.sideBarItemSelected
+                                ? resources.color.viewBgColorLight
                                 : resources.color.sideBarItemUnselected,
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                       ).loadImageWithMoreTapArea,
@@ -113,7 +131,7 @@ class SideBar extends StatelessWidget {
                         path: DrawableAssets.icUser,
                         backgroundTint:
                             index == 2
-                                ? resources.color.sideBarItemSelected
+                                ? resources.color.viewBgColorLight
                                 : resources.color.sideBarItemUnselected,
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                       ).loadImageWithMoreTapArea,

@@ -4,6 +4,7 @@ import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/enum/enum.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/data/local/app_settings_db.dart';
+import 'package:shareindia_health_camp/l10n/app_localizations.dart';
 import 'package:shareindia_health_camp/res/colors/base_clors.dart';
 import 'package:shareindia_health_camp/res/colors/theme_peach_colors.dart';
 import 'package:shareindia_health_camp/res/colors/theme_red_colors.dart';
@@ -15,7 +16,6 @@ import 'package:shareindia_health_camp/res/theme/theme_peach.dart';
 import 'package:shareindia_health_camp/res/theme/theme_red.dart';
 import 'dimentions/app_dimension.dart';
 import 'dimentions/font_dimension_default.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Resources {
   final BuildContext context;

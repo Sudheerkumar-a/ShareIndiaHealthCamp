@@ -1,9 +1,10 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/data/model/base_model.dart';
 import 'package:shareindia_health_camp/domain/entities/dashboard_entity.dart';
 
-class DashboardModel extends BaseModel {
+class DashboardModel2 extends BaseModel {
   String? totalScreened;
   HivEntity? hiv;
   PartnersEntity? partners;
@@ -11,9 +12,9 @@ class DashboardModel extends BaseModel {
   TbEntity? tb;
   String? iecParticipants;
 
-  DashboardModel();
+  DashboardModel2();
 
-  DashboardModel.fromJson(Map<String, dynamic> response) {
+  DashboardModel2.fromJson(Map<String, dynamic> response) {
     final json = response['data'];
     totalScreened = json['total_screened'];
     hiv =
@@ -29,8 +30,8 @@ class DashboardModel extends BaseModel {
   }
 
   @override
-  DashboardEntity toEntity() {
-    return DashboardEntity()
+  DashboardEntityOld toEntity() {
+    return DashboardEntityOld()
       ..totalScreened = totalScreened
       ..hiv = hiv
       ..partners = partners
@@ -116,5 +117,141 @@ class TbModel extends BaseModel {
     return TbEntity()
       ..diagnosed = diagnosed
       ..presumptive = presumptive;
+  }
+}
+
+class DashboardModel extends BaseModel {
+  List<DistrictWiseMonthlyEntity>? districtWiseMonthly;
+  List<DistrictWiseTotalEntity>? districtWiseTotal;
+  DistrictWiseTotalEntity? overallTotal;
+
+  DashboardModel.fromJson(Map<String, dynamic> response) {
+    final json = response['data'];
+    if (json == null) {
+      return;
+    }
+    if (json['district_wise_monthly'] != null) {
+      districtWiseMonthly = <DistrictWiseMonthlyEntity>[];
+      json['district_wise_monthly'].forEach((v) {
+        districtWiseMonthly!.add(
+          DistrictWiseMonthlyModel.fromJson(v).toEntity(),
+        );
+      });
+    }
+    if (json['district_wise_total'] != null) {
+      districtWiseTotal = <DistrictWiseTotalEntity>[];
+      json['district_wise_total'].forEach((v) {
+        districtWiseTotal!.add(DistrictWiseTotalModel.fromJson(v).toEntity());
+      });
+    }
+    overallTotal =
+        json['overall_total'] != null
+            ? DistrictWiseTotalModel.fromJson(json['overall_total']).toEntity()
+            : null;
+  }
+
+  @override
+  toEntity() {
+    return DashboardEntity()
+      ..districtWiseMonthly = districtWiseMonthly
+      ..districtWiseTotal = districtWiseTotal
+      ..overallTotal = overallTotal;
+  }
+}
+
+class DistrictWiseMonthlyModel extends BaseModel {
+  String? district;
+  String? yearMonth;
+  String? totalScreened;
+  String? hivReactive;
+  String? hypertensionAbnormal;
+  String? diabetesAbnormal;
+  String? cancerAbnormal;
+  String? iecParticipants;
+  String? tbDiagnosed;
+  String? syphilisPositive;
+  String? hepBPositive;
+  String? hepCPositive;
+
+  DistrictWiseMonthlyModel();
+
+  DistrictWiseMonthlyModel.fromJson(Map<String, dynamic> json) {
+    district = json['district'];
+    yearMonth = json['year_month'];
+    totalScreened = json['total_screened'];
+    hivReactive = json['hiv_reactive'];
+    hypertensionAbnormal = json['hypertension_abnormal'];
+    diabetesAbnormal = json['diabetes_abnormal'];
+    cancerAbnormal = json['cancer_abnormal'];
+    iecParticipants = json['iec_participants'];
+    tbDiagnosed = json['tb_diagnosed'];
+    syphilisPositive = json['syphilis_positive'];
+    hepBPositive = json['hep_b_positive'];
+    hepCPositive = json['hep_c_positive'];
+  }
+
+  @override
+  DistrictWiseMonthlyEntity toEntity() {
+    return DistrictWiseMonthlyEntity()
+      ..district = district
+      ..districtName =
+          districts.where((e) => e['id'] == district).firstOrNull?['name'] ?? ''
+      ..yearMonth = yearMonth
+      ..totalScreened = totalScreened
+      ..hivReactive = hivReactive
+      ..hypertensionAbnormal = hypertensionAbnormal
+      ..diabetesAbnormal = diabetesAbnormal
+      ..cancerAbnormal = cancerAbnormal
+      ..iecParticipants = iecParticipants
+      ..tbDiagnosed = tbDiagnosed
+      ..syphilisPositive = syphilisPositive
+      ..hepBPositive = hepBPositive
+      ..hepCPositive = hepCPositive;
+  }
+}
+
+class DistrictWiseTotalModel extends BaseModel {
+  String? district;
+  String? totalScreened;
+  String? hivReactive;
+  String? hypertensionAbnormal;
+  String? diabetesAbnormal;
+  String? cancerAbnormal;
+  String? iecParticipants;
+  String? tbDiagnosed;
+  String? syphilisPositive;
+  String? hepBPositive;
+  String? hepCPositive;
+
+  DistrictWiseTotalModel();
+
+  DistrictWiseTotalModel.fromJson(Map<String, dynamic> json) {
+    district = json['district'];
+    totalScreened = json['total_screened'];
+    hivReactive = json['hiv_reactive'];
+    hypertensionAbnormal = json['hypertension_abnormal'];
+    diabetesAbnormal = json['diabetes_abnormal'];
+    cancerAbnormal = json['cancer_abnormal'];
+    iecParticipants = json['iec_participants'];
+    tbDiagnosed = json['tb_diagnosed'];
+    syphilisPositive = json['syphilis_positive'];
+    hepBPositive = json['hep_b_positive'];
+    hepCPositive = json['hep_c_positive'];
+  }
+
+  @override
+  DistrictWiseTotalEntity toEntity() {
+    return DistrictWiseTotalEntity()
+      ..district = district
+      ..totalScreened = totalScreened
+      ..hivReactive = hivReactive
+      ..hypertensionAbnormal = hypertensionAbnormal
+      ..diabetesAbnormal = diabetesAbnormal
+      ..cancerAbnormal = cancerAbnormal
+      ..iecParticipants = iecParticipants
+      ..tbDiagnosed = tbDiagnosed
+      ..syphilisPositive = syphilisPositive
+      ..hepBPositive = hepBPositive
+      ..hepCPositive = hepCPositive;
   }
 }

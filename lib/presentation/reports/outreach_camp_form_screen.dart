@@ -231,13 +231,13 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           _onDataChanged(false);
         },
       FormEntity()
-        ..name = 'adhar'
-        ..labelEn = 'Adhar No(optional)'
-        ..labelTe = 'Adhar No(optional)'
+        ..name = 'aadhar'
+        ..labelEn = 'Aadhar No(optional)'
+        ..labelTe = 'Aadhar No(optional)'
         ..type = 'number'
         ..validation = (FormValidationEntity()..maxLength = 12)
-        ..placeholderEn = 'Adhar No(optional)'
-        ..placeholderTe = 'Adhar No(optional)'
+        ..placeholderEn = 'Aadhar No(optional)'
+        ..placeholderTe = 'Aadhar No(optional)'
         ..onDatachnage = (value) {
           _onDataChanged(false);
         },
@@ -718,7 +718,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           'items':
               [
                     {'id': '1', 'name': 'Reactive'},
-                    {'id': '2', 'name': 'Negative'},
+                    {'id': '2', 'name': 'Non‑Reactive'},
                   ]
                   .map(
                     (item) =>
@@ -962,7 +962,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                         }
                       }
                     }
-                    var isLastStep = _stepNotifier.value == 8;
+                    var isLastStep = _stepNotifier.value == 7;
                     if (_stepNotifier.value == 2) {
                       final field =
                           formFields[1]
@@ -1003,17 +1003,17 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                               return;
                             }
                             if (_stepNotifier.value == 2) {
-                              final fieldAdhar =
+                              final fieldAadhar =
+                                  formFields[1]
+                                      .where((item) => item.name == 'aadhar')
+                                      .firstOrNull;
+                              final fieldNumber =
                                   formFields[1]
                                       .where(
                                         (item) => item.name == 'mobilenumber',
                                       )
                                       .firstOrNull;
-                              final fieldNumber =
-                                  formFields[1]
-                                      .where((item) => item.name == 'adhar')
-                                      .firstOrNull;
-                              if ((fieldAdhar?.fieldValue ?? '').isEmpty ==
+                              if ((fieldAadhar?.fieldValue ?? '').isEmpty ==
                                       true &&
                                   (fieldNumber?.fieldValue ?? '').isEmpty ==
                                       true) {

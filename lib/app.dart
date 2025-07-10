@@ -3,8 +3,8 @@ import 'package:shareindia_health_camp/core/config/app_routes.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/enum/enum.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shareindia_health_camp/data/local/user_data_db.dart';
+import 'package:shareindia_health_camp/l10n/app_localizations.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -15,7 +15,9 @@ class App extends StatelessWidget {
     isSelectedLocalEn = (locale.languageCode == LocalEnum.en.name);
     var theme = context.resources.theme;
     theme.fontFamily(
-      locale.languageCode == LocalEnum.te.name ? locale.languageCode : fontFamilyEN,
+      locale.languageCode == LocalEnum.te.name
+          ? locale.languageCode
+          : fontFamilyEN,
     );
     userToken = context.userDataDB.get(UserDataDB.userToken, defaultValue: '');
     return MaterialApp(
@@ -27,8 +29,7 @@ class App extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       onGenerateTitle:
           (BuildContext context) => context.resources.string.appTitle,
-      initialRoute:
-          AppRoutes.initialRoute,
+      initialRoute: AppRoutes.initialRoute,
       routes: AppRoutes.getRoutes(),
     );
   }

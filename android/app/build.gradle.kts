@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.shareindia_health_camp"
+        applicationId = "com.ihs"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -43,20 +43,20 @@ android {
     productFlavors {
         create("production") {
             dimension = "mode"
-            resValue("string", "app_name", "SmartUAQ")
+            resValue("string", "app_name", "IHS")
         }
 
         create("development") {
             dimension = "mode"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
-            resValue("string", "app_name", "SmartUAQ-Dev")
+            resValue("string", "app_name", "IHS-Dev")
         }
 
         create("huawei") {
             dimension = "mode"
             applicationIdSuffix = ".appgallery"
-            resValue("string", "app_name", "SmartUAQ")
+            resValue("string", "app_name", "IHS")
         }
     }
 }

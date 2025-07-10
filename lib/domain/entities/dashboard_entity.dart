@@ -1,8 +1,9 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 
-class DashboardEntity extends BaseEntity {
+class DashboardEntityOld extends BaseEntity {
   String? totalScreened;
   HivEntity? hiv;
   PartnersEntity? partners;
@@ -41,4 +42,51 @@ class StiEntity extends BaseEntity {
 class TbEntity extends BaseEntity {
   String? presumptive;
   String? diagnosed;
+}
+
+class DashboardEntity extends BaseEntity {
+  List<DistrictWiseMonthlyEntity>? districtWiseMonthly;
+  List<DistrictWiseTotalEntity>? districtWiseTotal;
+  DistrictWiseTotalEntity? overallTotal;
+}
+
+class DistrictWiseMonthlyEntity extends BaseEntity {
+  String? district;
+  String? districtName;
+  String? yearMonth;
+  String? totalScreened;
+  String? hivReactive;
+  String? hypertensionAbnormal;
+  String? diabetesAbnormal;
+  String? cancerAbnormal;
+  String? iecParticipants;
+  String? tbDiagnosed;
+  String? syphilisPositive;
+  String? hepBPositive;
+  String? hepCPositive;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['district'] = districtName;
+    data['hiv'] = hivReactive ?? '';
+    data['cancer'] = cancerAbnormal;
+    data['diabities'] = diabetesAbnormal;
+    data['hypertension'] = hypertensionAbnormal;
+    data['totalScreened'] = totalScreened;
+    return data;
+  }
+}
+
+class DistrictWiseTotalEntity extends BaseEntity {
+  String? district;
+  String? totalScreened;
+  String? hivReactive;
+  String? hypertensionAbnormal;
+  String? diabetesAbnormal;
+  String? cancerAbnormal;
+  String? iecParticipants;
+  String? tbDiagnosed;
+  String? syphilisPositive;
+  String? hepBPositive;
+  String? hepCPositive;
 }
