@@ -15,7 +15,6 @@ import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
-import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 
 class UserDashboard extends BaseScreenWidget {
@@ -50,10 +49,7 @@ class UserDashboard extends BaseScreenWidget {
               final dashboardEntity = cast<DashboardEntity>(
                 state.responseEntity.entity,
               );
-              final districtWiseMonthly = List.empty(growable: true);
-              districtWiseMonthly.addAll(
-                dashboardEntity.districtWiseMonthly ?? [],
-              );
+
               return Column(
                 children: [
                   Expanded(
@@ -61,6 +57,11 @@ class UserDashboard extends BaseScreenWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          (FormEntity()
+                                ..type = 'labelheader'
+                                ..labelEn = 'Dashboard'.toUpperCase()
+                                ..labelTe = 'Dashboard'.toUpperCase())
+                              .getWidget(context),
                           Row(
                             children: [
                               Expanded(
@@ -77,8 +78,8 @@ class UserDashboard extends BaseScreenWidget {
                                 flex: 2,
                                 child: (FormEntity()
                                       ..type = 'collection'
-                                      ..placeholderEn = 'Select'
-                                      ..placeholderTe = 'Select'
+                                      ..placeholderEn = 'Select District'
+                                      ..placeholderTe = 'Select District'
                                       ..inputFieldData = {
                                         'items':
                                             districts
@@ -138,7 +139,7 @@ class UserDashboard extends BaseScreenWidget {
                                             child: Text.rich(
                                               textAlign: TextAlign.end,
                                               TextSpan(
-                                                text: 'Total Screened\n',
+                                                text: 'Total participants\n',
                                                 style:
                                                     context.textFontWeight600,
                                                 children: [
@@ -183,14 +184,14 @@ class UserDashboard extends BaseScreenWidget {
                                             child: Text.rich(
                                               textAlign: TextAlign.end,
                                               TextSpan(
-                                                text: 'HIV Reactive\n',
+                                                text: 'Total Screened\n',
                                                 style:
                                                     context.textFontWeight600,
                                                 children: [
                                                   TextSpan(
                                                     text:
                                                         overalData
-                                                            ?.hivReactive ??
+                                                            ?.totalScreened ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600
@@ -358,7 +359,51 @@ class UserDashboard extends BaseScreenWidget {
                                           ),
                                         ),
                                         SizedBox(width: resources.dimen.dp10),
-                                        Expanded(child: SizedBox()),
+                                        SizedBox(width: resources.dimen.dp20),
+                                        Expanded(
+                                          child: Container(
+                                            height: double.infinity,
+                                            padding: EdgeInsets.all(
+                                              resources.dimen.dp10,
+                                            ),
+                                            decoration:
+                                                BackgroundBoxDecoration(
+                                                  boxColor:
+                                                      resources
+                                                          .color
+                                                          .colorWhite,
+                                                  radious: resources.dimen.dp10,
+                                                ).roundedCornerBox,
+                                            child: Text.rich(
+                                              textAlign: TextAlign.end,
+                                              TextSpan(
+                                                text: 'HIV Reactive\n',
+                                                style:
+                                                    context.textFontWeight600,
+                                                children: [
+                                                  TextSpan(
+                                                    text:
+                                                        overalData
+                                                            ?.hivReactive ??
+                                                        '',
+                                                    style: context
+                                                        .textFontWeight600
+                                                        .onFontSize(
+                                                          resources
+                                                              .fontSize
+                                                              .dp18,
+                                                        )
+                                                        .onColor(
+                                                          resources
+                                                              .color
+                                                              .viewBgColor,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -393,27 +438,10 @@ class UserDashboard extends BaseScreenWidget {
                                         'doSort': false,
                                       }
                                       ..onDatachnage = (value) async {
-                                        Dialogs.loader(context);
-                                        final apiState = await _serviceBloc
-                                            .getDashboardData(
-                                              requestParams: {
-                                                'month': value.id,
-                                              },
-                                            );
-                                        if (context.mounted) {
-                                          Dialogs.dismiss(context);
-                                        }
-                                        districtWiseMonthly.clear();
-                                        if (apiState is ServicesStateSuccess) {
-                                          districtWiseMonthly.addAll(
-                                            (state.responseEntity.entity
-                                                        as DashboardEntity)
-                                                    .districtWiseMonthly ??
-                                                [],
-                                          );
-                                        }
                                         _onMonthChanged.value =
-                                            '${DateTime.now().year - value.id}';
+                                            value.id < 10
+                                                ? '0${value.id}'
+                                                : '${value.id}';
                                       })
                                     .getWidget(context),
                               ),
@@ -422,34 +450,56 @@ class UserDashboard extends BaseScreenWidget {
                           ValueListenableBuilder(
                             valueListenable: _onMonthChanged,
                             builder: (context, value, child) {
-                              (districtWiseMonthly).sort(
-                                (a, b) => (a.districtName ?? '').compareTo(
-                                  b.districtName ?? '',
+                              return FutureBuilder(
+                                future: _serviceBloc.getMonthwiseData(
+                                  requestParams: {
+                                    'year': '2025',
+                                    'month': value,
+                                  },
                                 ),
-                              );
-                              return ReportListWidget(
-                                ticketsHeaderData: [
-                                  'Distric',
-                                  'HIV',
-                                  'Cancer',
-                                  'Diabetes',
-                                  'Hypertension',
-                                  'Total',
-                                ],
-                                ticketsTableColunwidths: {
-                                  0: const FlexColumnWidth(4),
-                                  1: const FlexColumnWidth(2),
-                                  2: const FlexColumnWidth(2),
-                                  3: const FlexColumnWidth(2),
-                                  4: const FlexColumnWidth(2),
-                                  5: const FlexColumnWidth(2),
+                                builder: (context, snapShot) {
+                                  final districtWiseMonthly = List.empty(
+                                    growable: true,
+                                  );
+                                  final state = snapShot.data;
+                                  if (state is ServicesStateSuccess) {
+                                    districtWiseMonthly.addAll(
+                                      cast<DashboardEntity>(
+                                            state.responseEntity.entity,
+                                          ).districtWiseMonthly ??
+                                          [],
+                                    );
+                                    (districtWiseMonthly).sort(
+                                      (a, b) => (a.districtName ?? '')
+                                          .compareTo(b.districtName ?? ''),
+                                    );
+                                  }
+                                  return ReportListWidget(
+                                    ticketsHeaderData: [
+                                      'Distric',
+                                      'HIV',
+                                      'Cancer',
+                                      'Diabetes',
+                                      'Hypertension',
+                                      'Total',
+                                    ],
+                                    ticketsTableColunwidths: {
+                                      0: const FlexColumnWidth(4),
+                                      1: const FlexColumnWidth(2),
+                                      2: const FlexColumnWidth(2),
+                                      3: const FlexColumnWidth(2),
+                                      4: const FlexColumnWidth(2),
+                                      5: const FlexColumnWidth(2),
+                                    },
+                                    totalPagecount:
+                                        (districtWiseMonthly.length / 10)
+                                            .ceil(),
+                                    reportData: districtWiseMonthly.sublist(
+                                      0,
+                                      min(10, districtWiseMonthly.length),
+                                    ),
+                                  );
                                 },
-                                totalPagecount:
-                                    (districtWiseMonthly.length / 10).ceil(),
-                                reportData: districtWiseMonthly.sublist(
-                                  1,
-                                  min(10, districtWiseMonthly.length),
-                                ),
                               );
                             },
                           ),

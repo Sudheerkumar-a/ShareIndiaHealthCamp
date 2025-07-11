@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/dashboard_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
@@ -21,6 +22,29 @@ class ServicesBloc extends Cubit<ServicesState> {
       emit(ServicesStateLoading());
     }
     final result = await servicesUseCase.getDashboardData(
+      requestParams: requestParams,
+    );
+    final responseState = result.fold(
+      (l) => ServicesStateApiError(message: _getErrorMessage(l)),
+      (r) {
+        return ServicesStateSuccess(responseEntity: r);
+      },
+    );
+    if (emitResponse) {
+      emit(responseState);
+    }
+    return responseState;
+  }
+
+  Future<ServicesState> getMonthwiseData({
+    required Map<String, dynamic> requestParams,
+    emitResponse = false,
+  }) async {
+    if (emitResponse) {
+      emit(ServicesStateLoading());
+    }
+    final result = await servicesUseCase.getDashboardData(
+      apiUrl: dashboardMonthwiseApiUrl,
       requestParams: requestParams,
     );
     final responseState = result.fold(
@@ -82,12 +106,12 @@ class ServicesBloc extends Cubit<ServicesState> {
   Future<ServicesState> getFieldInputData({
     required String apiUrl,
     required Map<String, dynamic> requestParams,
-   required dynamic Function(Map<String, dynamic>) requestModel,
+    required dynamic Function(Map<String, dynamic>) requestModel,
   }) async {
     final result = await servicesUseCase.getFieldData(
       apiUrl: apiUrl,
       requestParams: requestParams,
-      responseModel: requestModel
+      responseModel: requestModel,
     );
     final responseState = result.fold(
       (l) => ServicesStateApiError(message: _getErrorMessage(l)),

@@ -96,6 +96,7 @@ flutter:
   assets:
     - assets/html/print.html
     - assets/images/ic_logo.png
+    - assets/images/screening.png
     - assets/images/ic_home.svg
     - assets/images/ic_report.svg
     - assets/images/ic_report.png

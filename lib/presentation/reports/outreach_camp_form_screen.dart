@@ -643,9 +643,9 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         ..inputFieldData = {
           'items':
               [
-                    {'id': '1', 'name': 'Reactive'},
-                    {'id': '2', 'name': 'Non‑Reactive'},
-                    {'id': '3', 'name': 'Not Done'},
+                    {'id': '1', 'name': 'ICTC-1'},
+                    {'id': '2', 'name': 'ICTC-2'},
+                    {'id': '3', 'name': 'ICTC-3'},
                   ]
                   .map(
                     (item) =>
@@ -920,7 +920,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                     Future.delayed(Duration.zero, () {
                       _doDatavalidation.value = !_doDatavalidation.value;
                     });
-                    return StepMetterWidget(stepCount: 8, currentStep: step);
+                    return StepMetterWidget(stepCount: 7, currentStep: step);
                   },
                 ),
                 Expanded(

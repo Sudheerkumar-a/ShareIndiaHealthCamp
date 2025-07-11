@@ -6,6 +6,7 @@ class DrawableAssets {
   //png
   //svg
   static const icLogo = '${drawablePath}ic_logo.png';
+  static const icScreening = '${drawablePath}screening.png';
   static const icLangAr = '${drawablePath}ic_lang_ar.svg';
   static const icLangEn = '${drawablePath}ic_lang_en.svg';
   static const icCross = '${drawablePath}ic_cross.svg';

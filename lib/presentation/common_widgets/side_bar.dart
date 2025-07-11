@@ -99,7 +99,7 @@ class SideBar extends StatelessWidget {
                   height: 40,
                   child:
                       ImageWidget(
-                        path: DrawableAssets.icReport,
+                        path: DrawableAssets.icScreening,
                         backgroundTint:
                             index == 1
                                 ? resources.color.viewBgColorLight
@@ -108,7 +108,7 @@ class SideBar extends StatelessWidget {
                       ).loadImageWithMoreTapArea,
                 ),
                 title: Text(
-                  resources.string.report,
+                  'Screening',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.textFontWeight600.onFontSize(
