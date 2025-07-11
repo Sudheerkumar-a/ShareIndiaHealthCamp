@@ -23,7 +23,7 @@ class ServicesUseCase extends BaseUseCase {
   }
 
   Future<Either<Failure, ApiEntity<DashboardEntity>>> getDashboardData({
-    String apiUrl=dashboardApiUrl,
+    String apiUrl = dashboardApiUrl,
     required Map<String, dynamic> requestParams,
   }) async {
     var apiResponse = await apisRepository.post<DashboardModel>(
@@ -79,6 +79,7 @@ class ServicesUseCase extends BaseUseCase {
       },
     );
   }
+
   Future<Either<Failure, ApiEntity<ListEntity>>> getFieldData({
     required String apiUrl,
     required Map<String, dynamic> requestParams,
@@ -95,6 +96,25 @@ class ServicesUseCase extends BaseUseCase {
       },
       (r) {
         var apiResponseEntity = r.toEntity<ListEntity>();
+        return Right(apiResponseEntity);
+      },
+    );
+  }
+
+  Future<Either<Failure, ApiEntity<SingleDataEntity>>> submitData({
+    required Map<String, dynamic> requestParams,
+  }) async {
+    var apiResponse = await apisRepository.post<SingleDataModel>(
+      apiUrl: submitApiUrl,
+      requestParams: requestParams,
+      responseModel: SingleDataModel.fromCreateRequest,
+    );
+    return apiResponse.fold(
+      (l) {
+        return Left(l);
+      },
+      (r) {
+        var apiResponseEntity = r.toEntity<SingleDataEntity>();
         return Right(apiResponseEntity);
       },
     );

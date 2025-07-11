@@ -122,6 +122,21 @@ class ServicesBloc extends Cubit<ServicesState> {
     return responseState;
   }
 
+  Future<ServicesState> submitData({
+    required Map<String, dynamic> requestParams,
+  }) async {
+    final result = await servicesUseCase.submitData(
+      requestParams: requestParams,
+    );
+    final responseState = result.fold(
+      (l) => ServicesStateApiError(message: _getErrorMessage(l)),
+      (r) {
+        return ServicesStateSuccess(responseEntity: r);
+      },
+    );
+    return responseState;
+  }
+
   String _getErrorMessage(Failure failure) {
     return failure.errorMessage;
   }

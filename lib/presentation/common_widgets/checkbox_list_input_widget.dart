@@ -7,6 +7,7 @@ import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class CheckboxListInputWidget extends StatelessWidget {
   final List<Map<String, dynamic>> inputData;
+  final Map<String, dynamic> selectedData;
   final String title;
   final bool isMandetory;
   final Function(Map) onSelected;
@@ -14,12 +15,13 @@ class CheckboxListInputWidget extends StatelessWidget {
     required this.title,
     required this.inputData,
     required this.onSelected,
+    this.selectedData = const {},
     this.isMandetory = false,
     super.key,
   });
 
   final _onDataChanged = ValueNotifier(false);
-  List<Map> data = [];
+  Map data = {};
 
   List<Widget> _getWidgetsByData(BuildContext context, int row) {
     final widgets = List<Widget>.empty(growable: true);
@@ -28,7 +30,7 @@ class CheckboxListInputWidget extends StatelessWidget {
       if (index >= inputData.length) {
         widgets.add(Expanded(child: SizedBox()));
       } else {
-        final item = data[index];
+        final item = inputData[index];
         widgets.add(
           Expanded(
             child:
@@ -52,7 +54,10 @@ class CheckboxListInputWidget extends StatelessWidget {
                                     .toList(),
                             'doSort': false,
                           }
-                          ..onDatachnage = (value) {})
+                          ..onDatachnage = (value) {
+                            data['result'] = value.name;
+                            onSelected.call(data);
+                          })
                         .getWidget(context)
                     : CheckboxListTile(
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -63,6 +68,8 @@ class CheckboxListInputWidget extends StatelessWidget {
                       ),
                       onChanged: (value) {
                         item['value'] = value;
+                        data['result'] = (value == true) ? 1 : 0;
+                        onSelected.call(data);
                         _onDataChanged.value = !_onDataChanged.value;
                       },
                       visualDensity: VisualDensity(
@@ -79,7 +86,7 @@ class CheckboxListInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    data = inputData;
+    data.addAll(selectedData);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

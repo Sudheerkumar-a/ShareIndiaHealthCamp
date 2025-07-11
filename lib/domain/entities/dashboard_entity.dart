@@ -84,6 +84,8 @@ class DistrictWiseTotalEntity extends BaseEntity {
   String? hypertensionAbnormal;
   String? diabetesAbnormal;
   String? cancerAbnormal;
+  String? cancerScreened;
+  String? cancerReferred;
   String? iecParticipants;
   String? tbDiagnosed;
   String? syphilisPositive;

@@ -25,7 +25,7 @@ class UserDashboard extends BaseScreenWidget {
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    _onMonthChanged.value = getDateByformat('yyyy-MM', DateTime.now());
+    _onMonthChanged.value = getDateByformat('MM', DateTime.now());
     Future.delayed(Duration.zero, () {
       _serviceBloc.getDashboardData(requestParams: {}, emitResponse: true);
     });
@@ -57,56 +57,54 @@ class UserDashboard extends BaseScreenWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          (FormEntity()
-                                ..type = 'labelheader'
-                                ..labelEn = 'Dashboard'.toUpperCase()
-                                ..labelTe = 'Dashboard'.toUpperCase())
-                              .getWidget(context),
                           Row(
                             children: [
                               Expanded(
-                                flex: 2,
                                 child: (FormEntity()
                                       ..type = 'labelheader'
-                                      ..labelEn = 'Andhra Pradesh'.toUpperCase()
-                                      ..labelTe =
-                                          'Andhra Pradesh'.toUpperCase())
+                                      ..labelEn = 'Dashboard'.toUpperCase()
+                                      ..labelTe = 'Dashboard'.toUpperCase())
                                     .getWidget(context),
                               ),
                               SizedBox(width: resources.dimen.dp10),
                               Expanded(
-                                flex: 2,
-                                child: (FormEntity()
-                                      ..type = 'collection'
-                                      ..placeholderEn = 'Select District'
-                                      ..placeholderTe = 'Select District'
-                                      ..inputFieldData = {
-                                        'items':
-                                            districts
-                                                .map(
-                                                  (item) =>
-                                                      NameIDModel.fromDistrictsJson(
-                                                        item
-                                                            as Map<
-                                                              String,
-                                                              dynamic
-                                                            >,
-                                                      ).toEntity(),
-                                                )
-                                                .toList()
-                                              ..add(
-                                                NameIDEntity()
-                                                  ..id = 0
-                                                  ..name = 'ALL',
-                                              ),
-                                      }
-                                      ..onDatachnage = (value) {
-                                        _onDistrictChanged.value = value.id;
-                                      })
-                                    .getWidget(context),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: (FormEntity()
+                                        ..type = 'labelheader'
+                                        ..labelEn =
+                                            'Andhra Pradesh'.toUpperCase()
+                                        ..labelTe =
+                                            'Andhra Pradesh'.toUpperCase())
+                                      .getWidget(context),
+                                ),
                               ),
                             ],
                           ),
+                          (FormEntity()
+                                ..type = 'collection'
+                                ..placeholderEn = 'Select District'
+                                ..placeholderTe = 'Select District'
+                                ..inputFieldData = {
+                                  'items':
+                                      districts
+                                          .map(
+                                            (item) =>
+                                                NameIDModel.fromDistrictsJson(
+                                                  item as Map<String, dynamic>,
+                                                ).toEntity(),
+                                          )
+                                          .toList()
+                                        ..add(
+                                          NameIDEntity()
+                                            ..id = 0
+                                            ..name = 'ALL',
+                                        ),
+                                }
+                                ..onDatachnage = (value) {
+                                  _onDistrictChanged.value = value.id;
+                                })
+                              .getWidget(context),
                           SizedBox(height: resources.dimen.dp10),
                           ValueListenableBuilder(
                             valueListenable: _onDistrictChanged,
@@ -328,37 +326,125 @@ class UserDashboard extends BaseScreenWidget {
                                                           .colorWhite,
                                                   radious: resources.dimen.dp10,
                                                 ).roundedCornerBox,
-                                            child: Text.rich(
-                                              textAlign: TextAlign.end,
-                                              TextSpan(
-                                                text: 'Cancer Abnormal\n',
-                                                style:
-                                                    context.textFontWeight600,
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        overalData
-                                                            ?.cancerAbnormal ??
-                                                        '',
-                                                    style: context
-                                                        .textFontWeight600
-                                                        .onFontSize(
-                                                          resources
-                                                              .fontSize
-                                                              .dp18,
-                                                        )
-                                                        .onColor(
-                                                          resources
-                                                              .color
-                                                              .viewBgColor,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  'Cancer',
+                                                  style:
+                                                      context.textFontWeight600,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text.rich(
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        TextSpan(
+                                                          text: 'oral',
+                                                          style: context
+                                                              .textFontWeight600
+                                                              .onFontSize(
+                                                                resources
+                                                                    .fontSize
+                                                                    .dp10,
+                                                              ),
+                                                          children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  '\n${overalData?.cancerAbnormal ?? ''}',
+                                                              style: context
+                                                                  .textFontWeight600
+                                                                  .onFontSize(
+                                                                    resources
+                                                                        .fontSize
+                                                                        .dp18,
+                                                                  )
+                                                                  .onColor(
+                                                                    resources
+                                                                        .color
+                                                                        .viewBgColor,
+                                                                  ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                  ),
-                                                ],
-                                              ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text.rich(
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        TextSpan(
+                                                          text: 'Breast',
+                                                          style: context
+                                                              .textFontWeight600
+                                                              .onFontSize(
+                                                                resources
+                                                                    .fontSize
+                                                                    .dp10,
+                                                              ),
+                                                          children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  '\n${overalData?.cancerScreened ?? '10'}',
+                                                              style: context
+                                                                  .textFontWeight600
+                                                                  .onFontSize(
+                                                                    resources
+                                                                        .fontSize
+                                                                        .dp18,
+                                                                  )
+                                                                  .onColor(
+                                                                    resources
+                                                                        .color
+                                                                        .viewBgColor,
+                                                                  ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text.rich(
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        TextSpan(
+                                                          text: 'Cervical',
+                                                          style: context
+                                                              .textFontWeight600
+                                                              .onFontSize(
+                                                                resources
+                                                                    .fontSize
+                                                                    .dp10,
+                                                              ),
+                                                          children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  '\n${overalData?.cancerReferred ?? '12'}',
+                                                              style: context
+                                                                  .textFontWeight600
+                                                                  .onFontSize(
+                                                                    resources
+                                                                        .fontSize
+                                                                        .dp18,
+                                                                  )
+                                                                  .onColor(
+                                                                    resources
+                                                                        .color
+                                                                        .viewBgColor,
+                                                                  ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: resources.dimen.dp10),
                                         SizedBox(width: resources.dimen.dp20),
                                         Expanded(
                                           child: Container(

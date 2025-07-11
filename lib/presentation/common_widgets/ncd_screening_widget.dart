@@ -7,6 +7,7 @@ import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class NcdScreeningWidget extends StatelessWidget {
   final List<Map<String, dynamic>> inputData;
+  final Map<String, dynamic> selctedData;
   final String title;
   final bool isMandetory;
   final Function(Map) onSelected;
@@ -14,12 +15,13 @@ class NcdScreeningWidget extends StatelessWidget {
     required this.title,
     required this.inputData,
     required this.onSelected,
+    this.selctedData = const {},
     this.isMandetory = false,
     super.key,
   });
 
   final _onDataChanged = ValueNotifier(false);
-  List<Map> data = [];
+  Map data = {};
 
   List<Widget> _getWidgetsByData(BuildContext context, int row) {
     final widgets = List<Widget>.empty(growable: true);
@@ -79,7 +81,7 @@ class NcdScreeningWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    data = inputData;
+    data.addAll(selctedData);
     final items = List<FormEntity>.empty(growable: true);
     items.addAll([
       FormEntity()
@@ -95,6 +97,8 @@ class NcdScreeningWidget extends StatelessWidget {
             child.isHidden = !value;
             child.fieldValue = null;
           }
+          data["screened"] = value ? 1 : 0;
+          onSelected.call(data);
           _onDataChanged.value = !_onDataChanged.value;
         },
       FormEntity()
@@ -132,6 +136,8 @@ class NcdScreeningWidget extends StatelessWidget {
               child.fieldValue = null;
             }
           }
+          data["abnormal"] = value.name;
+          onSelected.call(data);
           _onDataChanged.value = !_onDataChanged.value;
         },
       FormEntity()
@@ -141,7 +147,10 @@ class NcdScreeningWidget extends StatelessWidget {
         ..isHidden = true
         ..labelEn = 'Referred'
         ..labelTe = 'Referred'
-        ..onDatachnage = (value) {},
+        ..onDatachnage = (value) {
+          data["abnormal"] = value;
+          onSelected.call(data);
+        },
     ]);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
