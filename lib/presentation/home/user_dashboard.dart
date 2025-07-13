@@ -11,6 +11,7 @@ import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/dashboard_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
+import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
@@ -36,11 +37,7 @@ class UserDashboard extends BaseScreenWidget {
         child: BlocBuilder<ServicesBloc, ServicesState>(
           builder: (newContext, state) {
             if (state is ServicesStateLoading) {
-              return Center(
-                child: CircularProgressIndicator(
-                  constraints: BoxConstraints(maxHeight: 40, maxWidth: 40),
-                ),
-              );
+              return Center(child: CircularProgressIndicator());
             } else if (state is ServicesStateApiError) {
               return Center(
                 child: Text(state.message, style: context.textFontWeight600),
@@ -49,6 +46,21 @@ class UserDashboard extends BaseScreenWidget {
               final dashboardEntity = cast<DashboardEntity>(
                 state.responseEntity.entity,
               );
+
+              final isAdmin =
+                  UserCredentialsEntity.details(context).user?.isAdmin == 1;
+              final title =
+                  isAdmin
+                      ? 'Andhra Pradesh'.toUpperCase()
+                      : (UserCredentialsEntity.details(
+                                context,
+                              ).user?.district ??
+                              '')
+                          .toUpperCase();
+              final filterTitle =
+                  isAdmin
+                      ? resources.string.selectDistrict
+                      : resources.string.selectMandal;
 
               return Column(
                 children: [
@@ -62,8 +74,7 @@ class UserDashboard extends BaseScreenWidget {
                               Expanded(
                                 child: (FormEntity()
                                       ..type = 'labelheader'
-                                      ..labelEn = 'Dashboard'.toUpperCase()
-                                      ..labelTe = 'Dashboard'.toUpperCase())
+                                      ..label = resources.string.dashboard)
                                     .getWidget(context),
                               ),
                               SizedBox(width: resources.dimen.dp10),
@@ -72,10 +83,7 @@ class UserDashboard extends BaseScreenWidget {
                                   alignment: Alignment.centerRight,
                                   child: (FormEntity()
                                         ..type = 'labelheader'
-                                        ..labelEn =
-                                            'Andhra Pradesh'.toUpperCase()
-                                        ..labelTe =
-                                            'Andhra Pradesh'.toUpperCase())
+                                        ..label = title)
                                       .getWidget(context),
                                 ),
                               ),
@@ -83,8 +91,7 @@ class UserDashboard extends BaseScreenWidget {
                           ),
                           (FormEntity()
                                 ..type = 'collection'
-                                ..placeholderEn = 'Select District'
-                                ..placeholderTe = 'Select District'
+                                ..placeholder = filterTitle
                                 ..inputFieldData = {
                                   'items':
                                       districts
@@ -137,7 +144,8 @@ class UserDashboard extends BaseScreenWidget {
                                             child: Text.rich(
                                               textAlign: TextAlign.end,
                                               TextSpan(
-                                                text: 'Total participants\n',
+                                                text:
+                                                    '${resources.string.totalParticipants}\n',
                                                 style:
                                                     context.textFontWeight600,
                                                 children: [
@@ -182,7 +190,8 @@ class UserDashboard extends BaseScreenWidget {
                                             child: Text.rich(
                                               textAlign: TextAlign.end,
                                               TextSpan(
-                                                text: 'Total Screened\n',
+                                                text:
+                                                    '${resources.string.totalScreened}\n',
                                                 style:
                                                     context.textFontWeight600,
                                                 children: [
@@ -233,7 +242,8 @@ class UserDashboard extends BaseScreenWidget {
                                             child: Text.rich(
                                               textAlign: TextAlign.end,
                                               TextSpan(
-                                                text: 'Hypertension\n',
+                                                text:
+                                                    '${resources.string.hypertension}\n',
                                                 style:
                                                     context.textFontWeight600,
                                                 children: [
@@ -278,7 +288,8 @@ class UserDashboard extends BaseScreenWidget {
                                             child: Text.rich(
                                               textAlign: TextAlign.end,
                                               TextSpan(
-                                                text: 'Diabetes\n',
+                                                text:
+                                                    '${resources.string.diabetes}\n',
                                                 style:
                                                     context.textFontWeight600,
                                                 children: [
@@ -331,18 +342,23 @@ class UserDashboard extends BaseScreenWidget {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  'Cancer',
+                                                  resources.string.cancer,
                                                   style:
                                                       context.textFontWeight600,
                                                 ),
                                                 Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Expanded(
                                                       child: Text.rich(
                                                         textAlign:
                                                             TextAlign.center,
                                                         TextSpan(
-                                                          text: 'oral',
+                                                          text:
+                                                              resources
+                                                                  .string
+                                                                  .oral,
                                                           style: context
                                                               .textFontWeight600
                                                               .onFontSize(
@@ -353,7 +369,7 @@ class UserDashboard extends BaseScreenWidget {
                                                           children: [
                                                             TextSpan(
                                                               text:
-                                                                  '\n${overalData?.cancerAbnormal ?? ''}',
+                                                                  '\n${overalData?.cancerAbnormal ?? '0'}',
                                                               style: context
                                                                   .textFontWeight600
                                                                   .onFontSize(
@@ -376,7 +392,10 @@ class UserDashboard extends BaseScreenWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         TextSpan(
-                                                          text: 'Breast',
+                                                          text:
+                                                              resources
+                                                                  .string
+                                                                  .breast,
                                                           style: context
                                                               .textFontWeight600
                                                               .onFontSize(
@@ -410,7 +429,10 @@ class UserDashboard extends BaseScreenWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         TextSpan(
-                                                          text: 'Cervical',
+                                                          text:
+                                                              resources
+                                                                  .string
+                                                                  .cervical,
                                                           style: context
                                                               .textFontWeight600
                                                               .onFontSize(
@@ -463,7 +485,8 @@ class UserDashboard extends BaseScreenWidget {
                                             child: Text.rich(
                                               textAlign: TextAlign.end,
                                               TextSpan(
-                                                text: 'HIV Reactive\n',
+                                                text:
+                                                    '${resources.string.huvReactive}\n',
                                                 style:
                                                     context.textFontWeight600,
                                                 children: [
@@ -505,10 +528,15 @@ class UserDashboard extends BaseScreenWidget {
                                 flex: 2,
                                 child: (FormEntity()
                                       ..type = 'labelheader'
-                                      ..labelEn =
-                                          'Distric Wise Data'.toUpperCase()
-                                      ..labelTe =
-                                          'Distric Wise Data'.toUpperCase())
+                                      ..label =
+                                          (isAdmin
+                                                  ? resources
+                                                      .string
+                                                      .districtWiseData
+                                                  : resources
+                                                      .string
+                                                      .mandalWiseData)
+                                              .toUpperCase())
                                     .getWidget(context),
                               ),
                               SizedBox(width: resources.dimen.dp10),
@@ -562,12 +590,14 @@ class UserDashboard extends BaseScreenWidget {
                                   }
                                   return ReportListWidget(
                                     ticketsHeaderData: [
-                                      'Distric',
-                                      'HIV',
-                                      'Cancer',
-                                      'Diabetes',
-                                      'Hypertension',
-                                      'Total',
+                                      isAdmin
+                                          ? resources.string.district
+                                          : resources.string.mandal,
+                                      resources.string.total,
+                                      resources.string.hiv,
+                                      resources.string.cancer,
+                                      resources.string.diabetes,
+                                      resources.string.hypertension,
                                     ],
                                     ticketsTableColunwidths: {
                                       0: const FlexColumnWidth(4),

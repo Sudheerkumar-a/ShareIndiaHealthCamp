@@ -7,7 +7,7 @@ import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class NcdScreeningWidget extends StatelessWidget {
   final List<Map<String, dynamic>> inputData;
-  final Map<String, dynamic> selctedData;
+  final Map<dynamic, dynamic>? selctedData;
   final String title;
   final bool isMandetory;
   final Function(Map) onSelected;
@@ -15,7 +15,7 @@ class NcdScreeningWidget extends StatelessWidget {
     required this.title,
     required this.inputData,
     required this.onSelected,
-    this.selctedData = const {},
+    this.selctedData,
     this.isMandetory = false,
     super.key,
   });
@@ -64,7 +64,7 @@ class NcdScreeningWidget extends StatelessWidget {
                         style: context.textFontWeight400,
                       ),
                       onChanged: (value) {
-                        item['value'] = value;
+                        item['value'] = value==true?1:0;
                         _onDataChanged.value = !_onDataChanged.value;
                       },
                       visualDensity: VisualDensity(
@@ -81,7 +81,7 @@ class NcdScreeningWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    data.addAll(selctedData);
+    data.addAll(selctedData??{'screened':0,'abnormal':0,'referred':0});
     final items = List<FormEntity>.empty(growable: true);
     items.addAll([
       FormEntity()
@@ -136,7 +136,7 @@ class NcdScreeningWidget extends StatelessWidget {
               child.fieldValue = null;
             }
           }
-          data["abnormal"] = value.name;
+          data["abnormal"] = value.id==2?1:0;
           onSelected.call(data);
           _onDataChanged.value = !_onDataChanged.value;
         },
@@ -148,7 +148,7 @@ class NcdScreeningWidget extends StatelessWidget {
         ..labelEn = 'Referred'
         ..labelTe = 'Referred'
         ..onDatachnage = (value) {
-          data["abnormal"] = value;
+          data["abnormal"] = value==true?1:0;
           onSelected.call(data);
         },
     ]);

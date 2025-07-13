@@ -68,7 +68,7 @@ class CheckboxListInputWidget extends StatelessWidget {
                       ),
                       onChanged: (value) {
                         item['value'] = value;
-                        data['result'] = (value == true) ? 1 : 0;
+                        data['done'] = (value == true) ? 1 : 0;
                         onSelected.call(data);
                         _onDataChanged.value = !_onDataChanged.value;
                       },

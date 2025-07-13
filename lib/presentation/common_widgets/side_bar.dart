@@ -108,7 +108,7 @@ class SideBar extends StatelessWidget {
                       ).loadImageWithMoreTapArea,
                 ),
                 title: Text(
-                  'Screening',
+                  resources.string.screening,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.textFontWeight600.onFontSize(

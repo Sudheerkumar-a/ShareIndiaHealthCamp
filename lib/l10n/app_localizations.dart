@@ -98,7 +98,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'shareindia'**
+  /// **'ihs'**
   String get appTitle;
 
   /// No description provided for @close.
@@ -155,30 +155,6 @@ abstract class AppLocalizations {
   /// **'Clear'**
   String get clear;
 
-  /// No description provided for @appUpdateTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Update your application'**
-  String get appUpdateTitle;
-
-  /// No description provided for @appUpdateBody.
-  ///
-  /// In en, this message translates to:
-  /// **'We improve performance and fix some bugs to make your experience seamless'**
-  String get appUpdateBody;
-
-  /// No description provided for @whatareyoulookingfor.
-  ///
-  /// In en, this message translates to:
-  /// **'What are you looking for?'**
-  String get whatareyoulookingfor;
-
-  /// No description provided for @documentSuccessfullySaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Document successfully saved'**
-  String get documentSuccessfullySaved;
-
   /// No description provided for @home.
   ///
   /// In en, this message translates to:
@@ -203,143 +179,23 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profile;
 
-  /// No description provided for @searchHere.
-  ///
-  /// In en, this message translates to:
-  /// **'Search here with ticket ID...'**
-  String get searchHere;
-
-  /// No description provided for @supportSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'Support Summary'**
-  String get supportSummary;
-
-  /// No description provided for @supportSummaryDes.
-  ///
-  /// In en, this message translates to:
-  /// **'The dashboard about the IT Helpdesk Support Tickets'**
-  String get supportSummaryDes;
-
-  /// No description provided for @createNewRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'Create New Request'**
-  String get createNewRequest;
-
-  /// No description provided for @createNewRequestDes.
-  ///
-  /// In en, this message translates to:
-  /// **'To raise new ticket about your IT issues please fill the simple below form'**
-  String get createNewRequestDes;
-
-  /// No description provided for @notAssignedRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'Not Assigned\nRequests'**
-  String get notAssignedRequests;
-
-  /// No description provided for @openRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'Open\nRequests'**
-  String get openRequests;
-
-  /// No description provided for @closedRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'Closed\nRequests'**
-  String get closedRequests;
-
-  /// No description provided for @noOfRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'No. of\nRequests'**
-  String get noOfRequests;
-
-  /// No description provided for @ticketsSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'Tickets Summary'**
-  String get ticketsSummary;
-
-  /// No description provided for @ticketsSummaryDes.
-  ///
-  /// In en, this message translates to:
-  /// **'The dashboard about the IT Helpdesk Support Tickets'**
-  String get ticketsSummaryDes;
-
-  /// No description provided for @category.
-  ///
-  /// In en, this message translates to:
-  /// **'Category'**
-  String get category;
-
-  /// No description provided for @shareindiaSupportTickets.
-  ///
-  /// In en, this message translates to:
-  /// **'IT Helpdesk Support Tickets'**
-  String get shareindiaSupportTickets;
-
-  /// No description provided for @latestTickets.
-  ///
-  /// In en, this message translates to:
-  /// **'Latest Tickets'**
-  String get latestTickets;
-
-  /// No description provided for @latestTicketsDes.
-  ///
-  /// In en, this message translates to:
-  /// **'Latest Tickets (Showing 01 to 08 of 48 Tickets)'**
-  String get latestTicketsDes;
-
   /// No description provided for @sortBy.
   ///
   /// In en, this message translates to:
   /// **'Sort By'**
   String get sortBy;
 
-  /// No description provided for @id.
+  /// No description provided for @step.
   ///
   /// In en, this message translates to:
-  /// **'ID'**
-  String get id;
+  /// **'Step'**
+  String get step;
 
-  /// No description provided for @employeeName.
+  /// No description provided for @user.
   ///
   /// In en, this message translates to:
-  /// **'Employee Name'**
-  String get employeeName;
-
-  /// No description provided for @subjects.
-  ///
-  /// In en, this message translates to:
-  /// **'Subjects'**
-  String get subjects;
-
-  /// No description provided for @status.
-  ///
-  /// In en, this message translates to:
-  /// **'Status'**
-  String get status;
-
-  /// No description provided for @priority.
-  ///
-  /// In en, this message translates to:
-  /// **'Priority'**
-  String get priority;
-
-  /// No description provided for @assignee.
-  ///
-  /// In en, this message translates to:
-  /// **'Assignee'**
-  String get assignee;
-
-  /// No description provided for @department.
-  ///
-  /// In en, this message translates to:
-  /// **'Department'**
-  String get department;
+  /// **'User'**
+  String get user;
 
   /// No description provided for @createDate.
   ///
@@ -353,359 +209,23 @@ abstract class AppLocalizations {
   /// **'Create'**
   String get create;
 
-  /// No description provided for @step.
-  ///
-  /// In en, this message translates to:
-  /// **'Step'**
-  String get step;
-
-  /// No description provided for @step1Des.
-  ///
-  /// In en, this message translates to:
-  /// **'Select your Ticket Category'**
-  String get step1Des;
-
-  /// No description provided for @step2Des.
-  ///
-  /// In en, this message translates to:
-  /// **'Detail Required'**
-  String get step2Des;
-
-  /// No description provided for @step3Des.
-  ///
-  /// In en, this message translates to:
-  /// **'Supported Document'**
-  String get step3Des;
-
-  /// No description provided for @supportITRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'IT Support'**
-  String get supportITRequest;
-
-  /// No description provided for @itISOCRS.
-  ///
-  /// In en, this message translates to:
-  /// **'ISO CR'**
-  String get itISOCRS;
-
-  /// No description provided for @eservices.
-  ///
-  /// In en, this message translates to:
-  /// **'Eservices'**
-  String get eservices;
-
-  /// No description provided for @system.
-  ///
-  /// In en, this message translates to:
-  /// **'System'**
-  String get system;
-
-  /// No description provided for @application.
-  ///
-  /// In en, this message translates to:
-  /// **'Application'**
-  String get application;
-
-  /// No description provided for @subCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Sub Category'**
-  String get subCategory;
-
-  /// No description provided for @contactNoTelephoneExt.
-  ///
-  /// In en, this message translates to:
-  /// **'Contact No. / Telephone Ext.'**
-  String get contactNoTelephoneExt;
-
-  /// No description provided for @subject.
-  ///
-  /// In en, this message translates to:
-  /// **'Subject'**
-  String get subject;
-
-  /// No description provided for @description.
-  ///
-  /// In en, this message translates to:
-  /// **'Description'**
-  String get description;
-
-  /// No description provided for @uploadFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Upload File'**
-  String get uploadFile;
-
-  /// No description provided for @issueType.
-  ///
-  /// In en, this message translates to:
-  /// **'Issue Type'**
-  String get issueType;
-
-  /// No description provided for @serviceName.
-  ///
-  /// In en, this message translates to:
-  /// **'Service Name'**
-  String get serviceName;
-
-  /// No description provided for @requestNo.
-  ///
-  /// In en, this message translates to:
-  /// **'Request No.'**
-  String get requestNo;
-
-  /// No description provided for @latestUpdate.
-  ///
-  /// In en, this message translates to:
-  /// **'Latest Update'**
-  String get latestUpdate;
-
-  /// No description provided for @returnText.
-  ///
-  /// In en, this message translates to:
-  /// **'Return'**
-  String get returnText;
-
-  /// No description provided for @transfer.
-  ///
-  /// In en, this message translates to:
-  /// **'Transfer'**
-  String get transfer;
-
-  /// No description provided for @hold.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold'**
-  String get hold;
-
-  /// No description provided for @reject.
-  ///
-  /// In en, this message translates to:
-  /// **'Reject'**
-  String get reject;
-
-  /// No description provided for @chargeable.
-  ///
-  /// In en, this message translates to:
-  /// **'Chargeable'**
-  String get chargeable;
-
-  /// No description provided for @comments.
-  ///
-  /// In en, this message translates to:
-  /// **'Comments'**
-  String get comments;
-
-  /// No description provided for @forwardTo.
-  ///
-  /// In en, this message translates to:
-  /// **'Forward to'**
-  String get forwardTo;
-
-  /// No description provided for @user.
-  ///
-  /// In en, this message translates to:
-  /// **'User'**
-  String get user;
-
-  /// No description provided for @section.
-  ///
-  /// In en, this message translates to:
-  /// **'Section'**
-  String get section;
-
-  /// No description provided for @employee.
-  ///
-  /// In en, this message translates to:
-  /// **'Employee'**
-  String get employee;
-
-  /// No description provided for @selectDepartment.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Department'**
-  String get selectDepartment;
-
-  /// No description provided for @selectEmployeeName.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Employee Name'**
-  String get selectEmployeeName;
-
-  /// No description provided for @activeRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'Active\nRequests'**
-  String get activeRequests;
-
-  /// No description provided for @dueRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'Due\nRequests'**
-  String get dueRequests;
-
-  /// No description provided for @allRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'All\nRequests'**
-  String get allRequests;
-
-  /// No description provided for @export.
-  ///
-  /// In en, this message translates to:
-  /// **'Export'**
-  String get export;
-
-  /// No description provided for @print.
-  ///
-  /// In en, this message translates to:
-  /// **'Print'**
-  String get print;
-
-  /// No description provided for @designation.
-  ///
-  /// In en, this message translates to:
-  /// **'Designation'**
-  String get designation;
-
-  /// No description provided for @emailID.
-  ///
-  /// In en, this message translates to:
-  /// **'Email ID'**
-  String get emailID;
-
-  /// No description provided for @itSupportDirecotry.
-  ///
-  /// In en, this message translates to:
-  /// **'IT Support Direcotry'**
-  String get itSupportDirecotry;
-
-  /// No description provided for @itSupportDirecotryDes.
-  ///
-  /// In en, this message translates to:
-  /// **'Umm Al Quwain Department - IT Support Direcotry'**
-  String get itSupportDirecotryDes;
-
-  /// No description provided for @userProfile.
-  ///
-  /// In en, this message translates to:
-  /// **'User Profile'**
-  String get userProfile;
-
-  /// No description provided for @fullName.
-  ///
-  /// In en, this message translates to:
-  /// **'Full Name'**
-  String get fullName;
-
-  /// No description provided for @title.
-  ///
-  /// In en, this message translates to:
-  /// **'Title'**
-  String get title;
-
-  /// No description provided for @managerName.
-  ///
-  /// In en, this message translates to:
-  /// **'Manager Name'**
-  String get managerName;
-
-  /// No description provided for @yearOfService.
-  ///
-  /// In en, this message translates to:
-  /// **'Year of Service'**
-  String get yearOfService;
-
-  /// No description provided for @telephoneExt.
-  ///
-  /// In en, this message translates to:
-  /// **'Telephone Ext'**
-  String get telephoneExt;
-
-  /// No description provided for @reason.
-  ///
-  /// In en, this message translates to:
-  /// **'Reason'**
-  String get reason;
-
-  /// No description provided for @pleaseSelect.
-  ///
-  /// In en, this message translates to:
-  /// **'Please Select'**
-  String get pleaseSelect;
-
-  /// No description provided for @pleaseEnter.
-  ///
-  /// In en, this message translates to:
-  /// **'Please Enter'**
-  String get pleaseEnter;
-
-  /// No description provided for @approve.
-  ///
-  /// In en, this message translates to:
-  /// **'Approve'**
-  String get approve;
-
-  /// No description provided for @open.
-  ///
-  /// In en, this message translates to:
-  /// **'Open'**
-  String get open;
-
-  /// No description provided for @resubmit.
-  ///
-  /// In en, this message translates to:
-  /// **'Resubmit'**
-  String get resubmit;
-
-  /// No description provided for @reAssign.
-  ///
-  /// In en, this message translates to:
-  /// **'Re-Assign'**
-  String get reAssign;
-
-  /// No description provided for @reOpen.
-  ///
-  /// In en, this message translates to:
-  /// **'Re-Open'**
-  String get reOpen;
-
   /// No description provided for @all.
   ///
   /// In en, this message translates to:
   /// **'All'**
   String get all;
 
-  /// No description provided for @assignedTickets.
+  /// No description provided for @language.
   ///
   /// In en, this message translates to:
-  /// **'Assigned Tickets'**
-  String get assignedTickets;
+  /// **'Language'**
+  String get language;
 
-  /// No description provided for @myTickets.
+  /// No description provided for @uploadFile.
   ///
   /// In en, this message translates to:
-  /// **'My Tickets'**
-  String get myTickets;
-
-  /// No description provided for @employeeTickets.
-  ///
-  /// In en, this message translates to:
-  /// **'Employee Tickets'**
-  String get employeeTickets;
-
-  /// No description provided for @noTickets.
-  ///
-  /// In en, this message translates to:
-  /// **'No Tickets'**
-  String get noTickets;
-
-  /// No description provided for @filterByDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Filter by Date'**
-  String get filterByDate;
+  /// **'Upload File'**
+  String get uploadFile;
 
   /// No description provided for @startDate.
   ///
@@ -719,137 +239,197 @@ abstract class AppLocalizations {
   /// **'End Date'**
   String get endDate;
 
-  /// No description provided for @support.
+  /// No description provided for @pleaseSelect.
   ///
   /// In en, this message translates to:
-  /// **'Support'**
-  String get support;
+  /// **'Please Select'**
+  String get pleaseSelect;
 
-  /// No description provided for @itRequests.
+  /// No description provided for @pleaseEnter.
   ///
   /// In en, this message translates to:
-  /// **'IT Requests'**
-  String get itRequests;
+  /// **'Please Enter'**
+  String get pleaseEnter;
 
-  /// No description provided for @submittingRequest.
+  /// No description provided for @appUpdateTitle.
   ///
   /// In en, this message translates to:
-  /// **'Submitting Request'**
-  String get submittingRequest;
+  /// **'Update your application'**
+  String get appUpdateTitle;
 
-  /// No description provided for @successfullySubmitted.
+  /// No description provided for @userProfile.
   ///
   /// In en, this message translates to:
-  /// **'Successfully Submitted'**
-  String get successfullySubmitted;
+  /// **'User Profile'**
+  String get userProfile;
 
-  /// No description provided for @teamComments.
+  /// No description provided for @fullName.
   ///
   /// In en, this message translates to:
-  /// **'Team Comments'**
-  String get teamComments;
+  /// **'Full Name'**
+  String get fullName;
 
-  /// No description provided for @doYouWantReturnTo.
+  /// No description provided for @documentSuccessfullySaved.
   ///
   /// In en, this message translates to:
-  /// **'Do you want return to'**
-  String get doYouWantReturnTo;
+  /// **'Document successfully saved'**
+  String get documentSuccessfullySaved;
 
-  /// No description provided for @doYouWantToResubmit.
+  /// No description provided for @appUpdateBody.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to Resubmit'**
-  String get doYouWantToResubmit;
+  /// **'We improve performance and fix some bugs to make your experience seamless'**
+  String get appUpdateBody;
 
-  /// No description provided for @doYouWantToApprove.
+  /// No description provided for @selectDistrict.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to Approve'**
-  String get doYouWantToApprove;
+  /// **'Select District'**
+  String get selectDistrict;
 
-  /// No description provided for @doYouWantToForword.
+  /// No description provided for @selectMandal.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to Forword'**
-  String get doYouWantToForword;
+  /// **'Select Mandal'**
+  String get selectMandal;
 
-  /// No description provided for @doYouWantTo.
+  /// No description provided for @totalParticipants.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to'**
-  String get doYouWantTo;
+  /// **'Total participants'**
+  String get totalParticipants;
 
-  /// No description provided for @low.
+  /// No description provided for @totalScreened.
   ///
   /// In en, this message translates to:
-  /// **'Low'**
-  String get low;
+  /// **'Total Screened'**
+  String get totalScreened;
 
-  /// No description provided for @medium.
+  /// No description provided for @hypertension.
   ///
   /// In en, this message translates to:
-  /// **'Medium'**
-  String get medium;
+  /// **'Hypertension'**
+  String get hypertension;
 
-  /// No description provided for @high.
+  /// No description provided for @diabetes.
   ///
   /// In en, this message translates to:
-  /// **'High'**
-  String get high;
+  /// **'Diabetes'**
+  String get diabetes;
 
-  /// No description provided for @critical.
+  /// No description provided for @cancer.
   ///
   /// In en, this message translates to:
-  /// **'Critical'**
-  String get critical;
+  /// **'Cancer'**
+  String get cancer;
 
-  /// No description provided for @attachments.
+  /// No description provided for @oral.
   ///
   /// In en, this message translates to:
-  /// **'Attachments'**
-  String get attachments;
+  /// **'Oral'**
+  String get oral;
 
-  /// No description provided for @updatingTicket.
+  /// No description provided for @breast.
   ///
   /// In en, this message translates to:
-  /// **'Updating Ticket'**
-  String get updatingTicket;
+  /// **'Breast'**
+  String get breast;
 
-  /// No description provided for @successfullyUpdated.
+  /// No description provided for @cervical.
   ///
   /// In en, this message translates to:
-  /// **'Successfully Updated'**
-  String get successfullyUpdated;
+  /// **'Cervical'**
+  String get cervical;
 
-  /// No description provided for @createdBy.
+  /// No description provided for @huvReactive.
   ///
   /// In en, this message translates to:
-  /// **'Created by'**
-  String get createdBy;
+  /// **'HIV Reactive'**
+  String get huvReactive;
 
-  /// No description provided for @on.
+  /// No description provided for @districtWiseData.
   ///
   /// In en, this message translates to:
-  /// **'on'**
-  String get on;
+  /// **'District Wise Data\''**
+  String get districtWiseData;
 
-  /// No description provided for @otherActions.
+  /// No description provided for @mandalWiseData.
   ///
   /// In en, this message translates to:
-  /// **'Other Actions'**
-  String get otherActions;
+  /// **'Mandal Wise Data\''**
+  String get mandalWiseData;
 
-  /// No description provided for @vacation.
+  /// No description provided for @district.
   ///
   /// In en, this message translates to:
-  /// **'Vacation'**
-  String get vacation;
+  /// **'District'**
+  String get district;
 
-  /// No description provided for @language.
+  /// No description provided for @mandal.
   ///
   /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
+  /// **'Mandal'**
+  String get mandal;
+
+  /// No description provided for @village.
+  ///
+  /// In en, this message translates to:
+  /// **'Village'**
+  String get village;
+
+  /// No description provided for @hiv.
+  ///
+  /// In en, this message translates to:
+  /// **'HIV'**
+  String get hiv;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
+
+  /// No description provided for @dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboard;
+
+  /// No description provided for @screening.
+  ///
+  /// In en, this message translates to:
+  /// **'Screening'**
+  String get screening;
+
+  /// No description provided for @screeningDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Screening details'**
+  String get screeningDetails;
+
+  /// No description provided for @locationoftheCamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Location of the Camp'**
+  String get locationoftheCamp;
+
+  /// No description provided for @referralDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Referral Details'**
+  String get referralDetails;
+
+  /// No description provided for @string.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get string;
+
+  /// No description provided for @dummy.
+  ///
+  /// In en, this message translates to:
+  /// **'Dummy'**
+  String get dummy;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

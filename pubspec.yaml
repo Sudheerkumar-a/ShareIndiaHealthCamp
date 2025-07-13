@@ -94,7 +94,11 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/html/print.html
+    - assets/files/Consent_form_telugu.pdf
+    - assets/files/Consent_form_english.pdf
+    - assets/images/SHARE_Logo.png
+    - assets/images/NACO_logo.png
+    - assets/images/APSACS_logo.png
     - assets/images/ic_logo.png
     - assets/images/screening.png
     - assets/images/ic_home.svg

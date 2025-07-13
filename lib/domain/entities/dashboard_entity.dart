@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 
 class DashboardEntityOld extends BaseEntity {
@@ -68,11 +67,11 @@ class DistrictWiseMonthlyEntity extends BaseEntity {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['district'] = districtName;
+    data['totalScreened'] = totalScreened;
     data['hiv'] = hivReactive ?? '';
     data['cancer'] = cancerAbnormal;
     data['diabities'] = diabetesAbnormal;
     data['hypertension'] = hypertensionAbnormal;
-    data['totalScreened'] = totalScreened;
     return data;
   }
 }

@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'shareindia';
+  String get appTitle => 'ihs';
 
   @override
   String get close => 'Close';
@@ -39,18 +39,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clear => 'Clear';
 
   @override
-  String get appUpdateTitle => 'Update your application';
-
-  @override
-  String get appUpdateBody => 'We improve performance and fix some bugs to make your experience seamless';
-
-  @override
-  String get whatareyoulookingfor => 'What are you looking for?';
-
-  @override
-  String get documentSuccessfullySaved => 'Document successfully saved';
-
-  @override
   String get home => 'Home';
 
   @override
@@ -63,73 +51,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
 
   @override
-  String get searchHere => 'Search here with ticket ID...';
-
-  @override
-  String get supportSummary => 'Support Summary';
-
-  @override
-  String get supportSummaryDes => 'The dashboard about the IT Helpdesk Support Tickets';
-
-  @override
-  String get createNewRequest => 'Create New Request';
-
-  @override
-  String get createNewRequestDes => 'To raise new ticket about your IT issues please fill the simple below form';
-
-  @override
-  String get notAssignedRequests => 'Not Assigned\nRequests';
-
-  @override
-  String get openRequests => 'Open\nRequests';
-
-  @override
-  String get closedRequests => 'Closed\nRequests';
-
-  @override
-  String get noOfRequests => 'No. of\nRequests';
-
-  @override
-  String get ticketsSummary => 'Tickets Summary';
-
-  @override
-  String get ticketsSummaryDes => 'The dashboard about the IT Helpdesk Support Tickets';
-
-  @override
-  String get category => 'Category';
-
-  @override
-  String get shareindiaSupportTickets => 'IT Helpdesk Support Tickets';
-
-  @override
-  String get latestTickets => 'Latest Tickets';
-
-  @override
-  String get latestTicketsDes => 'Latest Tickets (Showing 01 to 08 of 48 Tickets)';
-
-  @override
   String get sortBy => 'Sort By';
 
   @override
-  String get id => 'ID';
+  String get step => 'Step';
 
   @override
-  String get employeeName => 'Employee Name';
-
-  @override
-  String get subjects => 'Subjects';
-
-  @override
-  String get status => 'Status';
-
-  @override
-  String get priority => 'Priority';
-
-  @override
-  String get assignee => 'Assignee';
-
-  @override
-  String get department => 'Department';
+  String get user => 'User';
 
   @override
   String get createDate => 'Create Date';
@@ -138,181 +66,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create => 'Create';
 
   @override
-  String get step => 'Step';
-
-  @override
-  String get step1Des => 'Select your Ticket Category';
-
-  @override
-  String get step2Des => 'Detail Required';
-
-  @override
-  String get step3Des => 'Supported Document';
-
-  @override
-  String get supportITRequest => 'IT Support';
-
-  @override
-  String get itISOCRS => 'ISO CR';
-
-  @override
-  String get eservices => 'Eservices';
-
-  @override
-  String get system => 'System';
-
-  @override
-  String get application => 'Application';
-
-  @override
-  String get subCategory => 'Sub Category';
-
-  @override
-  String get contactNoTelephoneExt => 'Contact No. / Telephone Ext.';
-
-  @override
-  String get subject => 'Subject';
-
-  @override
-  String get description => 'Description';
-
-  @override
-  String get uploadFile => 'Upload File';
-
-  @override
-  String get issueType => 'Issue Type';
-
-  @override
-  String get serviceName => 'Service Name';
-
-  @override
-  String get requestNo => 'Request No.';
-
-  @override
-  String get latestUpdate => 'Latest Update';
-
-  @override
-  String get returnText => 'Return';
-
-  @override
-  String get transfer => 'Transfer';
-
-  @override
-  String get hold => 'Hold';
-
-  @override
-  String get reject => 'Reject';
-
-  @override
-  String get chargeable => 'Chargeable';
-
-  @override
-  String get comments => 'Comments';
-
-  @override
-  String get forwardTo => 'Forward to';
-
-  @override
-  String get user => 'User';
-
-  @override
-  String get section => 'Section';
-
-  @override
-  String get employee => 'Employee';
-
-  @override
-  String get selectDepartment => 'Select Department';
-
-  @override
-  String get selectEmployeeName => 'Select Employee Name';
-
-  @override
-  String get activeRequests => 'Active\nRequests';
-
-  @override
-  String get dueRequests => 'Due\nRequests';
-
-  @override
-  String get allRequests => 'All\nRequests';
-
-  @override
-  String get export => 'Export';
-
-  @override
-  String get print => 'Print';
-
-  @override
-  String get designation => 'Designation';
-
-  @override
-  String get emailID => 'Email ID';
-
-  @override
-  String get itSupportDirecotry => 'IT Support Direcotry';
-
-  @override
-  String get itSupportDirecotryDes => 'Umm Al Quwain Department - IT Support Direcotry';
-
-  @override
-  String get userProfile => 'User Profile';
-
-  @override
-  String get fullName => 'Full Name';
-
-  @override
-  String get title => 'Title';
-
-  @override
-  String get managerName => 'Manager Name';
-
-  @override
-  String get yearOfService => 'Year of Service';
-
-  @override
-  String get telephoneExt => 'Telephone Ext';
-
-  @override
-  String get reason => 'Reason';
-
-  @override
-  String get pleaseSelect => 'Please Select';
-
-  @override
-  String get pleaseEnter => 'Please Enter';
-
-  @override
-  String get approve => 'Approve';
-
-  @override
-  String get open => 'Open';
-
-  @override
-  String get resubmit => 'Resubmit';
-
-  @override
-  String get reAssign => 'Re-Assign';
-
-  @override
-  String get reOpen => 'Re-Open';
-
-  @override
   String get all => 'All';
 
   @override
-  String get assignedTickets => 'Assigned Tickets';
+  String get language => 'Language';
 
   @override
-  String get myTickets => 'My Tickets';
-
-  @override
-  String get employeeTickets => 'Employee Tickets';
-
-  @override
-  String get noTickets => 'No Tickets';
-
-  @override
-  String get filterByDate => 'Filter by Date';
+  String get uploadFile => 'Upload File';
 
   @override
   String get startDate => 'Start Date';
@@ -321,68 +81,98 @@ class AppLocalizationsEn extends AppLocalizations {
   String get endDate => 'End Date';
 
   @override
-  String get support => 'Support';
+  String get pleaseSelect => 'Please Select';
 
   @override
-  String get itRequests => 'IT Requests';
+  String get pleaseEnter => 'Please Enter';
 
   @override
-  String get submittingRequest => 'Submitting Request';
+  String get appUpdateTitle => 'Update your application';
 
   @override
-  String get successfullySubmitted => 'Successfully Submitted';
+  String get userProfile => 'User Profile';
 
   @override
-  String get teamComments => 'Team Comments';
+  String get fullName => 'Full Name';
 
   @override
-  String get doYouWantReturnTo => 'Do you want return to';
+  String get documentSuccessfullySaved => 'Document successfully saved';
 
   @override
-  String get doYouWantToResubmit => 'Do you want to Resubmit';
+  String get appUpdateBody => 'We improve performance and fix some bugs to make your experience seamless';
 
   @override
-  String get doYouWantToApprove => 'Do you want to Approve';
+  String get selectDistrict => 'Select District';
 
   @override
-  String get doYouWantToForword => 'Do you want to Forword';
+  String get selectMandal => 'Select Mandal';
 
   @override
-  String get doYouWantTo => 'Do you want to';
+  String get totalParticipants => 'Total participants';
 
   @override
-  String get low => 'Low';
+  String get totalScreened => 'Total Screened';
 
   @override
-  String get medium => 'Medium';
+  String get hypertension => 'Hypertension';
 
   @override
-  String get high => 'High';
+  String get diabetes => 'Diabetes';
 
   @override
-  String get critical => 'Critical';
+  String get cancer => 'Cancer';
 
   @override
-  String get attachments => 'Attachments';
+  String get oral => 'Oral';
 
   @override
-  String get updatingTicket => 'Updating Ticket';
+  String get breast => 'Breast';
 
   @override
-  String get successfullyUpdated => 'Successfully Updated';
+  String get cervical => 'Cervical';
 
   @override
-  String get createdBy => 'Created by';
+  String get huvReactive => 'HIV Reactive';
 
   @override
-  String get on => 'on';
+  String get districtWiseData => 'District Wise Data\'';
 
   @override
-  String get otherActions => 'Other Actions';
+  String get mandalWiseData => 'Mandal Wise Data\'';
 
   @override
-  String get vacation => 'Vacation';
+  String get district => 'District';
 
   @override
-  String get language => 'Language';
+  String get mandal => 'Mandal';
+
+  @override
+  String get village => 'Village';
+
+  @override
+  String get hiv => 'HIV';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get dashboard => 'Dashboard';
+
+  @override
+  String get screening => 'Screening';
+
+  @override
+  String get screeningDetails => 'Screening details';
+
+  @override
+  String get locationoftheCamp => 'Location of the Camp';
+
+  @override
+  String get referralDetails => 'Referral Details';
+
+  @override
+  String get string => '';
+
+  @override
+  String get dummy => 'Dummy';
 }

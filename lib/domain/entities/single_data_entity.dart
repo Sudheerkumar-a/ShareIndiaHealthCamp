@@ -35,8 +35,10 @@ class FormEntity extends BaseEntity {
   Map<String, dynamic>? urlInputData;
   dynamic Function(Map<String, dynamic>)? requestModel;
   String? parameterName;
-  String? labelEn;
+  String? label;
   String? labelTe;
+  String? labelEn;
+  String? placeholder;
   String? placeholderEn;
   String? placeholderTe;
   String? suffixIcon;
@@ -63,9 +65,9 @@ class FormEntity extends BaseEntity {
   @override
   List<Object?> get props => [name, groupName, url, labelEn, labelTe];
 
-  String get getLabel => (isSelectedLocalEn ? labelEn : labelTe) ?? '';
-  String get placeholder =>
-      (isSelectedLocalEn ? placeholderEn : placeholderTe) ?? '';
+  String get getLabel => (isSelectedLocalEn ? labelEn : labelTe) ?? label??'';
+  String get getPlaceholder =>
+      (isSelectedLocalEn ? placeholderEn : placeholderTe) ?? placeholder??'';
 }
 
 class LKPchildrenEntity extends BaseEntity {

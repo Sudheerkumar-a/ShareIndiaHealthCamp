@@ -12,10 +12,12 @@ import 'package:shareindia_health_camp/presentation/bloc/user/user_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/image_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/right_icon_text_widget.dart';
 import 'package:shareindia_health_camp/presentation/home/user_main_screen.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
+import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
 
 class LoginScreen extends BaseScreenWidget {
   static start(BuildContext context) {
@@ -80,6 +82,23 @@ class LoginScreen extends BaseScreenWidget {
                         .onFontSize(resource.fontSize.dp16)
                         .onColor(resource.color.colorWhite),
                   ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child:
+                          ImageWidget(
+                            path: DrawableAssets.icNACOlogo,
+                          ).loadImage,
+                    ),
+                    Spacer(),
+                    Expanded(
+                      child:
+                          ImageWidget(
+                            path: DrawableAssets.icAPSACSlogo,
+                          ).loadImage,
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: Column(
@@ -147,7 +166,11 @@ class LoginScreen extends BaseScreenWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: resource.dimen.dp30),
+                Align(
+                  alignment: Alignment.topRight,
+                  child:
+                      ImageWidget(width: 60, path: DrawableAssets.icSHARELogo).loadImage,
+                ),
               ],
             ),
           ),

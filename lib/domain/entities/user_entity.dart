@@ -17,7 +17,7 @@ class UserEntity extends BaseEntity {
   String? role;
   String? district;
   String? mandal;
-  String? isAdmin;
+  int? isAdmin;
 
   @override
   List<Object?> get props => [id];

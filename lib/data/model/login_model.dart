@@ -34,7 +34,7 @@ class UserModel extends BaseModel {
   String? role;
   String? district;
   String? mandal;
-  String? isAdmin;
+  int? isAdmin;
   UserModel();
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -45,7 +45,7 @@ class UserModel extends BaseModel {
     role = userJson['role'];
     district = userJson['district'];
     mandal = userJson['mandal'];
-    isAdmin = userJson['is_admin'];
+    isAdmin = int.tryParse('${userJson['is_admin']??'0'}');
   }
 
   @override
@@ -60,7 +60,7 @@ class UserModel extends BaseModel {
     userEntity.role = role;
     userEntity.district = district;
     userEntity.mandal = mandal;
-    userEntity.isAdmin = isAdmin;
+    userEntity.isAdmin =  isAdmin;
     return userEntity;
   }
 }

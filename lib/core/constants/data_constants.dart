@@ -101,3 +101,14 @@ const gender = [
   {"id": "2", "name": "F"},
   {"id": "3", "name": "TG"},
 ];
+
+const maritalStatus = [
+  { "id": '1', "name": "Single" },
+  { "id": '2', "name": "Married" },
+  { "id": '3', "name": "Living together / Cohabiting" },
+  { "id": '4', "name": "Separated" },
+  { "id": '5', "name": "Divorced" },
+  { "id": '6', "name": "Widowed" },
+  { "id": '7', "name": "Prefer not to say" },
+  { "id": '8', "name": "Not applicable" }
+];

@@ -44,7 +44,7 @@ class _MainScreenState extends State<UserMainScreen> {
   late SideBar sideBar;
   final titles = [
     'Integrated Health Services (IHS)',
-    'Health campaign screening',
+    'Integrated Health Services (IHS)',
     'Profile',
   ];
 

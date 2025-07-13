@@ -20,6 +20,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/upload_attach
 import 'package:shareindia_health_camp/presentation/common_widgets/yesnoconfirm_widget.dart';
 import 'package:shareindia_health_camp/presentation/utils/date_time_util.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 extension FieldEntityExtension on FormEntity {
   Future<List<NameIDEntity>?> _getAccountTypes() async {
@@ -81,7 +82,7 @@ extension FieldEntityExtension on FormEntity {
                           labelText: getLabel,
                           errorMessage: isMandetory ? getLabel : '',
                           isMandetory: isMandetory,
-                          hintText: placeholder,
+                          hintText: getPlaceholder,
                           selectedItems:
                               fieldValue ??
                               List<NameIDEntity>.empty(growable: true),
@@ -95,7 +96,7 @@ extension FieldEntityExtension on FormEntity {
                           labelText: getLabel,
                           errorMessage: isMandetory ? getLabel : '',
                           isMandetory: isMandetory,
-                          hintText: placeholder,
+                          hintText: getPlaceholder,
                           selectedValue: fieldValue,
                           callback: (value) async {
                             fieldValue = value;
@@ -125,7 +126,7 @@ extension FieldEntityExtension on FormEntity {
                       : null,
               textInputAction: TextInputAction.next,
               labelText: getLabel,
-              hintText: placeholder,
+              hintText: getPlaceholder,
               maxLines: type == 'textarea' ? 4 : 1,
               errorMessage: isMandetory ? getLabel : '',
               isMandetory: isMandetory,
@@ -289,7 +290,7 @@ extension FieldEntityExtension on FormEntity {
                 height: resources.dimen.dp27,
                 textInputAction: TextInputAction.next,
                 labelText: getLabel,
-                hintText: placeholder,
+                hintText: getPlaceholder,
                 maxLines: 1,
                 errorMessage: (isMandetory) ? getLabel : '',
                 isMandetory: isMandetory,
@@ -323,7 +324,7 @@ extension FieldEntityExtension on FormEntity {
             child: UploadAttachmentWidget(
               height: resources.dimen.dp27,
               labelText: getLabel,
-              hintText: placeholder,
+              hintText: getPlaceholder,
               errorMessage: isMandetory ? getLabel : '',
               isMandetory: isMandetory,
               allowedExtensions:
@@ -508,6 +509,7 @@ extension FieldEntityExtension on FormEntity {
               ),
               child: CheckboxListInputWidget(
                 inputData: inputFieldData,
+                selectedData: fieldValue??{},
                 title: getLabel,
                 isMandetory: validation?.required ?? false,
                 onSelected: (value) {
@@ -531,10 +533,30 @@ extension FieldEntityExtension on FormEntity {
                 inputData: inputFieldData,
                 title: getLabel,
                 isMandetory: validation?.required ?? false,
+                selctedData: fieldValue??{},
                 onSelected: (value) {
                   fieldValue = value;
                   onDatachnage?.call(value);
                 },
+              ),
+            ),
+          );
+        }
+      case 'pdfviewer':
+        {
+          return Visibility(
+            visible: isVisible,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: verticalSpace ?? 10.0,
+                horizontal: horizontalSpace ?? 0.0,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                height: inputFieldData['height'],
+                child: SfPdfViewer.asset(
+                  inputFieldData['url'],
+                ),
               ),
             ),
           );
