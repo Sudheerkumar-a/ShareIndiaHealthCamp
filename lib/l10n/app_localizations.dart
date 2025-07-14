@@ -419,6 +419,30 @@ abstract class AppLocalizations {
   /// **'Referral Details'**
   String get referralDetails;
 
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @emailorUsename.
+  ///
+  /// In en, this message translates to:
+  /// **'Email/Username'**
+  String get emailorUsename;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @preferredLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred language'**
+  String get preferredLanguage;
+
   /// No description provided for @string.
   ///
   /// In en, this message translates to:

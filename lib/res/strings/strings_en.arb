@@ -55,6 +55,10 @@
     "screeningDetails":"Screening details",
     "locationoftheCamp":"Location of the Camp",
     "referralDetails":"Referral Details",
+    "login":"Login",
+    "emailorUsename":"Email/Username",
+    "password":"Password",
+    "preferredLanguage":"Preferred language",
     "string":"",
     "dummy":"Dummy"
 }

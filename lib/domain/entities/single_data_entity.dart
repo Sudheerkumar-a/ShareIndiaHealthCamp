@@ -65,9 +65,9 @@ class FormEntity extends BaseEntity {
   @override
   List<Object?> get props => [name, groupName, url, labelEn, labelTe];
 
-  String get getLabel => (isSelectedLocalEn ? labelEn : labelTe) ?? label??'';
+  String get getLabel => (isSelectedLocalEn ? labelEn : labelTe) ?? label ?? '';
   String get getPlaceholder =>
-      (isSelectedLocalEn ? placeholderEn : placeholderTe) ?? placeholder??'';
+      (isSelectedLocalEn ? placeholderEn : placeholderTe) ?? placeholder ?? '';
 }
 
 class LKPchildrenEntity extends BaseEntity {
@@ -95,28 +95,37 @@ class FormValidationEntity extends BaseEntity {
 }
 
 class FormMessageEntity extends BaseEntity {
+  String? required;
   String? requiredEn;
   String? requiredTe;
+  String? maxLength;
   String? maxLengthEn;
   String? maxLengthAr;
+  String? regex;
   String? regexEn;
   String? regexTe;
+  String? max;
   String? maxEn;
   String? maxTe;
+  String? min;
   String? minEn;
   String? minAr;
+  String? validate;
   String? validateEn;
   String? validateAr;
 
   @override
   List<Object?> get props => [requiredEn, maxLengthEn];
 
-  String? get requiredMessage => isSelectedLocalEn ? requiredEn : requiredTe;
-  String? get maxLengthMessage => isSelectedLocalEn ? maxLengthEn : maxLengthAr;
-  String? get regexMessage => isSelectedLocalEn ? regexEn : regexTe;
-  String? get maxMessage => isSelectedLocalEn ? maxEn : maxTe;
-  String? get minMessage => isSelectedLocalEn ? minEn : minAr;
-  String? get validateMessage => isSelectedLocalEn ? validateEn : validateAr;
+  String? get requiredMessage =>
+      (isSelectedLocalEn ? requiredEn : requiredTe) ?? required;
+  String? get maxLengthMessage =>
+      (isSelectedLocalEn ? maxLengthEn : maxLengthAr) ?? maxLength;
+  String? get regexMessage => (isSelectedLocalEn ? regexEn : regexTe) ?? regex;
+  String? get maxMessage => (isSelectedLocalEn ? maxEn : maxTe) ?? max;
+  String? get minMessage => (isSelectedLocalEn ? minEn : minAr) ?? min;
+  String? get validateMessage =>
+      (isSelectedLocalEn ? validateEn : validateAr) ?? validate;
 }
 
 class FieldParentEntity extends BaseEntity {

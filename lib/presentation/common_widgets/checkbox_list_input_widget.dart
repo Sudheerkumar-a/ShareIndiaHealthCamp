@@ -7,7 +7,7 @@ import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class CheckboxListInputWidget extends StatelessWidget {
   final List<Map<String, dynamic>> inputData;
-  final Map<String, dynamic> selectedData;
+  final Map<dynamic, dynamic> selectedData;
   final String title;
   final bool isMandetory;
   final Function(Map) onSelected;

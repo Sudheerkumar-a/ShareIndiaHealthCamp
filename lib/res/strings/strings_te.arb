@@ -52,6 +52,10 @@
     "screeningDetails":"స్క్రీనింగ్ వివరాలు",
     "locationoftheCamp":"క్యాంపు స్థలం",
     "referralDetails":"రెఫరల్ వివరాలు",
+    "login":"లాగిన్",
+    "emailorUsename":"ఇమెయిల్ / వినియోగదారు పేరు",
+    "password":"పాస్‌వర్డ్",
+    "preferredLanguage":"ప్రిఫర్డ్ లాంగ్వేజ్",
     "string":"",
     "dummy":"Dummy"
 }

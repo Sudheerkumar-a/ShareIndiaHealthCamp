@@ -42,8 +42,7 @@ class ReportEntity extends BaseEntity {
     data['district'] = district;
     data['mandal'] = mandal;
     data['name'] = '$firstName $lastName';
-    data['action'] = remarks;
+    data['action'] = 'Edit/Delete';
     return data;
   }
 }
-

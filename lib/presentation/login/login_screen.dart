@@ -4,8 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
+import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/data/local/user_data_db.dart';
+import 'package:shareindia_health_camp/data/model/single_data_model.dart';
+import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/user_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/user/user_bloc.dart';
@@ -77,7 +80,7 @@ class LoginScreen extends BaseScreenWidget {
                   decoration: BackgroundBoxDecoration().gradientColorBg,
                   child: Text(
                     textAlign: TextAlign.center,
-                    'Andhra Pradesh State Health Camp',
+                    'Andhra Pradesh State Integrated Health Services',
                     style: context.textFontWeight600
                         .onFontSize(resource.fontSize.dp16)
                         .onColor(resource.color.colorWhite),
@@ -85,6 +88,7 @@ class LoginScreen extends BaseScreenWidget {
                 ),
                 Row(
                   children: [
+                    SizedBox(width: resource.dimen.dp5),
                     Expanded(
                       child:
                           ImageWidget(
@@ -104,6 +108,37 @@ class LoginScreen extends BaseScreenWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      (FormEntity()
+                            ..name = 'peferred_language'
+                            ..label = resource.string.preferredLanguage
+                            ..type = 'radio'
+                            ..horizontalSpace = 25
+                            ..fieldValue =
+                                isSelectedLocalEn
+                                    ? (NameIDEntity()
+                                      ..id = 1
+                                      ..name = 'English')
+                                    : (NameIDEntity()
+                                      ..id = 2
+                                      ..name = 'తెలుగు')
+                            ..inputFieldData =
+                                [
+                                      {"id": "1", "name": "English"},
+                                      {"id": "2", "name": "తెలుగు"},
+                                    ]
+                                    .map(
+                                      (item) =>
+                                          NameIDModel.fromDistrictsJson(
+                                            item as Map<String, dynamic>,
+                                          ).toEntity(),
+                                    )
+                                    .toList()
+                            ..onDatachnage = (value) {
+                              resource.setLocal(
+                                language: (value.id == 1) ? 'en' : 'te',
+                              );
+                            })
+                          .getWidget(context),
                       Container(
                         margin: EdgeInsets.all(resource.dimen.dp20),
                         padding: EdgeInsets.all(resource.dimen.dp20),
@@ -120,7 +155,7 @@ class LoginScreen extends BaseScreenWidget {
                                 alignment: Alignment.topLeft,
                                 child: Text(
                                   textAlign: TextAlign.left,
-                                  'Login:',
+                                  resource.string.login,
                                   style: context.textFontWeight600
                                       .onColor(resource.color.viewBgColor)
                                       .onFontSize(resource.fontSize.dp16),
@@ -128,16 +163,18 @@ class LoginScreen extends BaseScreenWidget {
                               ),
                               SizedBox(height: resource.dimen.dp20),
                               RightIconTextWidget(
-                                labelText: "Email/User Nmae",
-                                hintText: "Email/User Nmae",
-                                errorMessage: "please enter Email/User Nmae",
+                                labelText: resource.string.emailorUsename,
+                                hintText: resource.string.emailorUsename,
+                                errorMessage:
+                                    "${resource.string.pleaseEnter} ${resource.string.emailorUsename}",
                                 textController: _emailTextController,
                               ),
                               SizedBox(height: resource.dimen.dp20),
                               RightIconTextWidget(
-                                labelText: "Password",
-                                hintText: "Password",
-                                errorMessage: "please enter password",
+                                labelText: resource.string.password,
+                                hintText: resource.string.password,
+                                errorMessage:
+                                    "${resource.string.pleaseEnter} ${resource.string.password}",
                                 textController: _passwordTextController,
                               ),
                               SizedBox(height: resource.dimen.dp30),
@@ -152,7 +189,7 @@ class LoginScreen extends BaseScreenWidget {
                                   }
                                 },
                                 child: ActionButtonWidget(
-                                  text: 'Login',
+                                  text: resource.string.login,
                                   padding: EdgeInsets.symmetric(
                                     horizontal: resource.dimen.dp25,
                                     vertical: resource.dimen.dp7,
@@ -169,7 +206,10 @@ class LoginScreen extends BaseScreenWidget {
                 Align(
                   alignment: Alignment.topRight,
                   child:
-                      ImageWidget(width: 60, path: DrawableAssets.icSHARELogo).loadImage,
+                      ImageWidget(
+                        width: 60,
+                        path: DrawableAssets.icSHARELogo,
+                      ).loadImage,
                 ),
               ],
             ),

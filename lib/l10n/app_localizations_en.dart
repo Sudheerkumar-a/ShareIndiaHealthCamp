@@ -171,6 +171,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get referralDetails => 'Referral Details';
 
   @override
+  String get login => 'Login';
+
+  @override
+  String get emailorUsename => 'Email/Username';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get preferredLanguage => 'Preferred language';
+
+  @override
   String get string => '';
 
   @override

@@ -171,6 +171,18 @@ class AppLocalizationsTe extends AppLocalizations {
   String get referralDetails => 'రెఫరల్ వివరాలు';
 
   @override
+  String get login => 'లాగిన్';
+
+  @override
+  String get emailorUsename => 'ఇమెయిల్ / వినియోగదారు పేరు';
+
+  @override
+  String get password => 'పాస్‌వర్డ్';
+
+  @override
+  String get preferredLanguage => 'ప్రిఫర్డ్ లాంగ్వేజ్';
+
+  @override
   String get string => '';
 
   @override
