@@ -6,12 +6,13 @@ import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart
 import 'package:shareindia_health_camp/presentation/common_widgets/image_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/item_attachment.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/multi_select_dialog_widget.dart';
+import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
 
 const double defaultHeight = 27;
 
-class MultiSelectDropDownWidget<T> extends StatelessWidget {
+class MultiSelectDropDownWidget<T> extends StatefulWidget {
   final double height;
   final bool isEnabled;
   final String labelText;
@@ -22,7 +23,6 @@ class MultiSelectDropDownWidget<T> extends StatelessWidget {
   final String fontFamily;
   final List<T> list;
   Function(List<T>?)? callback;
-  final ValueNotifier<bool> _onItemChanged = ValueNotifier(false);
   final Color? fillColor;
   final bool isMandetory;
   final List<T> selectedItems;
@@ -44,20 +44,34 @@ class MultiSelectDropDownWidget<T> extends StatelessWidget {
   });
 
   @override
+  State<MultiSelectDropDownWidget<T>> createState() =>
+      _MultiSelectDropDownWidgetState<T>();
+}
+
+class _MultiSelectDropDownWidgetState<T>
+    extends State<MultiSelectDropDownWidget<T>> {
+  List<T> serchitems = List.empty(growable: true);
+  @override
+  void initState() {
+    super.initState();
+    serchitems.addAll(widget.selectedItems);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final resources = context.resources;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (labelText.isNotEmpty) ...[
+        if (widget.labelText.isNotEmpty) ...[
           Text.rich(
             TextSpan(
-              text: labelText,
+              text: widget.labelText,
               style: context.textFontWeight400.onFontSize(
                 context.resources.fontSize.dp14,
               ),
               children: [
-                if (isMandetory)
+                if (widget.isMandetory)
                   TextSpan(
                     text: ' *',
                     style: context.textFontWeight400
@@ -71,20 +85,18 @@ class MultiSelectDropDownWidget<T> extends StatelessWidget {
         ],
         InkWell(
           onTap: () {
-            if (list.isNotEmpty) {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return MultiSelectDialogWidget(
-                    list: list,
-                    selectedItems: selectedItems,
-                  );
-                },
+            if (widget.list.isNotEmpty) {
+              Dialogs.showDialogWithClose(
+                context,
+                MultiSelectDialogWidget(
+                  list: widget.list,
+                  selectedItems: serchitems,
+                ),
               ).then((value) {
-                selectedItems.clear();
-                selectedItems.addAll(value);
-                _onItemChanged.value = !_onItemChanged.value;
-                callback?.call(selectedItems);
+                serchitems.clear();
+                serchitems.addAll(value);
+                setState(() {});
+                widget.callback?.call(serchitems);
               });
             }
           },
@@ -97,53 +109,43 @@ class MultiSelectDropDownWidget<T> extends StatelessWidget {
             ),
             decoration:
                 BackgroundBoxDecoration(
-                  boxColor: fillColor ?? const Color(0xFFF7F6F6),
+                  boxColor: widget.fillColor ?? const Color(0xFFF7F6F6),
                   radious: context.resources.dimen.dp10,
                 ).roundedCornerBox,
             child: Row(
               children: [
-                ValueListenableBuilder(
-                  valueListenable: _onItemChanged,
-                  builder: (context, isChanged, widget) {
-                    return Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          top: context.resources.dimen.dp5,
-                          right: context.resources.dimen.dp15,
-                          bottom: context.resources.dimen.dp5,
-                        ),
-                        child:
-                            selectedItems.isNotEmpty
-                                ? Wrap(
-                                  runSpacing: resources.dimen.dp10,
-                                  spacing: resources.dimen.dp10,
-                                  children: List.generate(
-                                    selectedItems.length,
-                                    (index) => ItemAttachment(
-                                      id: index,
-                                      name: selectedItems[index].toString(),
-                                      wrapContent: true,
-                                      callBack: (value) {
-                                        selectedItems.removeAt(value);
-                                        _onItemChanged.value =
-                                            !_onItemChanged.value;
-                                      },
-                                    ),
-                                  ),
-                                )
-                                : Text(
-                                  hintText,
-                                  style: context.textFontWeight400
-                                      .onFontSize(
-                                        context.resources.fontSize.dp12,
-                                      )
-                                      .onColor(
-                                        context.resources.color.colorD6D6D6,
-                                      ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: context.resources.dimen.dp5,
+                      right: context.resources.dimen.dp15,
+                      bottom: context.resources.dimen.dp5,
+                    ),
+                    child:
+                        serchitems.isNotEmpty
+                            ? Wrap(
+                              runSpacing: resources.dimen.dp10,
+                              spacing: resources.dimen.dp10,
+                              children: List.generate(
+                                serchitems.length,
+                                (index) => ItemAttachment(
+                                  id: index,
+                                  name: serchitems[index].toString(),
+                                  wrapContent: true,
+                                  callBack: (value) {
+                                    serchitems.removeAt(value);
+                                    setState(() {});
+                                  },
                                 ),
-                      ),
-                    );
-                  },
+                              ),
+                            )
+                            : Text(
+                              widget.hintText,
+                              style: context.textFontWeight400
+                                  .onFontSize(context.resources.fontSize.dp12)
+                                  .onColor(context.resources.color.colorD6D6D6),
+                            ),
+                  ),
                 ),
                 SizedBox(width: context.resources.dimen.dp15),
                 Padding(

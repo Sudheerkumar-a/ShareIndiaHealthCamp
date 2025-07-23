@@ -52,11 +52,20 @@ class UserDashboard extends BaseScreenWidget {
               final title =
                   isAdmin
                       ? 'Andhra Pradesh'.toUpperCase()
-                      : (UserCredentialsEntity.details(
-                                context,
-                              ).user?.district ??
-                              '')
-                          .toUpperCase();
+                      : districts
+                          .where(
+                            (e) =>
+                                e['name']?.toLowerCase() ==
+                                    UserCredentialsEntity.details(
+                                      context,
+                                    ).user?.district?.toLowerCase() ||
+                                e['id']?.toLowerCase() ==
+                                    UserCredentialsEntity.details(
+                                      context,
+                                    ).user?.district?.toLowerCase(),
+                          )
+                          .firstOrNull?['name']
+                          ?.toUpperCase();
               final filterTitle =
                   isAdmin
                       ? resources.string.selectDistrict
@@ -145,7 +154,7 @@ class UserDashboard extends BaseScreenWidget {
                                               textAlign: TextAlign.end,
                                               TextSpan(
                                                 text:
-                                                    '${resources.string.totalParticipants}\n',
+                                                    '${resources.string.totalClient}\n',
                                                 style:
                                                     context.textFontWeight600,
                                                 children: [
@@ -342,7 +351,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  resources.string.cancer,
+                                                  resources.string.hepatitis,
                                                   style:
                                                       context.textFontWeight600,
                                                 ),
@@ -355,17 +364,10 @@ class UserDashboard extends BaseScreenWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         TextSpan(
-                                                          text:
-                                                              resources
-                                                                  .string
-                                                                  .oral,
-                                                          style: context
-                                                              .textFontWeight600
-                                                              .onFontSize(
-                                                                resources
-                                                                    .fontSize
-                                                                    .dp10,
-                                                              ),
+                                                          text: 'A',
+                                                          style:
+                                                              context
+                                                                  .textFontWeight600,
                                                           children: [
                                                             TextSpan(
                                                               text:
@@ -392,58 +394,14 @@ class UserDashboard extends BaseScreenWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         TextSpan(
-                                                          text:
-                                                              resources
-                                                                  .string
-                                                                  .breast,
-                                                          style: context
-                                                              .textFontWeight600
-                                                              .onFontSize(
-                                                                resources
-                                                                    .fontSize
-                                                                    .dp10,
-                                                              ),
+                                                          text: 'B',
+                                                          style:
+                                                              context
+                                                                  .textFontWeight600,
                                                           children: [
                                                             TextSpan(
                                                               text:
                                                                   '\n${overalData?.cancerScreened ?? '10'}',
-                                                              style: context
-                                                                  .textFontWeight600
-                                                                  .onFontSize(
-                                                                    resources
-                                                                        .fontSize
-                                                                        .dp18,
-                                                                  )
-                                                                  .onColor(
-                                                                    resources
-                                                                        .color
-                                                                        .viewBgColor,
-                                                                  ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text.rich(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        TextSpan(
-                                                          text:
-                                                              resources
-                                                                  .string
-                                                                  .cervical,
-                                                          style: context
-                                                              .textFontWeight600
-                                                              .onFontSize(
-                                                                resources
-                                                                    .fontSize
-                                                                    .dp10,
-                                                              ),
-                                                          children: [
-                                                            TextSpan(
-                                                              text:
-                                                                  '\n${overalData?.cancerReferred ?? '12'}',
                                                               style: context
                                                                   .textFontWeight600
                                                                   .onFontSize(

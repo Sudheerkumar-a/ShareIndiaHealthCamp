@@ -175,8 +175,8 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
                   items.where((item) => item.name == 'referred').firstOrNull;
               final isHiiden = child?.isHidden;
               child?.isHidden =
-                  ((int.tryParse(value) ?? 0) <= 90 &&
-                      (int.tryParse(data["systolic"] ?? '0') ?? 0) <= 140);
+                  ((int.tryParse(value) ?? 0) <= 100 &&
+                      (int.tryParse(data["systolic"] ?? '0') ?? 0) <= 160);
               child?.fieldValue = null;
               data["diastolic"] = value;
               widget.onSelected.call(data);

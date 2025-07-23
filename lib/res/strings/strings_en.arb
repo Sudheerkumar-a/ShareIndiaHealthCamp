@@ -35,6 +35,7 @@
     "selectDistrict":"Select District",
     "selectMandal":"Select Mandal",
     "totalParticipants":"Total participants",
+    "totalClient":"Total Client",
     "totalScreened":"Total Screened",
     "hypertension":"Hypertension",
     "diabetes":"Diabetes",
@@ -44,7 +45,7 @@
     "cervical":"Cervical",
     "huvReactive":"HIV Reactive",
     "districtWiseData":"District Wise Data'",
-    "mandalWiseData":"Mandal Wise Data'",
+    "mandalWiseData":"Mandal Wise Data",
     "district":"District",
     "mandal":"Mandal",
     "village":"Village",
@@ -59,6 +60,7 @@
     "emailorUsename":"Email/Username",
     "password":"Password",
     "preferredLanguage":"Preferred language",
+    "hepatitis":"Hepatitis",
     "string":"",
     "dummy":"Dummy"
 }
