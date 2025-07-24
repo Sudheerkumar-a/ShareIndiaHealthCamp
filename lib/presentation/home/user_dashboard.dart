@@ -474,6 +474,102 @@ class UserDashboard extends BaseScreenWidget {
                                       ],
                                     ),
                                   ),
+                                  SizedBox(height: resources.dimen.dp20),
+                                  IntrinsicHeight(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            height: double.infinity,
+                                            padding: EdgeInsets.all(
+                                              resources.dimen.dp10,
+                                            ),
+                                            decoration:
+                                                BackgroundBoxDecoration(
+                                                  boxColor:
+                                                      resources
+                                                          .color
+                                                          .colorWhite,
+                                                  radious: resources.dimen.dp10,
+                                                ).roundedCornerBox,
+                                            child: Text.rich(
+                                              textAlign: TextAlign.end,
+                                              TextSpan(
+                                                text: 'Syphilis\n',
+                                                style:
+                                                    context.textFontWeight600,
+                                                children: [
+                                                  TextSpan(
+                                                    text:
+                                                        overalData
+                                                            ?.totalScreened ??
+                                                        '',
+                                                    style: context
+                                                        .textFontWeight600
+                                                        .onFontSize(
+                                                          resources
+                                                              .fontSize
+                                                              .dp18,
+                                                        )
+                                                        .onColor(
+                                                          resources
+                                                              .color
+                                                              .viewBgColor,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: resources.dimen.dp20),
+                                        Expanded(
+                                          child: Container(
+                                            height: double.infinity,
+                                            padding: EdgeInsets.all(
+                                              resources.dimen.dp10,
+                                            ),
+                                            decoration:
+                                                BackgroundBoxDecoration(
+                                                  boxColor:
+                                                      resources
+                                                          .color
+                                                          .colorWhite,
+                                                  radious: resources.dimen.dp10,
+                                                ).roundedCornerBox,
+                                            child: Text.rich(
+                                              textAlign: TextAlign.end,
+                                              TextSpan(
+                                                text: 'STI Cases\n',
+                                                style:
+                                                    context.textFontWeight600,
+                                                children: [
+                                                  TextSpan(
+                                                    text:
+                                                        overalData
+                                                            ?.totalScreened ??
+                                                        '',
+                                                    style: context
+                                                        .textFontWeight600
+                                                        .onFontSize(
+                                                          resources
+                                                              .fontSize
+                                                              .dp18,
+                                                        )
+                                                        .onColor(
+                                                          resources
+                                                              .color
+                                                              .viewBgColor,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               );
                             },

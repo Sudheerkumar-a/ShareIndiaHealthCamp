@@ -511,6 +511,10 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'collection'
           ..validation = (FormValidationEntity()..required = true)
           ..placeholderEn = 'Select Sex'
+          ..messages =
+              (FormMessageEntity()
+                ..requiredEn = 'please Select Sex'
+                ..requiredTe = 'please Select Sex')
           ..inputFieldData = {
             'items':
                 gender
@@ -524,24 +528,18 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             'doSort': false,
           }
           ..onDatachnage = (value) {
-            // final childs =
-            //     step4formFields
-            //         .where(
-            //           (item) => [
-            //             'breastcancer',
-            //             'cervicalcancer',
-            //           ].contains(item.name),
-            //         )
-            //         .toList();
-            // for (var child in childs) {
-            //   child.isHidden = value.id != 2;
-            //   child.fieldValue = null;
-            // }
-            final child =
+            final child1 =
                 step2formFields
-                    .where((item) => item.name == 'pregnancystatus')
+                    .where((item) => ['pregnancystatus'].contains(item.name))
                     .firstOrNull;
-            child?.isHidden = value.id != 2;
+            child1?.isHidden = value.id != 2;
+            child1?.fieldValue = null;
+            final child2 =
+                step2formFields
+                    .where((item) => ['date_of_LMP'].contains(item.name))
+                    .firstOrNull;
+            child2?.isHidden = true;
+            child2?.fieldValue = null;
             fieldsData['sex'] = value.name;
             _onDataChanged(true);
           },
@@ -792,12 +790,12 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..name = 'consent'
           ..type = 'confirmcheck'
           ..validation = (FormValidationEntity()..required = true)
-          ..labelEn = 'I give my consent in the last bullet'
-          ..labelTe = 'I give my consent in the last bullet'
+          ..labelEn = 'I give my consent'
+          ..labelTe = 'I give my consent'
           ..messages =
               (FormMessageEntity()
-                ..requiredEn = 'I give my consent in the last bullet'
-                ..requiredTe = 'I give my consent in the last bullet')
+                ..requiredEn = 'I give my consent'
+                ..requiredTe = 'I give my consent')
           ..onDatachnage = (value) {
             fieldsData['consent'] = value ? 1 : 0;
             _onDataChanged(false);
@@ -1329,9 +1327,21 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       ]);
     }
     fieldsData['sti'] ??= {};
-    fieldsData['sti']['syphilis'] = {'done': 0, 'result': 'Non-Reactive'};
-    fieldsData['sti']['hepB'] = {'done': 0, 'result': 'Non-Reactive'};
-    fieldsData['sti']['hepC'] = {'done': 0, 'result': 'Non-Reactive'};
+    fieldsData['sti']['syphilis'] = {
+      'done': 0,
+      'result': 'Non-Reactive',
+      'referred': 0,
+    };
+    fieldsData['sti']['hepB'] = {
+      'done': 0,
+      'result': 'Non-Reactive',
+      'referred': 0,
+    };
+    fieldsData['sti']['hepC'] = {
+      'done': 0,
+      'result': 'Non-Reactive',
+      'referred': 0,
+    };
     if (step6formFields.isEmpty) {
       step6formFields.addAll([
         FormEntity()
@@ -1383,10 +1393,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Syphilis'
           ..labelTe = 'Syphilis'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive'}
+          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
-            {'label': 'Result', 'value': false, 'type': 'collection'},
+            {'label': 'Result', 'value': null, 'type': 'collection'},
+            {'label': 'Referred?', 'value': null, 'type': 'confirmcheck'},
           ]
           ..onDatachnage = (value) {
             fieldsData['sti'] ??= {};
@@ -1397,10 +1408,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Hepatitis-B'
           ..labelTe = 'Hepatitis-B'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive'}
+          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
-            {'label': 'Result', 'value': false, 'type': 'collection'},
+            {'label': 'Result', 'value': null, 'type': 'collection'},
+            {'label': 'Referred?', 'value': null, 'type': 'confirmcheck'},
           ]
           ..onDatachnage = (value) {
             fieldsData['sti'] ??= {};
@@ -1411,10 +1423,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Hepatitis-C'
           ..labelTe = 'Hepatitis-C'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive'}
+          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
-            {'label': 'Result', 'value': false, 'type': 'collection'},
+            {'label': 'Result', 'value': null, 'type': 'collection'},
+            {'label': 'Referred?', 'value': null, 'type': 'confirmcheck'},
           ]
           ..onDatachnage = (value) {
             fieldsData['sti'] ??= {};
@@ -1491,7 +1504,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             child: Column(
               children: [
                 MSearchUserAppBarWidget(
-                  title: 'Integrated Health Services (IHS)',
+                  title: 'Integrated Health Services (IHS) - APSACS',
                   showBack: true,
                 ),
                 ValueListenableBuilder(

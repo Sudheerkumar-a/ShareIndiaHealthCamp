@@ -43,8 +43,8 @@ class _MainScreenState extends State<UserMainScreen> {
   double sideBarWidth = 200;
   late SideBar sideBar;
   final titles = [
-    'Integrated Health Services (IHS)',
-    'Integrated Health Services (IHS)',
+    'Integrated Health Services (IHS) - APSACS',
+    'Integrated Health Services (IHS) - APSACS',
     'Profile',
   ];
 
