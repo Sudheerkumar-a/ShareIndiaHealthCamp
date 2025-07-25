@@ -78,6 +78,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                 )
                 .first,
           ).toEntity();
+      fieldsData['district'] = selectedDistrict.id;
       sl<ServicesBloc>()
           .getFieldInputData(
             apiUrl: mandalListApiUrl,
@@ -1594,10 +1595,10 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                         ],
                         InkWell(
                           onTap: () async {
-                            if (!isDataValid ||
-                                _formKey.currentState?.validate() != true) {
-                              return;
-                            }
+                            // if (!isDataValid ||
+                            //     _formKey.currentState?.validate() != true) {
+                            //   return;
+                            // }
 
                             if (!isLastStep) {
                               _stepNotifier.value = _stepNotifier.value + 1;

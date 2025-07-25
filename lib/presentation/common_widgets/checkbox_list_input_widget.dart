@@ -70,11 +70,14 @@ class CheckboxListInputWidget extends StatelessWidget {
                               ..type = 'confirmcheck'
                               ..isHidden = !isReactive
                               ..horizontalSpace = 20
-                              ..fieldValue = item['value']
+                              ..fieldValue =
+                                  item['value'] == null
+                                      ? null
+                                      : bool.tryParse(item['value'])
                               ..labelEn = item['label']
                               ..labelTe = item['label']
                               ..onDatachnage = (value) {
-                                item['value'] = value;
+                                item['value'] = value.toString();
                                 data['referred'] = value ? 1 : 0;
                                 onSelected.call(data);
                               })
