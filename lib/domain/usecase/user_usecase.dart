@@ -8,6 +8,8 @@ import 'package:shareindia_health_camp/domain/entities/user_entity.dart';
 import 'package:shareindia_health_camp/domain/repository/apis_repository.dart';
 import 'package:shareindia_health_camp/domain/usecase/base_usecase.dart';
 
+import '../../data/model/single_data_model.dart';
+import '../entities/single_data_entity.dart';
 
 class UserUseCase extends BaseUseCase {
   final ApisRepository apisRepository;

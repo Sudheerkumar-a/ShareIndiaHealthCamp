@@ -5,7 +5,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_w
 import 'package:shareindia_health_camp/presentation/reports/reports_screen.dart';
 
 class ReportsNavigatorScreen extends BaseScreenWidget {
-  ReportsNavigatorScreen({super.key});
+  ReportsNavigatorScreen({Key? key}) : super(key: key);
   static late GlobalKey<NavigatorState> reportKey;
   late ReportsScreen reportsScreen;
   @override

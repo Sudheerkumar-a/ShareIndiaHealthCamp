@@ -1,7 +1,10 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:shareindia_health_camp/data/model/base_model.dart';
+import 'package:shareindia_health_camp/data/model/single_data_model.dart';
+import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
+import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class ReportDataModel extends BaseModel {
   int? page;

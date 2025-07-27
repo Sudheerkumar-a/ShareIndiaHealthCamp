@@ -12,7 +12,7 @@ class NcdScreeningWidget extends StatefulWidget {
   final String title;
   final bool isMandetory;
   final Function(Map) onSelected;
-  const NcdScreeningWidget({
+  NcdScreeningWidget({
     required this.title,
     required this.inputData,
     required this.onSelected,

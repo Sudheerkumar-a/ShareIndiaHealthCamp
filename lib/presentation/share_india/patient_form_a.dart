@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/right_icon_text_widget.dart';
 import 'package:shareindia_health_camp/presentation/utils/date_time_util.dart';
 

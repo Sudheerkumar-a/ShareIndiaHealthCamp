@@ -5,7 +5,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_w
 import 'package:shareindia_health_camp/presentation/profile/profile_screen.dart';
 
 class ProfileNavigatorScreen extends BaseScreenWidget {
-  ProfileNavigatorScreen({super.key});
+  ProfileNavigatorScreen({Key? key}) : super(key: key);
   static late GlobalKey<NavigatorState> profileKey;
   late ProfileScreen profileScreen;
   @override

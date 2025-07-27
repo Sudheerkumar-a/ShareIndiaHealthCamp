@@ -7,11 +7,13 @@ import 'package:shareindia_health_camp/data/local/app_settings_db.dart';
 import 'package:shareindia_health_camp/l10n/app_localizations.dart';
 import 'package:shareindia_health_camp/res/colors/base_clors.dart';
 import 'package:shareindia_health_camp/res/colors/theme_peach_colors.dart';
+import 'package:shareindia_health_camp/res/colors/theme_red_colors.dart';
 import 'package:shareindia_health_camp/res/dimentions/font_dimension.dart';
 import 'package:shareindia_health_camp/res/dimentions/font_dimension_big.dart';
 import 'package:shareindia_health_camp/res/dimentions/font_dimension_small.dart';
 import 'package:shareindia_health_camp/res/theme/app_theme.dart';
 import 'package:shareindia_health_camp/res/theme/theme_peach.dart';
+import 'package:shareindia_health_camp/res/theme/theme_red.dart';
 import 'dimentions/app_dimension.dart';
 import 'dimentions/font_dimension_default.dart';
 

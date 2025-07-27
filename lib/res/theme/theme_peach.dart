@@ -46,6 +46,7 @@ class ThemePeach extends ApplicationTheme {
         unselectedWidgetColor: const Color(0x8a000000),
         disabledColor: const Color(0x61000000),
         secondaryHeaderColor: const Color(0xfffaebeb),
+        dialogBackgroundColor: const Color(0xffffffff),
         indicatorColor: const Color(0xff872725),
         hintColor: const Color(0x8a000000),
         fontFamily: _fontFamily ?? 'Inter',
@@ -55,7 +56,7 @@ class ThemePeach extends ApplicationTheme {
             const DatePickerThemeData(headerBackgroundColor: Color(0xff872725)),
         scrollbarTheme: const ScrollbarThemeData().copyWith(
           radius: const Radius.circular(10.0),
-          thumbColor: WidgetStateProperty.all(const Color(0xff872725)),
+          thumbColor: MaterialStateProperty.all(const Color(0xff872725)),
         ),
         buttonTheme: const ButtonThemeData(
           textTheme: ButtonTextTheme.normal,
@@ -81,10 +82,12 @@ class ThemePeach extends ApplicationTheme {
             primary: Color(0xff872725),
             secondary: Color(0xffc83a37),
             surface: Color(0xffffffff),
+            background: Color(0xffe9b0af),
             error: Color(0xffd32f2f),
             onPrimary: Color(0xffffffff),
             onSecondary: Color(0xffffffff),
             onSurface: Color(0xff000000),
+            onBackground: Color(0xffffffff),
             onError: Color(0xffffffff),
             brightness: Brightness.light,
           ),
@@ -168,6 +171,6 @@ class ThemePeach extends ApplicationTheme {
             fontWeight: FontWeight.w400,
             fontStyle: FontStyle.normal,
           ),
-        ), dialogTheme: DialogThemeData(backgroundColor: const Color(0xffffffff)),
+        ),
       );
 }

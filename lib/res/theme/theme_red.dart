@@ -46,6 +46,7 @@ class ThemeRed extends ApplicationTheme {
         unselectedWidgetColor: const Color(0x8a000000),
         disabledColor: const Color(0x61000000),
         secondaryHeaderColor: const Color(0xfffde8ea),
+        dialogBackgroundColor: const Color(0xffffffff),
         indicatorColor: const Color(0xffea152d),
         hintColor: const Color(0x8a000000),
         fontFamily: _fontFamily ?? 'Inter',
@@ -55,7 +56,7 @@ class ThemeRed extends ApplicationTheme {
             const DatePickerThemeData(headerBackgroundColor: Color(0xffea152d)),
         scrollbarTheme: const ScrollbarThemeData().copyWith(
           radius: const Radius.circular(10.0),
-          thumbColor: WidgetStateProperty.all(const Color(0xffEC294E)),
+          thumbColor: MaterialStateProperty.all(const Color(0xffEC294E)),
         ),
         buttonTheme: const ButtonThemeData(
           textTheme: ButtonTextTheme.normal,
@@ -81,10 +82,12 @@ class ThemeRed extends ApplicationTheme {
             primary: Color(0xffec293f),
             secondary: Color(0xffea152d),
             surface: Color(0xffffffff),
+            background: Color(0xfff7a1ab),
             error: Color(0xffd32f2f),
             onPrimary: Color(0xffffffff),
             onSecondary: Color(0xffffffff),
             onSurface: Color(0xff000000),
+            onBackground: Color(0xffffffff),
             onError: Color(0xffffffff),
             brightness: Brightness.light,
           ),
@@ -168,6 +171,6 @@ class ThemeRed extends ApplicationTheme {
             fontWeight: FontWeight.w400,
             fontStyle: FontStyle.normal,
           ),
-        ), dialogTheme: DialogThemeData(backgroundColor: const Color(0xffffffff)),
+        ),
       );
 }
