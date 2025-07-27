@@ -111,6 +111,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
               _onDataChanged(true);
             }
           });
+          fieldsData['date_of_camp'] = getDateByformat('dd/MM/yyyy', DateTime.now());
       step1formFields.addAll([
         FormEntity()
           ..name = 'integratedoutreachcampform'
@@ -123,7 +124,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelTe = 'Date Of Camp'
           ..type = 'date'
           ..placeholderEn = 'dd/MM/yyyy'
-          ..fieldValue = getDateByformat('dd/MM/yyyy', DateTime.now())
+          ..fieldValue =  fieldsData['date_of_camp']
           ..validation = (FormValidationEntity()..required = true)
           ..messages =
               (FormMessageEntity()..requiredEn = 'Please Enter DateOfCamp')
@@ -1028,7 +1029,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             'items':
                 [
                       {'id': '1', 'name': 'Reactive'},
-                      {'id': '2', 'name': 'Non‑Reactive'},
+                      {'id': '2', 'name': 'Non Reactive'},
                       {'id': '3', 'name': 'Not Done'},
                     ]
                     .map(
@@ -1330,17 +1331,17 @@ class OutreachCampFormScreen extends BaseScreenWidget {
     fieldsData['sti'] ??= {};
     fieldsData['sti']['syphilis'] = {
       'done': 0,
-      'result': 'Non-Reactive',
+      'result': 'Non Reactive',
       'referred': 0,
     };
     fieldsData['sti']['hepB'] = {
       'done': 0,
-      'result': 'Non-Reactive',
+      'result': 'Non Reactive',
       'referred': 0,
     };
     fieldsData['sti']['hepC'] = {
       'done': 0,
-      'result': 'Non-Reactive',
+      'result': 'Non Reactive',
       'referred': 0,
     };
     if (step6formFields.isEmpty) {
@@ -1394,7 +1395,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Syphilis'
           ..labelTe = 'Syphilis'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
+          ..fieldValue = {'done': 0, 'result': 'Non Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
             {'label': 'Result', 'value': null, 'type': 'collection'},
@@ -1409,7 +1410,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Hepatitis-B'
           ..labelTe = 'Hepatitis-B'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
+          ..fieldValue = {'done': 0, 'result': 'Non Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
             {'label': 'Result', 'value': null, 'type': 'collection'},
@@ -1424,7 +1425,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Hepatitis-C'
           ..labelTe = 'Hepatitis-C'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
+          ..fieldValue = {'done': 0, 'result': 'Non Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
             {'label': 'Result', 'value': null, 'type': 'collection'},

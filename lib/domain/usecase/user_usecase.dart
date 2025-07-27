@@ -44,7 +44,7 @@ class UserUseCase extends BaseUseCase {
     required Map<String, dynamic> requestParams,
   }) async {
     var apiResponse = await apisRepository.get<UserModel>(
-      apiUrl: userDetailsApiUrl,
+      apiUrl: '',
       requestParams: requestParams,
       responseModel: UserModel.fromJson,
     );

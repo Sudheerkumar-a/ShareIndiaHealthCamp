@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:shareindia_health_camp/core/error/failures.dart';
 import 'package:shareindia_health_camp/data/model/api_response_model.dart';
 import 'package:shareindia_health_camp/data/model/login_model.dart';
-import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/api_entity.dart';
 import 'package:shareindia_health_camp/domain/repository/apis_repository.dart';
 
@@ -14,7 +13,7 @@ abstract class BaseUseCase {
     required Map<String, dynamic> requestParams,
   }) async {
     var apiResponse = await getApisRepository.call().get<UserModel>(
-      apiUrl: getUserDataApiUrl,
+      apiUrl: '',
       requestParams: requestParams,
       responseModel: UserModel.fromJson,
     );

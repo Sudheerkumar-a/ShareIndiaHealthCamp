@@ -44,7 +44,7 @@ class CheckboxListInputWidget extends StatelessWidget {
                             'items':
                                 [
                                       {'id': '1', 'name': 'Reactive'},
-                                      {'id': '2', 'name': 'Non-Reactive'},
+                                      {'id': '2', 'name': 'Non Reactive'},
                                     ]
                                     .map(
                                       (item) =>
