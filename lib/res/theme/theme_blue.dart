@@ -45,7 +45,6 @@ class ThemeBlue extends ApplicationTheme {
         unselectedWidgetColor: const Color(0x8a000000),
         disabledColor: const Color(0x61000000),
         secondaryHeaderColor: const Color(0xffe8f0fc),
-        dialogBackgroundColor: const Color(0xffffffff),
         indicatorColor: const Color(0xff175cd2),
         hintColor: const Color(0x8a000000),
         fontFamily: _fontFamily ?? 'Inter',
@@ -55,7 +54,7 @@ class ThemeBlue extends ApplicationTheme {
             const DatePickerThemeData(headerBackgroundColor: Color(0xff175cd2)),
         scrollbarTheme: const ScrollbarThemeData().copyWith(
           radius: const Radius.circular(10.0),
-          thumbColor: MaterialStateProperty.all(const Color(0xff175CD3)),
+          thumbColor: WidgetStateProperty.all(const Color(0xff175CD3)),
         ),
         buttonTheme: const ButtonThemeData(
           textTheme: ButtonTextTheme.normal,
@@ -81,12 +80,10 @@ class ThemeBlue extends ApplicationTheme {
             primary: Color(0xff175cd2),
             secondary: Color(0xff1965e6),
             surface: Color(0xffffffff),
-            background: Color(0xffa3c1f5),
             error: Color(0xffd32f2f),
             onPrimary: Color(0xffffffff),
             onSecondary: Color(0xffffffff),
             onSurface: Color(0xff000000),
-            onBackground: Color(0xffffffff),
             onError: Color(0xffffffff),
             brightness: Brightness.light,
           ),
@@ -170,6 +167,6 @@ class ThemeBlue extends ApplicationTheme {
             fontWeight: FontWeight.w400,
             fontStyle: FontStyle.normal,
           ),
-        ),
+        ), dialogTheme: DialogThemeData(backgroundColor: const Color(0xffffffff)),
       );
 }

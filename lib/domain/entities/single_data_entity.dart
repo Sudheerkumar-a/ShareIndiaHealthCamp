@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:shareindia_health_camp/core/constants/constants.dart';
-import 'package:shareindia_health_camp/core/enum/enum.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 
 class SingleDataEntity extends BaseEntity {

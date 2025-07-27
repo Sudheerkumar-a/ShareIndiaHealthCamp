@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
-import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 
 class ReportListWidget extends StatelessWidget {

@@ -14,8 +14,6 @@ import 'package:shareindia_health_camp/core/enum/enum.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/data/local/user_data_db.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
-import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mime/mime.dart';
 

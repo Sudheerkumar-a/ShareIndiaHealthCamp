@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/constants/data_constants.dart';
@@ -12,13 +11,11 @@ import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
-import 'package:shareindia_health_camp/presentation/bloc/user/user_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
-import 'package:shareindia_health_camp/presentation/share_india/patient_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import '../../core/constants/constants.dart';
 import '../../domain/entities/user_credentials_entity.dart';
@@ -305,25 +302,27 @@ class ReportsScreen extends BaseScreenWidget {
               style: context.textFontWeight600,
             ),
           ),
-          SizedBox(width: resources.dimen.dp10),
-          InkWell(
-            onTap: () async {
-              OutreachCampFormScreen.start(context);
-            },
-            child: ActionButtonWidget(
-              text: 'Add New Record',
-              radious: resources.dimen.dp15,
-              textSize: resources.fontSize.dp12,
-              padding: EdgeInsets.symmetric(
-                vertical: resources.dimen.dp5,
-                horizontal: resources.dimen.dp15,
+          if (UserCredentialsEntity.details(context).user?.isAdmin == 1) ...[
+            SizedBox(width: resources.dimen.dp10),
+            InkWell(
+              onTap: () async {
+                OutreachCampFormScreen.start(context);
+              },
+              child: ActionButtonWidget(
+                text: 'Add New Record',
+                radious: resources.dimen.dp15,
+                textSize: resources.fontSize.dp12,
+                padding: EdgeInsets.symmetric(
+                  vertical: resources.dimen.dp5,
+                  horizontal: resources.dimen.dp15,
+                ),
+                color: resources.color.viewBgColorLight,
               ),
-              color: resources.color.viewBgColorLight,
             ),
-          ),
+          ],
         ],
       ),
-      if (UserCredentialsEntity.details(context).user?.isAdmin == '1') ...[
+      if (UserCredentialsEntity.details(context).user?.isAdmin == 1) ...[
         SizedBox(width: resources.dimen.dp20, height: resources.dimen.dp10),
         _getFilters(context),
       ],
