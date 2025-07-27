@@ -111,6 +111,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get totalParticipants => 'Total participants';
 
   @override
+  String get totalClient => 'Total Client';
+
+  @override
   String get totalScreened => 'Total Screened';
 
   @override
@@ -138,7 +141,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get districtWiseData => 'District Wise Data\'';
 
   @override
-  String get mandalWiseData => 'Mandal Wise Data\'';
+  String get mandalWiseData => 'Mandal Wise Data';
 
   @override
   String get district => 'District';
@@ -181,6 +184,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get preferredLanguage => 'Preferred language';
+
+  @override
+  String get hepatitis => 'Hepatitis';
 
   @override
   String get string => '';

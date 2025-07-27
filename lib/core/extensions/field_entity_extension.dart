@@ -87,6 +87,7 @@ extension FieldEntityExtension on FormEntity {
                               fieldValue ??
                               List<NameIDEntity>.empty(growable: true),
                           callback: (value) async {
+                            fieldValue = value;
                             onDatachnage?.call(value);
                           },
                         )
@@ -509,7 +510,7 @@ extension FieldEntityExtension on FormEntity {
               ),
               child: CheckboxListInputWidget(
                 inputData: inputFieldData,
-                selectedData: fieldValue??{},
+                selectedData: fieldValue ?? {},
                 title: getLabel,
                 isMandetory: validation?.required ?? false,
                 onSelected: (value) {
@@ -533,7 +534,7 @@ extension FieldEntityExtension on FormEntity {
                 inputData: inputFieldData,
                 title: getLabel,
                 isMandetory: validation?.required ?? false,
-                selctedData: fieldValue??{},
+                selctedData: fieldValue ?? {},
                 onSelected: (value) {
                   fieldValue = value;
                   onDatachnage?.call(value);
@@ -554,9 +555,7 @@ extension FieldEntityExtension on FormEntity {
               child: SizedBox(
                 width: double.infinity,
                 height: inputFieldData['height'],
-                child: SfPdfViewer.asset(
-                  inputFieldData['url'],
-                ),
+                child: SfPdfViewer.asset(inputFieldData['url']),
               ),
             ),
           );

@@ -299,6 +299,12 @@ abstract class AppLocalizations {
   /// **'Total participants'**
   String get totalParticipants;
 
+  /// No description provided for @totalClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Client'**
+  String get totalClient;
+
   /// No description provided for @totalScreened.
   ///
   /// In en, this message translates to:
@@ -356,7 +362,7 @@ abstract class AppLocalizations {
   /// No description provided for @mandalWiseData.
   ///
   /// In en, this message translates to:
-  /// **'Mandal Wise Data\''**
+  /// **'Mandal Wise Data'**
   String get mandalWiseData;
 
   /// No description provided for @district.
@@ -442,6 +448,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preferred language'**
   String get preferredLanguage;
+
+  /// No description provided for @hepatitis.
+  ///
+  /// In en, this message translates to:
+  /// **'Hepatitis'**
+  String get hepatitis;
 
   /// No description provided for @string.
   ///

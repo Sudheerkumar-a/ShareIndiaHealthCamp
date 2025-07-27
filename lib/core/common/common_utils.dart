@@ -7,6 +7,8 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shareindia_health_camp/core/common/log.dart';
 import 'package:shareindia_health_camp/core/config/flavor_config.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
@@ -14,10 +16,11 @@ import 'package:shareindia_health_camp/core/enum/enum.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/data/local/user_data_db.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
-import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
+import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mime/mime.dart';
+
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' as excel;
 
 Future<void> openMapsSheet(
   BuildContext context,
@@ -358,4 +361,90 @@ List<PriorityType> getPriorityTypes() {
     PriorityType.high,
     PriorityType.critical,
   ];
+}
+
+Future<bool> exportToExcel(ExportDataEntity exportData) async {
+  try {
+    final workbook = excel.Workbook();
+    final sheet = workbook.worksheets[0];
+
+    // ✅ This is correct — merge range A1:C1
+    final mergedRange = sheet.getRangeByName('B2:D2');
+    mergedRange.merge();
+
+    // Set title with style
+    final titleCell = sheet.getRangeByName('B2');
+    titleCell.setText(exportData.title);
+    titleCell.cellStyle
+      ..bold = true
+      ..fontSize = 18
+      ..hAlign = excel.HAlignType.left
+      ..fontColor = '#007ACC';
+
+    final mergedRange2 = sheet.getRangeByName('E2:G2');
+    mergedRange2.merge();
+    final titleCell2 = sheet.getRangeByName('E2');
+    titleCell2.setText('Date:${exportData.date}');
+    titleCell2.cellStyle
+      ..bold = true
+      ..fontSize = 14
+      ..hAlign = excel.HAlignType.left
+      ..fontColor = '#007ACC';
+    final columns = exportData.columns;
+    for (int col = 0; col < columns.length; col++) {
+      double estimatedWidth = (columns.length * 0.8).clamp(15, 50);
+      final range = sheet.getRangeByIndex(4, col + 2);
+      range.setText(columns[col]);
+      range.columnWidth = estimatedWidth;
+      final style = range.cellStyle;
+      style.fontSize = 12;
+      style.bold = true;
+      style.fontColor = "#D32030";
+      style.hAlign = excel.HAlignType.left;
+      style.vAlign = excel.VAlignType.top;
+      range.cellStyle = style;
+    }
+
+    for (int row = 0; row < exportData.rows.length; row++) {
+      final item = exportData.rows[row];
+      final columnsData = item.toExcel();
+      int col = 0;
+      for (var item in (columnsData as Map<String, dynamic>).entries) {
+        printLog((item.value?.length ?? 0 * 0.8).clamp(15, 50));
+        int estimatedWidth = (item.value?.length ?? 0 * 0.8).clamp(15, 50);
+        final range = sheet.getRangeByIndex(row + 5, col + 2);
+        range.setText(item.value);
+        range.columnWidth = estimatedWidth.toDouble();
+        final style = range.cellStyle;
+        style.fontSize = 12;
+        style.hAlign = excel.HAlignType.left;
+        style.vAlign = excel.VAlignType.top;
+        style.wrapText = true;
+        range.cellStyle = style;
+        col++;
+      }
+    }
+
+    // Save to file
+    final List<int> bytes = workbook.saveAsStream();
+    workbook.dispose();
+
+    // Get temporary directory
+    final directory = await getTemporaryDirectory();
+    final path = '${directory.path}/ihs_outcome_report_${exportData.date}.xlsx';
+
+    // Save the file
+    final File file = File(path);
+    await file.writeAsBytes(bytes, flush: true);
+
+    // Share the file
+    final params = ShareParams(
+      text: 'Check out this Excel file!',
+      files: [XFile(path)],
+    );
+    await SharePlus.instance.share(params);
+  } catch (e) {
+    return false;
+  }
+  return true;
 }

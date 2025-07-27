@@ -10,6 +10,7 @@ import 'package:shareindia_health_camp/core/extensions/field_entity_extension.da
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
+import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
@@ -47,7 +48,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
   final referralFormFields = List<FormEntity>.empty(growable: true);
   final consentFormFields = List<FormEntity>.empty(growable: true);
   final indexTestingFormFields = List<FormEntity>.empty(growable: true);
-  final stepCount = 9;
+  final stepCount = 7;
   _onDataChanged(bool doRefresh) {
     Future.delayed(Duration(milliseconds: 500), () {
       _formKey.currentState?.validate();
@@ -61,6 +62,55 @@ class OutreachCampFormScreen extends BaseScreenWidget {
   List<List<FormEntity>> _getFormFields(BuildContext context) {
     final resources = context.resources;
     if (step1formFields.isEmpty) {
+      final selectedDistrict =
+          NameIDModel.fromDistrictsJson(
+            districts
+                .where(
+                  (e) =>
+                      e['name']?.toLowerCase() ==
+                          UserCredentialsEntity.details(
+                            context,
+                          ).user?.district?.toLowerCase() ||
+                      e['id']?.toLowerCase() ==
+                          UserCredentialsEntity.details(
+                            context,
+                          ).user?.district?.toLowerCase(),
+                )
+                .first,
+          ).toEntity();
+      fieldsData['district'] = selectedDistrict.id;
+      sl<ServicesBloc>()
+          .getFieldInputData(
+            apiUrl: mandalListApiUrl,
+            requestParams: {'dist_id': selectedDistrict.id},
+            requestModel: ListModel.fromMandalJson,
+          )
+          .then((response) {
+            if (response is ServicesStateSuccess) {
+              final items =
+                  ((response).responseEntity.entity as ListEntity).items
+                      .map((item) => item as NameIDEntity)
+                      .toList();
+              final mandal =
+                  items
+                      .where(
+                        (e) =>
+                            e.name?.toLowerCase() ==
+                            UserCredentialsEntity.details(
+                              context,
+                            ).user?.mandal?.toLowerCase(),
+                      )
+                      .firstOrNull;
+              final child =
+                  step1formFields
+                      .where((item) => item.name == 'mandal')
+                      .firstOrNull;
+              child?.inputFieldData = {'items': items};
+              child?.fieldValue = mandal;
+              fieldsData['mandal'] = mandal?.id;
+              _onDataChanged(true);
+            }
+          });
       step1formFields.addAll([
         FormEntity()
           ..name = 'integratedoutreachcampform'
@@ -72,7 +122,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Date Of Camp'
           ..labelTe = 'Date Of Camp'
           ..type = 'date'
-          ..placeholderEn = 'dd/mm/yyyy'
+          ..placeholderEn = 'dd/MM/yyyy'
+          ..fieldValue = getDateByformat('dd/MM/yyyy', DateTime.now())
           ..validation = (FormValidationEntity()..required = true)
           ..messages =
               (FormMessageEntity()..requiredEn = 'Please Enter DateOfCamp')
@@ -88,6 +139,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'collection'
           ..validation = (FormValidationEntity()..required = true)
           ..placeholderEn = 'Select District'
+          ..fieldValue = selectedDistrict
           ..inputFieldData = {
             'items':
                 districts
@@ -118,6 +170,33 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Mandal'
           ..labelTe = 'Mandal'
           ..type = 'collection'
+          ..validation = (FormValidationEntity()..required = true)
+          ..placeholderEn = 'Select Mandal'
+          ..onDatachnage = (value) {
+            fieldsData['mandal'] = value.id;
+            _onDataChanged(false);
+          },
+        FormEntity()
+          ..name = 'village'
+          ..labelEn = 'Village'
+          ..labelTe = 'Village'
+          ..type = 'collection'
+          ..inputFieldData = {
+            'items':
+                [
+                      {'id': 1, 'name': 'Village1'},
+                      {'id': 2, 'name': 'Village2'},
+                      {'id': 3, 'name': 'Village3'},
+                      {'id': 4, 'name': 'Village4'},
+                    ]
+                    .map(
+                      (item) =>
+                          NameIDModel.fromDistrictsJson(
+                            item as Map<String, dynamic>,
+                          ).toEntity(),
+                    )
+                    .toList(),
+          }
           ..validation = (FormValidationEntity()..required = true)
           ..placeholderEn = 'Select Mandal'
           ..onDatachnage = (value) {
@@ -161,27 +240,26 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             'doSort': false,
           }
           ..onDatachnage = (value) {
-            final child =
-                step1formFields
-                    .where((item) => item.name == 'camp_location_other')
-                    .firstOrNull;
-            if (value.id == 6) {
-              if (child != null) {
-                child.isHidden = false;
-              }
-            } else {
-              if (child != null) {
-                child.isHidden = true;
-                child.fieldValue = null;
-              }
-            }
+            // final child =
+            //     step1formFields
+            //         .where((item) => item.name == 'camp_location_other')
+            //         .firstOrNull;
+            // if (value.id == 6) {
+            //   if (child != null) {
+            //     child.isHidden = false;
+            //   }
+            // } else {
+            //   if (child != null) {
+            //     child.isHidden = true;
+            //     child.fieldValue = null;
+            //   }
+            // }
             fieldsData['camp_location'] = value.name;
             _onDataChanged(true);
           },
         FormEntity()
           ..name = 'camp_location_other'
           ..type = 'text'
-          ..isHidden = true
           ..validation =
               (FormValidationEntity()
                 ..required = true
@@ -192,6 +270,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                 ..requiredTe = 'Please Enter Camp Village / Location'
                 ..regexEn = 'Please Enter Valid Camp Village / Location'
                 ..regexTe = 'Please Enter Valid Camp Village / Location')
+          ..label = 'Camp Village / Location'
           ..placeholderEn = 'Camp Village / Location'
           ..placeholderTe = 'Camp Village / Location'
           ..onDatachnage = (value) {
@@ -433,6 +512,10 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'collection'
           ..validation = (FormValidationEntity()..required = true)
           ..placeholderEn = 'Select Sex'
+          ..messages =
+              (FormMessageEntity()
+                ..requiredEn = 'please Select Sex'
+                ..requiredTe = 'please Select Sex')
           ..inputFieldData = {
             'items':
                 gender
@@ -446,20 +529,51 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             'doSort': false,
           }
           ..onDatachnage = (value) {
-            final childs =
-                step4formFields
-                    .where(
-                      (item) => [
-                        'breastcancer',
-                        'cervicalcancer',
-                      ].contains(item.name),
-                    )
-                    .toList();
-            for (var child in childs) {
-              child.isHidden = value.id != 2;
-              child.fieldValue = null;
-            }
+            final child1 =
+                step2formFields
+                    .where((item) => ['pregnancystatus'].contains(item.name))
+                    .firstOrNull;
+            child1?.isHidden = value.id != 2;
+            child1?.fieldValue = null;
+            final child2 =
+                step2formFields
+                    .where((item) => ['date_of_LMP'].contains(item.name))
+                    .firstOrNull;
+            child2?.isHidden = true;
+            child2?.fieldValue = null;
             fieldsData['sex'] = value.name;
+            _onDataChanged(true);
+          },
+        FormEntity()
+          ..name = 'pregnancystatus'
+          ..type = 'confirmcheck'
+          ..verticalSpace = 0
+          ..horizontalSpace = 0
+          ..labelEn = 'Pregnancy status'
+          ..labelTe = 'Pregnancy status'
+          ..isHidden = true
+          ..onDatachnage = (value) {
+            final child =
+                step2formFields
+                    .where((item) => item.name == 'date_of_LMP')
+                    .firstOrNull;
+            child?.isHidden = !value;
+            fieldsData['pregnancystatus'] = value == true ? 1 : 0;
+            _onDataChanged(true);
+          },
+        FormEntity()
+          ..name = 'date_of_LMP'
+          ..labelEn = 'Date of LMP'
+          ..labelTe = 'Date of LMP'
+          ..type = 'date'
+          ..isHidden = true
+          ..placeholderEn = 'dd/MM/yyyy'
+          ..validation = (FormValidationEntity()..required = true)
+          ..messages =
+              (FormMessageEntity()..requiredEn = 'Please Enter Date of LMP')
+          ..suffixIcon = DrawableAssets.icCalendar
+          ..onDatachnage = (value) {
+            fieldsData['date_of_LMP'] = value;
             _onDataChanged(false);
           },
         FormEntity()
@@ -677,12 +791,12 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..name = 'consent'
           ..type = 'confirmcheck'
           ..validation = (FormValidationEntity()..required = true)
-          ..labelEn = 'I consent to check-up & tests'
-          ..labelTe = 'I consent to check-up & tests'
+          ..labelEn = 'I give my consent'
+          ..labelTe = 'I give my consent'
           ..messages =
               (FormMessageEntity()
-                ..requiredEn = 'Please consent check-up & tests'
-                ..requiredTe = 'Please consent check-up & tests')
+                ..requiredEn = 'I give my consent'
+                ..requiredTe = 'I give my consent')
           ..onDatachnage = (value) {
             fieldsData['consent'] = value ? 1 : 0;
             _onDataChanged(false);
@@ -783,24 +897,24 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             fieldsData['ontreatmentknownhepatitis'] = value == true ? 1 : 0;
             _onDataChanged(false);
           },
-        FormEntity()
-          ..name = 'tobaccouse'
-          ..type = 'confirmcheck'
-          ..labelEn = 'Tobacco use'
-          ..labelTe = 'Tobacco use'
-          ..onDatachnage = (value) {
-            fieldsData['tobaccouse'] = value ? 1 : 0;
-            _onDataChanged(false);
-          },
-        FormEntity()
-          ..name = 'alcoholuse'
-          ..type = 'confirmcheck'
-          ..labelEn = 'Alcohol use'
-          ..labelTe = 'Alcohol use'
-          ..onDatachnage = (value) {
-            fieldsData['alcoholuse'] = value ? 1 : 0;
-            _onDataChanged(false);
-          },
+        // FormEntity()
+        //   ..name = 'tobaccouse'
+        //   ..type = 'confirmcheck'
+        //   ..labelEn = 'Tobacco use'
+        //   ..labelTe = 'Tobacco use'
+        //   ..onDatachnage = (value) {
+        //     fieldsData['tobaccouse'] = value ? 1 : 0;
+        //     _onDataChanged(false);
+        //   },
+        // FormEntity()
+        //   ..name = 'alcoholuse'
+        //   ..type = 'confirmcheck'
+        //   ..labelEn = 'Alcohol use'
+        //   ..labelTe = 'Alcohol use'
+        //   ..onDatachnage = (value) {
+        //     fieldsData['alcoholuse'] = value ? 1 : 0;
+        //     _onDataChanged(false);
+        //   },
       ]);
     }
     if (step4formFields.isEmpty) {
@@ -836,45 +950,45 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..onDatachnage = (value) {
             fieldsData['diabetes'] = value;
           },
-        FormEntity()
-          ..name = 'oralcancer'
-          ..type = 'ncdscreening'
-          ..labelEn = 'Oral Cancer'
-          ..labelTe = 'Oral Cancer'
-          ..inputFieldData = [
-            {'label': 'Screened', 'value': false},
-            {'label': 'Abnormal', 'value': false},
-            {'label': 'Referred', 'value': false},
-          ]
-          ..onDatachnage = (value) {
-            fieldsData['oral'] = value;
-          },
-        FormEntity()
-          ..name = 'breastcancer'
-          ..type = 'ncdscreening'
-          ..labelEn = 'Breast Cancer'
-          ..labelTe = 'Breast Cancer'
-          ..inputFieldData = [
-            {'label': 'Screened', 'value': false},
-            {'label': 'Abnormal', 'value': false},
-            {'label': 'Referred', 'value': false},
-          ]
-          ..onDatachnage = (value) {
-            fieldsData['breast'] = value;
-          },
-        FormEntity()
-          ..name = 'cervicalcancer'
-          ..type = 'ncdscreening'
-          ..labelEn = 'Cervical Cancer'
-          ..labelTe = 'Cervical Cancer'
-          ..inputFieldData = [
-            {'label': 'Screened', 'value': false},
-            {'label': 'Abnormal', 'value': false},
-            {'label': 'Referred', 'value': false},
-          ]
-          ..onDatachnage = (value) {
-            fieldsData['cervical'] = value;
-          },
+        // FormEntity()
+        //   ..name = 'oralcancer'
+        //   ..type = 'ncdscreening'
+        //   ..labelEn = 'Oral Cancer'
+        //   ..labelTe = 'Oral Cancer'
+        //   ..inputFieldData = [
+        //     {'label': 'Screened', 'value': false},
+        //     {'label': 'Abnormal', 'value': false},
+        //     {'label': 'Referred', 'value': false},
+        //   ]
+        //   ..onDatachnage = (value) {
+        //     fieldsData['oral'] = value;
+        //   },
+        // FormEntity()
+        //   ..name = 'breastcancer'
+        //   ..type = 'ncdscreening'
+        //   ..labelEn = 'Breast Cancer'
+        //   ..labelTe = 'Breast Cancer'
+        //   ..inputFieldData = [
+        //     {'label': 'Screened', 'value': false},
+        //     {'label': 'Abnormal', 'value': false},
+        //     {'label': 'Referred', 'value': false},
+        //   ]
+        //   ..onDatachnage = (value) {
+        //     fieldsData['breast'] = value;
+        //   },
+        // FormEntity()
+        //   ..name = 'cervicalcancer'
+        //   ..type = 'ncdscreening'
+        //   ..labelEn = 'Cervical Cancer'
+        //   ..labelTe = 'Cervical Cancer'
+        //   ..inputFieldData = [
+        //     {'label': 'Screened', 'value': false},
+        //     {'label': 'Abnormal', 'value': false},
+        //     {'label': 'Referred', 'value': false},
+        //   ]
+        //   ..onDatachnage = (value) {
+        //     fieldsData['cervical'] = value;
+        //   },
       ]);
     }
     if (step5formFields.isEmpty) {
@@ -929,7 +1043,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..onDatachnage = (value) {
             final child =
                 step5formFields
-                    .where((item) => item.name == 'referredtoICTC')
+                    .where((item) => item.name == 'alreadAtART')
                     .firstOrNull;
             if (child != null) {
               if (value.id == 1) {
@@ -942,6 +1056,38 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             }
             fieldsData['hiv']['result'] = value.name;
             _onDataChanged(true);
+          },
+
+        FormEntity()
+          ..name = 'alreadAtART'
+          ..type = 'confirmcheck'
+          ..label = 'Already on ART?'
+          ..isHidden = true
+          ..onDatachnage = (value) {
+            final child =
+                step5formFields
+                    .where((item) => item.name == 'alreadAtARTName')
+                    .firstOrNull;
+
+            child?.isHidden = !value;
+            child?.fieldValue = null;
+            final child2 =
+                step5formFields
+                    .where((item) => item.name == 'referredtoICTC')
+                    .firstOrNull;
+            child2?.isHidden = value;
+            child2?.fieldValue = null;
+            fieldsData['hiv']['alreadAtART'] = value ? 1 : 0;
+            _onDataChanged(true);
+          },
+        FormEntity()
+          ..name = 'alreadAtARTName'
+          ..type = 'text'
+          ..placeholder = 'ART Centre Name &amp; ART NO:'
+          ..isHidden = true
+          ..onDatachnage = (value) {
+            fieldsData['hiv']['alreadAtARTName'] = value;
+            _onDataChanged(false);
           },
         FormEntity()
           ..name = 'referredtoICTC'
@@ -1005,7 +1151,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..isHidden = true
           ..onDatachnage = (value) {
             final childs = step5formFields.where(
-              (item) => ['alreadAtART'].contains(item.name),
+              (item) => ['referredtoART'].contains(item.name),
             );
             for (var child in childs) {
               child.isHidden = !value;
@@ -1013,37 +1159,6 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             }
             fieldsData['hiv']['confirmedICTC'] = value ? 1 : 0;
             _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'alreadAtART'
-          ..type = 'confirmcheck'
-          ..label = 'Already on ART?'
-          ..isHidden = true
-          ..onDatachnage = (value) {
-            final child =
-                step5formFields
-                    .where((item) => item.name == 'alreadAtARTName')
-                    .firstOrNull;
-
-            child?.isHidden = !value;
-            child?.fieldValue = null;
-            final child2 =
-                step5formFields
-                    .where((item) => item.name == 'referredtoART')
-                    .firstOrNull;
-            child2?.isHidden = value;
-            child2?.fieldValue = null;
-            fieldsData['hiv']['alreadAtART'] = value ? 1 : 0;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'alreadAtARTName'
-          ..type = 'text'
-          ..placeholder = 'ART Centre Name &amp; ART NO:'
-          ..isHidden = true
-          ..onDatachnage = (value) {
-            fieldsData['hiv']['alreadAtARTName'] = value;
-            _onDataChanged(false);
           },
         FormEntity()
           ..name = 'referredtoART'
@@ -1213,9 +1328,21 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       ]);
     }
     fieldsData['sti'] ??= {};
-    fieldsData['sti']['syphilis'] = {'done': 0, 'result': 'Non-Reactive'};
-    fieldsData['sti']['hepB'] = {'done': 0, 'result': 'Non-Reactive'};
-    fieldsData['sti']['hepC'] = {'done': 0, 'result': 'Non-Reactive'};
+    fieldsData['sti']['syphilis'] = {
+      'done': 0,
+      'result': 'Non-Reactive',
+      'referred': 0,
+    };
+    fieldsData['sti']['hepB'] = {
+      'done': 0,
+      'result': 'Non-Reactive',
+      'referred': 0,
+    };
+    fieldsData['sti']['hepC'] = {
+      'done': 0,
+      'result': 'Non-Reactive',
+      'referred': 0,
+    };
     if (step6formFields.isEmpty) {
       step6formFields.addAll([
         FormEntity()
@@ -1224,14 +1351,54 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelTe = 'STI Screening'
           ..type = 'labelheader',
         FormEntity()
+          ..name = 'syndromiccases'
+          ..labelEn = 'Syndromic case management'
+          ..labelTe = 'Syndromic case management'
+          ..type = 'collection'
+          ..multi = true
+          ..validation = (FormValidationEntity()..required = true)
+          ..placeholderEn = 'Select Partner Relationship'
+          ..inputFieldData = {
+            'items':
+                syndromicCases
+                    .map(
+                      (item) =>
+                          NameIDModel.fromDistrictsJson(
+                            item as Map<String, dynamic>,
+                          ).toEntity(),
+                    )
+                    .toList(),
+            'doSort': false,
+          }
+          ..onDatachnage = (value) {
+            final child =
+                step6formFields
+                    .where((item) => item.name == 'syndromicreferred')
+                    .firstOrNull;
+            child?.isHidden = (value as List).firstOrNull?.id == 13;
+            fieldsData['syndromiccases'] = value;
+            _onDataChanged(true);
+          },
+        FormEntity()
+          ..name = 'syndromicreferred'
+          ..type = 'confirmcheck'
+          ..labelEn = 'Referred?'
+          ..labelTe = 'Referred?'
+          ..isHidden = true
+          ..onDatachnage = (value) {
+            fieldsData['syndromicreferred'] = value ? 1 : 0;
+            _onDataChanged(false);
+          },
+        FormEntity()
           ..name = 'syphilis'
           ..type = 'listcheckbox'
           ..labelEn = 'Syphilis'
           ..labelTe = 'Syphilis'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive'}
+          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
-            {'label': 'Result', 'value': false, 'type': 'collection'},
+            {'label': 'Result', 'value': null, 'type': 'collection'},
+            {'label': 'Referred?', 'value': null, 'type': 'confirmcheck'},
           ]
           ..onDatachnage = (value) {
             fieldsData['sti'] ??= {};
@@ -1242,10 +1409,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Hepatitis-B'
           ..labelTe = 'Hepatitis-B'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive'}
+          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
-            {'label': 'Result', 'value': false, 'type': 'collection'},
+            {'label': 'Result', 'value': null, 'type': 'collection'},
+            {'label': 'Referred?', 'value': null, 'type': 'confirmcheck'},
           ]
           ..onDatachnage = (value) {
             fieldsData['sti'] ??= {};
@@ -1256,10 +1424,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Hepatitis-C'
           ..labelTe = 'Hepatitis-C'
-          ..fieldValue = {'done': 0, 'result': 'Non-Reactive'}
+          ..fieldValue = {'done': 0, 'result': 'Non-Reactive', 'referred': 0}
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
-            {'label': 'Result', 'value': false, 'type': 'collection'},
+            {'label': 'Result', 'value': null, 'type': 'collection'},
+            {'label': 'Referred?', 'value': null, 'type': 'confirmcheck'},
           ]
           ..onDatachnage = (value) {
             fieldsData['sti'] ??= {};
@@ -1281,13 +1450,13 @@ class OutreachCampFormScreen extends BaseScreenWidget {
     }
     return [
       step1formFields,
-      referralFormFields,
+      //referralFormFields,
       step2formFields,
       consentFormFields,
       step3formFields,
       step4formFields,
       step5formFields,
-      indexTestingFormFields,
+      //indexTestingFormFields,
       step6formFields,
     ];
   }
@@ -1298,13 +1467,13 @@ class OutreachCampFormScreen extends BaseScreenWidget {
 
     List<String> stepButtonTexts = [
       'Next',
+      //'Next',
       'Next',
       'Next',
       'Next',
       'Next',
       'Next',
-      'Next',
-      'Next',
+      //'Next',
       'Next',
       'Submit',
       resources.string.submit,
@@ -1336,7 +1505,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             child: Column(
               children: [
                 MSearchUserAppBarWidget(
-                  title: 'Integrated Health Services (IHS)',
+                  title: 'Integrated Health Services (IHS) - APSACS',
                   showBack: true,
                 ),
                 ValueListenableBuilder(
@@ -1391,7 +1560,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                       }
                     }
                     var isLastStep = _stepNotifier.value == stepCount;
-                    if (_stepNotifier.value == 4) {
+                    if (_stepNotifier.value == 3) {
                       final field =
                           consentFormFields
                               .where((item) => item.name == 'consent')
@@ -1426,10 +1595,10 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                         ],
                         InkWell(
                           onTap: () async {
-                            if (!isDataValid ||
-                                _formKey.currentState?.validate() != true) {
-                              return;
-                            }
+                            // if (!isDataValid ||
+                            //     _formKey.currentState?.validate() != true) {
+                            //   return;
+                            // }
 
                             if (!isLastStep) {
                               _stepNotifier.value = _stepNotifier.value + 1;
@@ -1458,6 +1627,9 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                                       "last_name": fieldsData['last_name'],
                                       "age": fieldsData['age'],
                                       "sex": fieldsData['sex'],
+                                      "pregnancystatus":
+                                          fieldsData['pregnancystatus'],
+                                      "date_of_LMP": fieldsData['date_of_LMP'],
                                       "contact_number":
                                           fieldsData['contact_number'],
                                       "aadher_number":
@@ -1486,10 +1658,10 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                                             fieldsData['ontreatmentknownhepatitis'] ??
                                             0,
                                       },
-                                      "tobacco_user":
-                                          fieldsData['tobaccouse'] ?? 0,
-                                      "alcohol_user":
-                                          fieldsData['alcoholuse'] ?? 0,
+                                      // "tobacco_user":
+                                      //     fieldsData['tobaccouse'] ?? 0,
+                                      // "alcohol_user":
+                                      //     fieldsData['alcoholuse'] ?? 0,
                                       "ncd": {
                                         "hypertension":
                                             fieldsData['hypertension'] ??
@@ -1505,29 +1677,39 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                                               'abnormal': 0,
                                               'referred': 0,
                                             },
-                                        "oral":
-                                            fieldsData['oralcancer'] ??
-                                            {
-                                              'screened': 0,
-                                              'abnormal': 0,
-                                              'referred': 0,
-                                            },
-                                        "breast":
-                                            fieldsData['breastcancer'] ??
-                                            {
-                                              'screened': 0,
-                                              'abnormal': 0,
-                                              'referred': 0,
-                                            },
-                                        "cervical":
-                                            fieldsData['cervicalcancer'] ??
-                                            {
-                                              'screened': 0,
-                                              'abnormal': 0,
-                                              'referred': 0,
-                                            },
+                                        // "oral":
+                                        //     fieldsData['oralcancer'] ??
+                                        //     {
+                                        //       'screened': 0,
+                                        //       'abnormal': 0,
+                                        //       'referred': 0,
+                                        //     },
+                                        // "breast":
+                                        //     fieldsData['breastcancer'] ??
+                                        //     {
+                                        //       'screened': 0,
+                                        //       'abnormal': 0,
+                                        //       'referred': 0,
+                                        //     },
+                                        // "cervical":
+                                        //     fieldsData['cervicalcancer'] ??
+                                        //     {
+                                        //       'screened': 0,
+                                        //       'abnormal': 0,
+                                        //       'referred': 0,
+                                        //     },
                                       },
                                       "hiv": fieldsData['hiv'],
+                                      "syndromiccases":
+                                          fieldsData['syndromiccases'] is List
+                                              ? (fieldsData['syndromiccases']
+                                                  .map(
+                                                    (syndrom) => syndrom.name,
+                                                  )
+                                                  .join(', '))
+                                              : '',
+                                      "syndromicreferred":
+                                          fieldsData['syndromicreferred'],
                                       "sti": fieldsData['sti'],
                                       "remarks": fieldsData['remarks'],
                                     };

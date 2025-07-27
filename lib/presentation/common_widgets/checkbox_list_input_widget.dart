@@ -22,6 +22,7 @@ class CheckboxListInputWidget extends StatelessWidget {
 
   final _onDataChanged = ValueNotifier(false);
   Map data = {};
+  final ValueNotifier _isReactive = ValueNotifier(false);
 
   List<Widget> _getWidgetsByData(BuildContext context, int row) {
     final widgets = List<Widget>.empty(growable: true);
@@ -55,10 +56,34 @@ class CheckboxListInputWidget extends StatelessWidget {
                             'doSort': false,
                           }
                           ..onDatachnage = (value) {
+                            _isReactive.value = value.id == 1;
                             data['result'] = value.name;
                             onSelected.call(data);
                           })
                         .getWidget(context)
+                    : (item['type'] == 'confirmcheck')
+                    ? ValueListenableBuilder(
+                      valueListenable: _isReactive,
+                      builder: (context, isReactive, child) {
+                        return (FormEntity()
+                              ..name = 'referred'
+                              ..type = 'confirmcheck'
+                              ..isHidden = !isReactive
+                              ..horizontalSpace = 20
+                              ..fieldValue =
+                                  item['value'] == null
+                                      ? null
+                                      : bool.tryParse(item['value'])
+                              ..labelEn = item['label']
+                              ..labelTe = item['label']
+                              ..onDatachnage = (value) {
+                                item['value'] = value.toString();
+                                data['referred'] = value ? 1 : 0;
+                                onSelected.call(data);
+                              })
+                            .getWidget(context);
+                      },
+                    )
                     : CheckboxListTile(
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
                       value: item['value'] ?? false,

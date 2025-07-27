@@ -103,12 +103,34 @@ const gender = [
 ];
 
 const maritalStatus = [
-  { "id": '1', "name": "Single" },
-  { "id": '2', "name": "Married" },
-  { "id": '3', "name": "Living together / Cohabiting" },
-  { "id": '4', "name": "Separated" },
-  { "id": '5', "name": "Divorced" },
-  { "id": '6', "name": "Widowed" },
-  { "id": '7', "name": "Prefer not to say" },
-  { "id": '8', "name": "Not applicable" }
+  {"id": '1', "name": "Single"},
+  {"id": '2', "name": "Married"},
+  {"id": '3', "name": "Living together / Cohabiting"},
+  {"id": '4', "name": "Separated"},
+  {"id": '5', "name": "Divorced"},
+  {"id": '6', "name": "Widowed"},
+  {"id": '7', "name": "Prefer not to say"},
+  {"id": '8', "name": "Not applicable"},
+];
+const syndromicCases = [
+  {"id": '1', "name": "Urethral Discharge"},
+  {"id": '2', "name": "Vaginal Discharge"},
+  {"id": '3', "name": "Painful Scrotal Swelling"},
+  {"id": '4', "name": "Vaginal Discharge Syndrome (for vaginitis)"},
+  {
+    "id": '5',
+    "name": "Genital Ulcer Disease Syndrome (for Syphilis and Chancroid)",
+  },
+  {
+    "id": '6',
+    "name":
+        "Genital Ulcer Disease Syndrome (for Syphilis and Chancroid when unavailability or history of allergy to BPG)",
+  },
+  {"id": '7', "name": "Genital Ulcer Disease Syndrome (for Herpetic Ulcers)"},
+  {"id": '8', "name": "Lower Abdomen Pain"},
+  {"id": '9', "name": "Pelvic Inflammatory Disease"},
+  {"id": '10', "name": "Inguinal Bubo under Genital Ulcer Disease Syndrome"},
+  {"id": '11', "name": "LGV Proctitis under Anorectal Discharge Syndrome"},
+  {"id": '12', "name": "Anorectal Discharge Syndrome"},
+  {"id": '13', "name": "No symptoms"},
 ];

@@ -45,4 +45,16 @@ class ReportEntity extends BaseEntity {
     data['action'] = 'Edit/Delete';
     return data;
   }
+
+  Map<String, dynamic> toExcel() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['district'] = district;
+    data['mandal'] = mandal;
+    data['name'] = '$firstName $lastName';
+    data['age'] = age;
+    data['sex'] = sex;
+    data['contactNumber'] = contactNumber;
+    data['remarks'] = remarks;
+    return data;
+  }
 }

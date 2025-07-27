@@ -111,6 +111,9 @@ class AppLocalizationsTe extends AppLocalizations {
   String get totalParticipants => 'మొత్తం పాల్గొనేవారు';
 
   @override
+  String get totalClient => 'Total Client';
+
+  @override
   String get totalScreened => 'మొత్తం స్క్రీనింగ్ చేసిన వారు';
 
   @override
@@ -181,6 +184,9 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get preferredLanguage => 'ప్రిఫర్డ్ లాంగ్వేజ్';
+
+  @override
+  String get hepatitis => 'Hepatitis';
 
   @override
   String get string => '';
