@@ -99,7 +99,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get documentSuccessfullySaved => 'Document successfully saved';
 
   @override
-  String get appUpdateBody => 'We improve performance and fix some bugs to make your experience seamless';
+  String get appUpdateBody =>
+      'We improve performance and fix some bugs to make your experience seamless';
 
   @override
   String get selectDistrict => 'Select District';

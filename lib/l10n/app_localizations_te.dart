@@ -99,7 +99,8 @@ class AppLocalizationsTe extends AppLocalizations {
   String get documentSuccessfullySaved => 'పత్రం విజయవంతంగా సేవ్ చేయబడింది';
 
   @override
-  String get appUpdateBody => 'మీ అనుభవాన్ని సజావుగా చేయడానికి మేము పనితీరును మెరుగుపరుస్తాము మరియు కొన్ని బగ్‌లను పరిష్కరిస్తాము.';
+  String get appUpdateBody =>
+      'మీ అనుభవాన్ని సజావుగా చేయడానికి మేము పనితీరును మెరుగుపరుస్తాము మరియు కొన్ని బగ్‌లను పరిష్కరిస్తాము.';
 
   @override
   String get selectDistrict => 'జిల్లాను ఎంచుకోండి';
