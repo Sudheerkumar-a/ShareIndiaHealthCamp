@@ -1,6 +1,7 @@
 //smartUAQ server ports
 const String apiFolderUrl = 'api/';
 const String validateUserApiUrl = 'auth/login.php';
+const String addAgentApiUrl = 'campaign/add_field_agent.php';
 const String dashboardApiUrl = 'dashboard/index.php';
 const String dashboardMonthwiseApiUrl = 'dashboard/monthwise.php';
 const String reportListApiUrl = 'campaign/list.php';
