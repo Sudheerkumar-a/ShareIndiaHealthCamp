@@ -111,7 +111,10 @@ class OutreachCampFormScreen extends BaseScreenWidget {
               _onDataChanged(true);
             }
           });
-          fieldsData['date_of_camp'] = getDateByformat('dd/MM/yyyy', DateTime.now());
+      fieldsData['date_of_camp'] = getDateByformat(
+        'dd/MM/yyyy',
+        DateTime.now(),
+      );
       step1formFields.addAll([
         FormEntity()
           ..name = 'integratedoutreachcampform'
@@ -124,7 +127,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelTe = 'Date Of Camp'
           ..type = 'date'
           ..placeholderEn = 'dd/MM/yyyy'
-          ..fieldValue =  fieldsData['date_of_camp']
+          ..fieldValue = fieldsData['date_of_camp']
           ..validation = (FormValidationEntity()..required = true)
           ..messages =
               (FormMessageEntity()..requiredEn = 'Please Enter DateOfCamp')
@@ -181,27 +184,36 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..name = 'village'
           ..labelEn = 'Village'
           ..labelTe = 'Village'
-          ..type = 'collection'
-          ..inputFieldData = {
-            'items':
-                [
-                      {'id': 1, 'name': 'Village1'},
-                      {'id': 2, 'name': 'Village2'},
-                      {'id': 3, 'name': 'Village3'},
-                      {'id': 4, 'name': 'Village4'},
-                    ]
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-          }
-          ..validation = (FormValidationEntity()..required = true)
-          ..placeholderEn = 'Select Mandal'
+          ..type = 'text'
+          // ..inputFieldData = {
+          //   'items':
+          //       [
+          //             {'id': 1, 'name': 'Village1'},
+          //             {'id': 2, 'name': 'Village2'},
+          //             {'id': 3, 'name': 'Village3'},
+          //             {'id': 4, 'name': 'Village4'},
+          //           ]
+          //           .map(
+          //             (item) =>
+          //                 NameIDModel.fromDistrictsJson(
+          //                   item as Map<String, dynamic>,
+          //                 ).toEntity(),
+          //           )
+          //           .toList(),
+          // }
+          ..validation =
+              (FormValidationEntity()
+                ..required = true
+                ..regex = nameRegExp)
+          ..messages =
+              (FormMessageEntity()
+                ..requiredEn = 'Please Enter Village'
+                ..requiredTe = 'Please Enter Village'
+                ..regexEn = 'Please Enter Valid Village'
+                ..regexTe = 'Please Enter Valid Village')
+          ..placeholderEn = 'Enter Village'
           ..onDatachnage = (value) {
-            fieldsData['mandal'] = value.id;
+            fieldsData['village'] = value;
             _onDataChanged(false);
           },
         FormEntity()
@@ -1118,30 +1130,30 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           },
         FormEntity()
           ..name = 'ictcnames'
-          ..labelEn = 'ICTC Names'
-          ..labelTe = 'ICTC Names'
-          ..type = 'collection'
+          ..labelEn = 'ICTC Name'
+          ..labelTe = 'ICTC Name'
+          ..type = 'text'
           ..isHidden = true
           ..validation = (FormValidationEntity()..required = true)
-          ..placeholderEn = 'Select ICTC Names'
-          ..inputFieldData = {
-            'items':
-                [
-                      {'id': '1', 'name': 'ICTC-1'},
-                      {'id': '2', 'name': 'ICTC-2'},
-                      {'id': '3', 'name': 'ICTC-3'},
-                    ]
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
+          ..placeholderEn = 'ICTC Name'
+          // ..inputFieldData = {
+          //   'items':
+          //       [
+          //             {'id': '1', 'name': 'ICTC-1'},
+          //             {'id': '2', 'name': 'ICTC-2'},
+          //             {'id': '3', 'name': 'ICTC-3'},
+          //           ]
+          //           .map(
+          //             (item) =>
+          //                 NameIDModel.fromDistrictsJson(
+          //                   item as Map<String, dynamic>,
+          //                 ).toEntity(),
+          //           )
+          //           .toList(),
+          //   'doSort': false,
+          // }
           ..onDatachnage = (value) {
-            fieldsData['hiv']['nameOfICTC'] = value.name;
+            fieldsData['hiv']['nameOfICTC'] = value;
             _onDataChanged(false);
           },
         FormEntity()
