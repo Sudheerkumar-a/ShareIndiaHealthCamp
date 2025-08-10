@@ -58,3 +58,22 @@ class ReportEntity extends BaseEntity {
     return data;
   }
 }
+
+class AgentDataEntity extends BaseEntity {
+  int? id;
+  int? parentId;
+  int? districtId;
+  int? mandalId;
+  String? name;
+  String? mobile;
+  String? createdAt;
+  List<ReportEntity> reportList = [];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['Name'] = name;
+    data['mobile'] = mobile;
+    data['action'] = 'Delete';
+    return data;
+  }
+}

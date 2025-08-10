@@ -16,6 +16,7 @@ class UserEntity extends BaseEntity {
   String? email;
   String? role;
   String? district;
+  int? districtId;
   String? mandal;
   int? isAdmin;
 

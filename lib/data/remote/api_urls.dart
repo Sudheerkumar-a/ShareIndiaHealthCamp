@@ -7,3 +7,5 @@ const String dashboardMonthwiseApiUrl = 'dashboard/monthwise.php';
 const String reportListApiUrl = 'campaign/list.php';
 const String mandalListApiUrl = 'get/mandals.php';
 const String submitApiUrl = 'campaign/screen.php';
+const String agentListApiUrl = 'campaign/list_field_agents.php';
+const String deleteAgentApiUrl = 'campaign/delete_agent.php';

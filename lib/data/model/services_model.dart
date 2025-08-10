@@ -1,10 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:shareindia_health_camp/data/model/base_model.dart';
-import 'package:shareindia_health_camp/data/model/single_data_model.dart';
-import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
-import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class ReportDataModel extends BaseModel {
   int? page;
@@ -105,6 +102,39 @@ class ReportModel extends BaseModel {
       ..otherComorbidity = otherComorbidity
       ..remarks = remarks
       ..createdAt = createdAt;
+  }
+}
+
+class AgentDataModel extends BaseModel {
+  int? id;
+  int? parentId;
+  int? districtId;
+  int? mandalId;
+  String? name;
+  String? mobile;
+  String? createdAt;
+  List<ReportEntity> reportList = [];
+
+  AgentDataModel.fromJson(Map<String, dynamic> json) {
+    final response = json['data'];
+    id = response['id'];
+    parentId = response['parent_id'];
+    districtId = response['district_id'];
+    mandalId = response['mandal_id'];
+    name = response['name'];
+    mobile = response['mobile'];
+    createdAt = response['created_at'];
+  }
+
+  @override
+  AgentDataEntity toEntity() {
+   return AgentDataEntity()..id=id
+   ..parentId = parentId
+   ..districtId = districtId
+   ..mandalId = mandalId
+   ..name = name
+   ..mobile = mobile
+   ..createdAt = createdAt;
   }
 }
 

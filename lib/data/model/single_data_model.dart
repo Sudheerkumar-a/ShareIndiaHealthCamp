@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:shareindia_health_camp/data/model/base_model.dart';
+import 'package:shareindia_health_camp/data/model/services_model.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
@@ -38,6 +39,15 @@ class ListModel extends BaseModel {
     if (response != null) {
       response.forEach((v) {
         items.add(NameIDModel.fromDistrictsJson(v).toEntity());
+      });
+    }
+  }
+
+  ListModel.fromAgents(Map<String, dynamic> json) {
+    final response = json['data'];
+    if (response != null) {
+      response.forEach((v) {
+        items.add(AgentDataModel.fromJson(v).toEntity());
       });
     }
   }

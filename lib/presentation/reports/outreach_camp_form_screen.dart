@@ -1737,7 +1737,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                                       return;
                                     }
                                     Dialogs.dismiss(context);
-                                    //if (response is ServicesStateSuccess) {
+                                    if (response is ServicesStateSuccess) {
                                     Dialogs.showInfoDialog(
                                       context,
                                       PopupType.success,
@@ -1747,14 +1747,14 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                                         Navigator.pop(context);
                                       }
                                     });
-                                    // } else if (response
-                                    //     is ServicesStateApiError) {
-                                    //   Dialogs.showInfoDialog(
-                                    //     context,
-                                    //     PopupType.fail,
-                                    //     response.message,
-                                    //   );
-                                    // }
+                                    } else if (response
+                                        is ServicesStateApiError) {
+                                      Dialogs.showInfoDialog(
+                                        context,
+                                        PopupType.fail,
+                                        response.message,
+                                      );
+                                    }
                                   },
                                 ),
                               );

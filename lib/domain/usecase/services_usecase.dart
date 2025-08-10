@@ -80,6 +80,25 @@ class ServicesUseCase extends BaseUseCase {
     );
   }
 
+  Future<Either<Failure, ApiEntity<ListEntity>>> getAgentsList({
+    required Map<String, dynamic> requestParams,
+  }) async {
+    var apiResponse = await apisRepository.post<ListModel>(
+      apiUrl: agentListApiUrl,
+      requestParams: requestParams,
+      responseModel: ListModel.fromAgents,
+    );
+    return apiResponse.fold(
+      (l) {
+        return Left(l);
+      },
+      (r) {
+        var apiResponseEntity = r.toEntity<ListEntity>();
+        return Right(apiResponseEntity);
+      },
+    );
+  }
+
   Future<Either<Failure, ApiEntity<ListEntity>>> getFieldData({
     required String apiUrl,
     required Map<String, dynamic> requestParams,
