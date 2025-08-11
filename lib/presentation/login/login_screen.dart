@@ -43,7 +43,7 @@ class LoginScreen extends BaseScreenWidget {
   @override
   Widget build(BuildContext context) {
     final resource = context.resources;
-    _emailTextController.text = 'srinu431@gmail.com';
+    _emailTextController.text = 'chintapalli_ramesh@gmail.com';//'srinu431@gmail.com';
     _passwordTextController.text = 'Works@909';
     return SafeArea(
       child: Scaffold(

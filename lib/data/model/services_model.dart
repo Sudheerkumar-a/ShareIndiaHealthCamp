@@ -46,6 +46,7 @@ class ReportModel extends BaseModel {
   String? age;
   String? sex;
   String? contactNumber;
+  String? aadherNumber;
   String? villageColony;
   String? occupation;
   String? profileCategory;
@@ -68,6 +69,7 @@ class ReportModel extends BaseModel {
     age = json['age'];
     sex = json['sex'];
     contactNumber = json['contact_number'];
+    aadherNumber = json['aadher_number'];
     villageColony = json['village_colony'];
     occupation = json['occupation'];
     profileCategory = json['profile_category'];
@@ -93,6 +95,7 @@ class ReportModel extends BaseModel {
       ..age = age
       ..sex = sex
       ..contactNumber = contactNumber
+      ..aadherNumber = aadherNumber
       ..villageColony = villageColony
       ..occupation = occupation
       ..profileCategory = profileCategory

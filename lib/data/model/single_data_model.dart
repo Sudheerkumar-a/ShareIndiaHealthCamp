@@ -2,7 +2,6 @@
 
 import 'package:shareindia_health_camp/data/model/base_model.dart';
 import 'package:shareindia_health_camp/data/model/services_model.dart';
-import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class SingleDataModel extends BaseModel {

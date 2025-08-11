@@ -22,6 +22,7 @@ class ReportEntity extends BaseEntity {
   String? age;
   String? sex;
   String? contactNumber;
+  String? aadherNumber;
   String? villageColony;
   String? occupation;
   String? profileCategory;
@@ -48,13 +49,20 @@ class ReportEntity extends BaseEntity {
 
   Map<String, dynamic> toExcel() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['date_of_camp'] = dateOfCamp;
     data['district'] = district;
     data['mandal'] = mandal;
+    data['state'] = state;
     data['name'] = '$firstName $lastName';
     data['age'] = age;
     data['sex'] = sex;
     data['contactNumber'] = contactNumber;
+    data['aadharNumber'] = aadherNumber;
+    data['village_colony'] = villageColony;
+    data['occupation'] = occupation;
+    data['consent'] = consent;
     data['remarks'] = remarks;
+    data['createdAt'] = createdAt;
     return data;
   }
 }

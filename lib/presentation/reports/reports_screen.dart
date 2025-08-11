@@ -364,13 +364,19 @@ class ReportsScreen extends BaseScreenWidget {
                   ..title = 'IHS_Clients_Report'
                   ..date = getDateByformat('dd-MM-yyyy', DateTime.now())
                   ..columns = [
+                    'date Of Camp',
                     'District',
                     'Mandal',
                     'Name',
                     'Age',
                     'Sex',
                     'Contact Number',
+                    'AadharNumber',
+                    'Village Colony',
+                    'Occupation',
+                    'Consent',
                     'Remarks',
+                    'CreatedAt',
                   ]
                   ..rows = reportData?.reportList ?? [],
               );
