@@ -43,7 +43,7 @@ class ListModel extends BaseModel {
   }
 
   ListModel.fromAgents(Map<String, dynamic> json) {
-    final response = json['data'];
+    final response = json['data']?['data'];
     if (response != null) {
       response.forEach((v) {
         items.add(AgentDataModel.fromJson(v).toEntity());

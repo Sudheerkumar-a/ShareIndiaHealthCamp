@@ -30,7 +30,7 @@ class AgentListScreen extends BaseScreenWidget {
   AgentListScreen({super.key});
   final ServicesBloc _servicesBloc = sl<ServicesBloc>();
   // final _masterDataBloc = sl<MasterDataBloc>();
-  ReportDataEntity? reportData;
+  AgentDataEntity? agentData;
   int? index;
   int? totalPagecount;
   final ValueNotifier<bool> _onFilterChange = ValueNotifier(false);
@@ -38,7 +38,6 @@ class AgentListScreen extends BaseScreenWidget {
   String? selectedStatus;
   Map<String, dynamic>? filteredData;
   final ValueNotifier<List<String>> filteredDates = ValueNotifier([]);
-  final ValueNotifier<List<dynamic>> _mandalList = ValueNotifier([]);
 
   List<Widget> _getFilterBar(BuildContext context) {
     final resources = context.resources;
@@ -78,10 +77,8 @@ class AgentListScreen extends BaseScreenWidget {
     if (context.mounted) {
       Dialogs.dismiss(context);
       if (responseState is ServicesStateSuccess) {
-        reportData = cast<ReportDataEntity>(
-          responseState.responseEntity.entity,
-        );
-        totalPagecount = reportData?.total;
+        agentData = cast<AgentDataEntity>(responseState.responseEntity.entity);
+        totalPagecount = agentData?.total;
       }
       _onFilterChange.value = !_onFilterChange.value;
     }
@@ -125,15 +122,15 @@ class AgentListScreen extends BaseScreenWidget {
                       valueListenable: _onFilterChange,
                       builder: (context, value, child) {
                         return ReportListWidget(
-                          reportData: reportData?.reportList ?? [],
+                          reportData: agentData?.agentsList ?? [],
                           ticketsHeaderData: ticketsHeaderData,
                           ticketsTableColunwidths: ticketsTableColunwidths,
-                          page: reportData?.page ?? 1,
-                          totalPagecount: reportData?.pages ?? 0,
+                          page: agentData?.page ?? 1,
+                          totalPagecount: agentData?.pages ?? 0,
                           onTicketSelected: (ticket) {},
                           onPageChange: (page) {
                             index = page;
-                            if (page <= (reportData?.pages ?? 0)) {
+                            if (page <= (agentData?.pages ?? 0)) {
                               _updateTickets(context);
                             }
                           },

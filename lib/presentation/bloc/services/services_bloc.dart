@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
-import 'package:shareindia_health_camp/domain/entities/dashboard_entity.dart';
-import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/entities/api_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -144,7 +142,7 @@ class ServicesBloc extends Cubit<ServicesState> {
     if (emitResponse) {
       emit(ServicesStateLoading());
     }
-    final result = await servicesUseCase.getMandalList(
+    final result = await servicesUseCase.getAgentsList(
       requestParams: requestParams,
     );
     final responseState = result.fold(

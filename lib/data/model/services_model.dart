@@ -109,17 +109,48 @@ class ReportModel extends BaseModel {
 }
 
 class AgentDataModel extends BaseModel {
-  int? id;
-  int? parentId;
-  int? districtId;
-  int? mandalId;
+  int? page;
+  int? limit;
+  int? total;
+  int? pages;
+  List<AgentEntity> agentsList = [];
+
+  AgentDataModel.fromJson(Map<String, dynamic> json) {
+    final response = json['data'];
+    page = response['page'];
+    limit = response['limit'];
+    total = int.tryParse(response['total'] ?? '0');
+    pages = response['pages'];
+    if (response['data'] != null) {
+      response['data'].forEach((v) {
+        agentsList.add(AgentModel.fromJson(v).toEntity());
+      });
+    }
+  }
+
+  @override
+  AgentDataEntity toEntity() {
+    return AgentDataEntity()
+      ..page = page
+      ..limit = limit
+      ..total = total
+      ..pages = pages
+      ..agentsList = agentsList;
+  }
+}
+
+class AgentModel extends BaseModel {
+  String? id;
+  String? parentId;
+  String? districtId;
+  String? mandalId;
   String? name;
   String? mobile;
   String? createdAt;
   List<ReportEntity> reportList = [];
 
-  AgentDataModel.fromJson(Map<String, dynamic> json) {
-    final response = json['data'];
+  AgentModel.fromJson(Map<String, dynamic> json) {
+    final response = json['data'] ?? json;
     id = response['id'];
     parentId = response['parent_id'];
     districtId = response['district_id'];
@@ -130,14 +161,14 @@ class AgentDataModel extends BaseModel {
   }
 
   @override
-  AgentDataEntity toEntity() {
-   return AgentDataEntity()..id=id
-   ..parentId = parentId
-   ..districtId = districtId
-   ..mandalId = mandalId
-   ..name = name
-   ..mobile = mobile
-   ..createdAt = createdAt;
+  AgentEntity toEntity() {
+    return AgentEntity()
+      ..id = id
+      ..parentId = parentId
+      ..districtId = districtId
+      ..mandalId = mandalId
+      ..name = name
+      ..mobile = mobile
+      ..createdAt = createdAt;
   }
 }
-

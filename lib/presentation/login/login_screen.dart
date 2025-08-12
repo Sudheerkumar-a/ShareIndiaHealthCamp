@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shareindia_health_camp/core/config/flavor_config.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
@@ -43,8 +44,11 @@ class LoginScreen extends BaseScreenWidget {
   @override
   Widget build(BuildContext context) {
     final resource = context.resources;
-    _emailTextController.text = 'chintapalli_ramesh@gmail.com';//'srinu431@gmail.com';
-    _passwordTextController.text = 'Works@909';
+    if (FlavorConfig.isDevelopment()) {
+      _emailTextController.text =
+          'chintapalli_ramesh@gmail.com'; //'srinu431@gmail.com';
+      _passwordTextController.text = 'Works@909';
+    }
     return SafeArea(
       child: Scaffold(
         backgroundColor: resource.color.appScaffoldBg,

@@ -120,71 +120,73 @@ class ReportListWidget extends StatelessWidget {
             ],
           ],
         ),
-        Container(
-          margin: EdgeInsets.only(bottom: resources.dimen.dp20),
-          decoration:
-              BackgroundBoxDecoration(
-                boxColor: resources.color.colorWhite,
-                boxBorder: Border(
-                  top: BorderSide(
-                    color: resources.color.appScaffoldBg,
-                    width: 5,
-                  ),
-                  bottom: BorderSide(
-                    color: resources.color.appScaffoldBg,
-                    width: 5,
-                  ),
-                ),
-              ).roundedCornerBox,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: resources.dimen.dp5,
-              horizontal: resources.dimen.dp5,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () {
-                    if (page > 1) {
-                      onPageChange?.call(page - 1);
-                    }
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(resources.dimen.dp5),
-                    child: Icon(
-                      Icons.chevron_left_sharp,
-                      color: page == 1 ? resources.color.colorGray9E9E9E : null,
+        if ((totalPagecount ?? 0) > 0)
+          Container(
+            margin: EdgeInsets.only(bottom: resources.dimen.dp20),
+            decoration:
+                BackgroundBoxDecoration(
+                  boxColor: resources.color.colorWhite,
+                  boxBorder: Border(
+                    top: BorderSide(
+                      color: resources.color.appScaffoldBg,
+                      width: 5,
+                    ),
+                    bottom: BorderSide(
+                      color: resources.color.appScaffoldBg,
+                      width: 5,
                     ),
                   ),
-                ),
-                Text(
-                  '$page / $totalPagecount',
-                  style: context.textFontWeight500
-                      .onFontSize(resources.fontSize.dp12)
-                      .onFontFamily(fontFamily: fontFamilyEN),
-                ),
-                InkWell(
-                  onTap: () {
-                    if (page < (totalPagecount ?? 0)) {
-                      onPageChange?.call(page + 1);
-                    }
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(resources.dimen.dp5),
-                    child: Icon(
-                      Icons.chevron_right_sharp,
-                      color:
-                          page < (totalPagecount ?? 0)
-                              ? null
-                              : resources.color.colorGray9E9E9E,
+                ).roundedCornerBox,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: resources.dimen.dp5,
+                horizontal: resources.dimen.dp5,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (page > 1) {
+                        onPageChange?.call(page - 1);
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(resources.dimen.dp5),
+                      child: Icon(
+                        Icons.chevron_left_sharp,
+                        color:
+                            page == 1 ? resources.color.colorGray9E9E9E : null,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Text(
+                    '$page / $totalPagecount',
+                    style: context.textFontWeight500
+                        .onFontSize(resources.fontSize.dp12)
+                        .onFontFamily(fontFamily: fontFamilyEN),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (page < (totalPagecount ?? 0)) {
+                        onPageChange?.call(page + 1);
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(resources.dimen.dp5),
+                      child: Icon(
+                        Icons.chevron_right_sharp,
+                        color:
+                            page < (totalPagecount ?? 0)
+                                ? null
+                                : resources.color.colorGray9E9E9E,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
       ],
     );
   }
