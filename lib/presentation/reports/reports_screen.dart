@@ -475,7 +475,7 @@ class ReportsScreen extends BaseScreenWidget {
                       ticketsTableColunwidths: ticketsTableColunwidths,
                       page: reportData?.page ?? 1,
                       totalPagecount: reportData?.pages ?? 0,
-                      onTicketSelected: (ticket) {},
+                      onRowSelected: (ticket) {},
                       onPageChange: (page) {
                         index = page;
                         if (page <= (reportData?.pages ?? 0)) {

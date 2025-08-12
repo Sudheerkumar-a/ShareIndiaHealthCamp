@@ -8,7 +8,9 @@ import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/discard_changes_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/presentation/reports/add_field_agent_screen.dart';
@@ -127,7 +129,47 @@ class AgentListScreen extends BaseScreenWidget {
                           ticketsTableColunwidths: ticketsTableColunwidths,
                           page: agentData?.page ?? 1,
                           totalPagecount: agentData?.pages ?? 0,
-                          onTicketSelected: (ticket) {},
+                          onRowSelected: (ticket) {},
+                          onColumnClick: (p0, p1) async {
+                            if (p0 == 'action') {
+                              Dialogs.showContentHeightBottomSheetDialog(
+                                context, DiscardChangesDialog(
+                                data: {
+                                  'title': 'Alert',
+                                  'description': 'Do you want delete Agent',
+                                  'action': 'Proceed',
+                                },
+                                callback: () async {
+                                  Dialogs.loader(context);
+                                  final response = await _servicesBloc
+                                      .deleteAgent(
+                                        requestParams: {'agent_id': p1.id},
+                                      );
+                                  if (context.mounted) {
+                                    Dialogs.dismiss(context);
+                                    if (response is ServicesStateSuccess) {
+                                      Dialogs.showInfoDialog(
+                                        context,
+                                        PopupType.success,
+                                        'Deleted Successfuly',
+                                      ).then((value){
+                                        if(context.mounted) {
+                                          _updateTickets(context);
+                                        }
+                                      });
+                                    } else if (response
+                                        is ServicesStateApiError) {
+                                      Dialogs.showInfoDialog(
+                                        context,
+                                        PopupType.fail,
+                                        response.message,
+                                      );
+                                    }
+                                  }
+                                },
+                              ));
+                            }
+                          },
                           onPageChange: (page) {
                             index = page;
                             if (page <= (agentData?.pages ?? 0)) {

@@ -138,4 +138,23 @@ class ServicesUseCase extends BaseUseCase {
       },
     );
   }
+
+  Future<Either<Failure, ApiEntity<SingleDataEntity>>> deleteAgent({
+    required Map<String, dynamic> requestParams,
+  }) async {
+    var apiResponse = await apisRepository.post<SingleDataModel>(
+      apiUrl: deleteAgentApiUrl,
+      requestParams: requestParams,
+      responseModel: SingleDataModel.fromCreateRequest,
+    );
+    return apiResponse.fold(
+      (l) {
+        return Left(l);
+      },
+      (r) {
+        var apiResponseEntity = r.toEntity<SingleDataEntity>();
+        return Right(apiResponseEntity);
+      },
+    );
+  }
 }

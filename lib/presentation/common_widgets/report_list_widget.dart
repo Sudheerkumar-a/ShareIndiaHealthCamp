@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
-import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 
 class ReportListWidget extends StatelessWidget {
@@ -14,25 +13,27 @@ class ReportListWidget extends StatelessWidget {
   final int page;
   final int? totalPagecount;
   final Function(int)? onPageChange;
-  final Function(dynamic)? onTicketSelected;
+  final Function(dynamic)? onRowSelected;
+  final Function(String, dynamic)? onColumnClick;
   const ReportListWidget({
     required this.reportData,
     required this.ticketsHeaderData,
     this.ticketsTableColunwidths,
-    this.onTicketSelected,
+    this.onRowSelected,
+    this.onColumnClick,
     this.page = 1,
     this.totalPagecount,
     this.onPageChange,
     super.key,
   });
 
-  List<Widget> _getTicketData(BuildContext context, dynamic ticketEntity) {
+  List<Widget> _getTicketData(BuildContext context, dynamic rowEntity) {
     final list = List<Widget>.empty(growable: true);
-    ticketEntity.toJson().forEach((key, value) {
+    rowEntity.toJson().forEach((key, value) {
       list.add(
         InkWell(
           onTap: () {
-            onTicketSelected?.call(ticketEntity);
+            onColumnClick?.call(key, rowEntity);
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
