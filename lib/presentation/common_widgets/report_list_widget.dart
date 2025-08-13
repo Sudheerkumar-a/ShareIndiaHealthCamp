@@ -1,6 +1,9 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
@@ -64,62 +67,79 @@ class ReportListWidget extends StatelessWidget {
     // };
     return Column(
       children: [
-        Table(
-          columnWidths: ticketsTableColunwidths,
-          children: [
-            TableRow(
-              decoration:
-                  BackgroundBoxDecoration(
-                    boxColor: resources.color.colorGray9E9E9E,
-                    boxBorder: Border(
-                      top: BorderSide(
-                        color: resources.color.appScaffoldBg,
-                        width: 5,
-                      ),
-                      bottom: BorderSide(
-                        color: resources.color.appScaffoldBg,
-                        width: 5,
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SizedBox(
+              width:
+                  ticketsHeaderData.length > 4
+                      ? max(
+                        getScrrenSize(context).width,
+                        ticketsHeaderData.length * 100.0,
+                      )
+                      : getScrrenSize(context).width - 40,
+              child: Table(
+                defaultColumnWidth: IntrinsicColumnWidth(),
+                //columnWidths: ticketsTableColunwidths,
+                children: [
+                  TableRow(
+                    decoration:
+                        BackgroundBoxDecoration(
+                          boxColor: resources.color.colorGray9E9E9E,
+                          boxBorder: Border(
+                            top: BorderSide(
+                              color: resources.color.appScaffoldBg,
+                              width: 5,
+                            ),
+                            bottom: BorderSide(
+                              color: resources.color.appScaffoldBg,
+                              width: 5,
+                            ),
+                          ),
+                        ).roundedCornerBox,
+                    children: List.generate(
+                      ticketsHeaderData.length,
+                      (index) => Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: resources.dimen.dp10,
+                          horizontal: resources.dimen.dp10,
+                        ),
+                        child: Text(
+                          ticketsHeaderData[index].toString(),
+                          textAlign:
+                              index == 0 ? TextAlign.left : TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.textFontWeight600
+                              .onColor(resources.color.colorWhite)
+                              .onFontSize(resources.fontSize.dp10),
+                        ),
                       ),
                     ),
-                  ).roundedCornerBox,
-              children: List.generate(
-                ticketsHeaderData.length,
-                (index) => Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: resources.dimen.dp10,
-                    horizontal: resources.dimen.dp10,
                   ),
-                  child: Text(
-                    ticketsHeaderData[index].toString(),
-                    textAlign: index == 0 ? TextAlign.left : TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.textFontWeight600
-                        .onColor(resources.color.colorWhite)
-                        .onFontSize(resources.fontSize.dp10),
-                  ),
-                ),
+                  for (var i = 0; i < reportData.length; i++) ...[
+                    TableRow(
+                      decoration:
+                          BackgroundBoxDecoration(
+                            boxColor: resources.color.colorWhite,
+                            boxBorder: Border(
+                              top: BorderSide(
+                                color: resources.color.appScaffoldBg,
+                                width: 5,
+                              ),
+                              bottom: BorderSide(
+                                color: resources.color.appScaffoldBg,
+                                width: 5,
+                              ),
+                            ),
+                          ).roundedCornerBox,
+                      children: _getTicketData(context, reportData[i]),
+                    ),
+                  ],
+                ],
               ),
             ),
-            for (var i = 0; i < reportData.length; i++) ...[
-              TableRow(
-                decoration:
-                    BackgroundBoxDecoration(
-                      boxColor: resources.color.colorWhite,
-                      boxBorder: Border(
-                        top: BorderSide(
-                          color: resources.color.appScaffoldBg,
-                          width: 5,
-                        ),
-                        bottom: BorderSide(
-                          color: resources.color.appScaffoldBg,
-                          width: 5,
-                        ),
-                      ),
-                    ).roundedCornerBox,
-                children: _getTicketData(context, reportData[i]),
-              ),
-            ],
-          ],
+          ),
         ),
         if ((totalPagecount ?? 0) > 0)
           Container(

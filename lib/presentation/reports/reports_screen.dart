@@ -10,6 +10,7 @@ import 'package:shareindia_health_camp/core/extensions/build_context_extension.d
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
+import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
@@ -359,27 +360,17 @@ class ReportsScreen extends BaseScreenWidget {
           SizedBox(width: resources.dimen.dp10),
           InkWell(
             onTap: () async {
+              Dialogs.loader(context);
               await exportToExcel(
                 ExportDataEntity()
                   ..title = 'IHS_Clients_Report'
                   ..date = getDateByformat('dd-MM-yyyy', DateTime.now())
-                  ..columns = [
-                    'date Of Camp',
-                    'District',
-                    'Mandal',
-                    'Name',
-                    'Age',
-                    'Sex',
-                    'Contact Number',
-                    'AadharNumber',
-                    'Village Colony',
-                    'Occupation',
-                    'Consent',
-                    'Remarks',
-                    'CreatedAt',
-                  ]
+                  ..columns = ScreeningDetailsEntity().toJson().keys.toList()
                   ..rows = reportData?.reportList ?? [],
               );
+              if (context.mounted) {
+                Dialogs.dismiss(context);
+              }
             },
 
             child: ActionButtonWidget(
@@ -445,13 +436,6 @@ class ReportsScreen extends BaseScreenWidget {
         _updateTickets(context);
       }
     });
-    final ticketsHeaderData = ['District', 'Mandal', 'Name', 'Action'];
-    final ticketsTableColunwidths = {
-      0: const FlexColumnWidth(4),
-      1: const FlexColumnWidth(4),
-      2: const FlexColumnWidth(4),
-      3: const FlexColumnWidth(4),
-    };
     return Padding(
       padding: EdgeInsets.all(resources.dimen.dp20),
       child: SingleChildScrollView(
@@ -469,6 +453,12 @@ class ReportsScreen extends BaseScreenWidget {
                 return ValueListenableBuilder(
                   valueListenable: _onFilterChange,
                   builder: (context, value, child) {
+                    final ticketsHeaderData =
+                        ScreeningDetailsEntity().toJson().keys.toList();
+                    final ticketsTableColunwidths = <int, FlexColumnWidth>{};
+                    ticketsHeaderData.asMap().forEach((index, value) {
+                      ticketsTableColunwidths[index] = const FlexColumnWidth(4);
+                    });
                     return ReportListWidget(
                       reportData: reportData?.reportList ?? [],
                       ticketsHeaderData: ticketsHeaderData,

@@ -410,10 +410,11 @@ Future<bool> exportToExcel(ExportDataEntity exportData) async {
       final columnsData = item.toExcel();
       int col = 0;
       for (var item in (columnsData as Map<String, dynamic>).entries) {
-        printLog((item.value?.length ?? 0 * 0.8).clamp(15, 50));
-        int estimatedWidth = (item.value?.length ?? 0 * 0.8).clamp(15, 50);
+        final value = '${item.value ?? ''}';
+        printLog((value.length * 0.8).clamp(15, 50));
+        int estimatedWidth = (value.length * 0.8).clamp(15, 50).toInt();
         final range = sheet.getRangeByIndex(row + 5, col + 2);
-        range.setText(item.value);
+        range.setText(value);
         range.columnWidth = estimatedWidth.toDouble();
         final style = range.cellStyle;
         style.fontSize = 12;

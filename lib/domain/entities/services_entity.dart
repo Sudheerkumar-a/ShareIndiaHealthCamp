@@ -1,13 +1,14 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
+import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 
 class ReportDataEntity extends BaseEntity {
   int? page;
   int? limit;
   int? total;
   int? pages;
-  List<ReportEntity> reportList = [];
+  List<ScreeningDetailsEntity> reportList = [];
 }
 
 class ReportEntity extends BaseEntity {

@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:shareindia_health_camp/data/model/base_model.dart';
+import 'package:shareindia_health_camp/data/model/screening_model.dart';
+import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 
 class ReportDataModel extends BaseModel {
@@ -8,7 +10,7 @@ class ReportDataModel extends BaseModel {
   int? limit;
   int? total;
   int? pages;
-  List<ReportEntity> reportList = [];
+  List<ScreeningDetailsEntity> reportList = [];
 
   ReportDataModel.fromJson(Map<String, dynamic> json) {
     final response = json['data'];
@@ -18,7 +20,7 @@ class ReportDataModel extends BaseModel {
     pages = response['pages'];
     if (response['data'] != null) {
       response['data'].forEach((v) {
-        reportList.add(ReportModel.fromJson(v).toEntity());
+        reportList.add(ScreeningDetailsModel.fromJson(v).toEntity());
       });
     }
   }
