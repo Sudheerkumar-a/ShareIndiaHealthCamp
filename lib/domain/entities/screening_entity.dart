@@ -55,25 +55,42 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['occupation'] = occupation;
     data['consent'] = consent;
 
-    //if (medHistory != null) {
-    data['medHistory/OnTreatment'] =
-        'diabetes: 20/Yes\nHTN: 12/No\nHepatitis: 5/Yes';
-    //}
-    // if (onTreatment != null) {
-
-    // data['onTreatment'] = 'diabetes: 20\nHTN: 12\nHepatitis: 5';
-    //   data['onTreatment'] = onTreatment!.toJson();
-    // }
+    if (medHistory != null) {
+      data['medHistory/OnTreatment'] =
+          'diabetes: ${medHistory?.diabetes == "0" ? 'Non diabetic' : 'diabetic'}/${onTreatment?.diabetes == "0" ? 'Not onTreatment' : 'onTreatment'}\nHTN: ${medHistory?.hTN == "0" ? 'Non HTN' : 'HTN'}/${onTreatment?.hTN == "0" ? 'Not onTreatment' : 'onTreatment'}\nHepatitis: ${medHistory?.hepatitis == "0" ? 'Non Hepatitis' : 'Hepatitis'}/${onTreatment?.hepatitis == "0" ? 'Not onTreatment' : 'onTreatment'}';
+    } else {
+      data['medHistory/OnTreatment'] = '';
+    }
     if (ncd != null) {
-      data['ncd'] = ncd!.toJson();
+      data['diabetes'] =
+          '${ncd?.diabetes?.bloodsugar} - ${ncd?.diabetes?.abnormal == "0" ? 'Normal' : 'Abnormal'} - ${ncd?.diabetes?.screened == "0" ? 'No' : 'Yes'}';
+      data['hypertension'] =
+          '${ncd?.hypertension?.systolic ?? 0}/${ncd?.hypertension?.diastolic ?? 0} - ${ncd?.hypertension?.abnormal == "0" ? 'Normal' : 'Abnormal'} - ${ncd?.hypertension?.screened == "0" ? 'No' : 'Yes'}';
+    } else {
+      data['diabetes'] = '';
+      data['hypertension'] = '';
     }
     if (hiv != null) {
-      data['hiv'] = hiv!.toJson();
+      data['hiv'] =
+          hiv?.offered == '1'
+              ? 'Offered - ${hiv?.result} - ${hiv?.alreadAtART == "0" ? 'AlreadAtART' : ''}\nICTC: ${hiv?.referredICTC == "0" ? 'No' : 'Referred'} ${hiv?.referredICTC == "0" ? '' : '- ${hiv?.nameOfICTC}'} - ${hiv?.confirmedICTC == "0" ? 'Not Confirmed' : 'Confirmed'} - ${hiv?.referredART == "0" ? 'Not ReferredART' : 'ReferredART'}'
+              : 'No';
+    } else {
+      data['hiv'] = '';
     }
     data['syndromiccases'] = syndromiccases;
     data['syndromicreferred'] = syndromicreferred;
     if (sti != null) {
-      data['sti'] = sti!.toJson();
+      data['syphilis'] =
+          '${sti?.syphilis?.done == "0" ? 'No' : 'Done'} - ${sti?.syphilis?.result} - ${sti?.syphilis?.referred == "0" ? 'Not Referred' : 'Referred'}';
+      data['hepB'] =
+          '${sti?.hepB?.done == "0" ? 'No' : 'Done'} - ${sti?.hepB?.result} - ${sti?.hepB?.referred == "0" ? 'Not Referred' : 'Referred'}';
+      data['hepC'] =
+          '${sti?.hepC?.done == "0" ? 'No' : 'Done'} - ${sti?.hepC?.result} - ${sti?.hepC?.referred == "0" ? 'Not Referred' : 'Referred'}';
+    } else {
+      data['syphilis'] = '';
+      data['hepB'] = '';
+      data['hepC'] = '';
     }
     data['remarks'] = remarks;
     return data;
@@ -81,9 +98,9 @@ class ScreeningDetailsEntity extends BaseEntity {
 }
 
 class MedHistoryEntity extends BaseEntity {
-  int? diabetes;
-  int? hTN;
-  int? hepatitis;
+  String? diabetes;
+  String? hTN;
+  String? hepatitis;
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['Diabetes'] = diabetes;
@@ -110,10 +127,10 @@ class NcdEntity extends BaseEntity {
 }
 
 class HypertensionEntity extends BaseEntity {
-  int? screened;
+  String? screened;
   String? systolic;
   String? diastolic;
-  int? abnormal;
+  String? abnormal;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -126,9 +143,9 @@ class HypertensionEntity extends BaseEntity {
 }
 
 class DiabetesEntity extends BaseEntity {
-  int? screened;
+  String? screened;
   String? bloodsugar;
-  int? abnormal;
+  String? abnormal;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -140,13 +157,13 @@ class DiabetesEntity extends BaseEntity {
 }
 
 class HivEntity extends BaseEntity {
-  int? offered;
+  String? offered;
   String? result;
-  int? alreadAtART;
-  int? referredICTC;
+  String? alreadAtART;
+  String? referredICTC;
   String? nameOfICTC;
-  int? confirmedICTC;
-  int? referredART;
+  String? confirmedICTC;
+  String? referredART;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -182,9 +199,9 @@ class StiEntity extends BaseEntity {
 }
 
 class SyphilisEntity extends BaseEntity {
-  int? done;
+  String? done;
   String? result;
-  int? referred;
+  String? referred;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

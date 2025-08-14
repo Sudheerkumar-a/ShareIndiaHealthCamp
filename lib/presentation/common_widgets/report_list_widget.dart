@@ -42,6 +42,7 @@ class ReportListWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
             child: Text(
               '$value',
+              maxLines: 2,
               textAlign: list.isEmpty ? TextAlign.left : TextAlign.center,
               style: context.textFontWeight600.onFontSize(
                 context.resources.fontSize.dp10,

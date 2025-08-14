@@ -22,6 +22,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/report_list_w
 import 'package:shareindia_health_camp/presentation/reports/add_field_agent_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/agent_list_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
+import 'package:shareindia_health_camp/presentation/reports/view_screening_details.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import '../../core/constants/constants.dart';
 import '../../domain/entities/user_credentials_entity.dart';
@@ -465,7 +466,12 @@ class ReportsScreen extends BaseScreenWidget {
                       ticketsTableColunwidths: ticketsTableColunwidths,
                       page: reportData?.page ?? 1,
                       totalPagecount: reportData?.pages ?? 0,
-                      onRowSelected: (ticket) {},
+                      onColumnClick: (key, ticket) {
+                        ViewScreeningDetails.start(
+                          context,
+                          cast<ScreeningDetailsEntity>(ticket),
+                        );
+                      },
                       onPageChange: (page) {
                         index = page;
                         if (page <= (reportData?.pages ?? 0)) {

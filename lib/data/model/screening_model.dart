@@ -102,9 +102,9 @@ class ScreeningDetailsModel extends BaseModel {
 }
 
 class MedHistoryModel extends BaseModel {
-  int? diabetes;
-  int? hTN;
-  int? hepatitis;
+  String? diabetes;
+  String? hTN;
+  String? hepatitis;
 
   MedHistoryModel.fromJson(Map<String, dynamic> json) {
     diabetes = json['Diabetes'];
@@ -145,16 +145,16 @@ class NcdModel extends BaseModel {
 }
 
 class HypertensionModel extends BaseModel {
-  int? screened;
+  String? screened;
   String? systolic;
   String? diastolic;
-  int? abnormal;
+  String? abnormal;
 
   HypertensionModel.fromJson(Map<String, dynamic> json) {
-    screened = json['screened'];
-    systolic = json['systolic'];
-    diastolic = json['diastolic'];
-    abnormal = json['abnormal'];
+    screened = '${json['screened'] ?? '0'}';
+    systolic = '${json['systolic'] ?? '0'}';
+    diastolic = '${json['diastolic'] ?? ''}';
+    abnormal = '${json['abnormal'] ?? ''}';
   }
 
   @override
@@ -168,14 +168,14 @@ class HypertensionModel extends BaseModel {
 }
 
 class DiabetesModel extends BaseModel {
-  int? screened;
+  String? screened;
   String? bloodsugar;
-  int? abnormal;
+  String? abnormal;
 
   DiabetesModel.fromJson(Map<String, dynamic> json) {
-    screened = json['screened'];
-    bloodsugar = json['bloodsugar'];
-    abnormal = json['abnormal'];
+    screened = '${json['screened'] ?? ''}';
+    bloodsugar = '${json['bloodsugar'] ?? '0'}';
+    abnormal = '${json['abnormal'] ?? ''}';
   }
 
   @override
@@ -188,22 +188,22 @@ class DiabetesModel extends BaseModel {
 }
 
 class HivModel extends BaseModel {
-  int? offered;
+  String? offered;
   String? result;
-  int? alreadAtART;
-  int? referredICTC;
+  String? alreadAtART;
+  String? referredICTC;
   String? nameOfICTC;
-  int? confirmedICTC;
-  int? referredART;
+  String? confirmedICTC;
+  String? referredART;
 
   HivModel.fromJson(Map<String, dynamic> json) {
-    offered = json['offered'];
-    result = json['result'];
-    alreadAtART = json['alreadAtART'];
-    referredICTC = json['referredICTC'];
-    nameOfICTC = json['nameOfICTC'];
-    confirmedICTC = json['confirmedICTC'];
-    referredART = json['referredART'];
+    offered = '${json['offered'] ?? ''}';
+    result = '${json['result'] ?? ''}';
+    alreadAtART = '${json['alreadAtART'] ?? ''}';
+    referredICTC = '${json['referredICTC'] ?? ''}';
+    nameOfICTC = '${json['nameOfICTC'] ?? ''}';
+    confirmedICTC = '${json['confirmedICTC'] ?? ''}';
+    referredART = '${json['referredART'] ?? ''}';
   }
 
   @override
@@ -249,14 +249,14 @@ class StiModel extends BaseModel {
 }
 
 class SyphilisModel extends BaseModel {
-  int? done;
+  String? done;
   String? result;
-  int? referred;
+  String? referred;
 
   SyphilisModel.fromJson(Map<String, dynamic> json) {
-    done = json['done'];
-    result = json['result'];
-    referred = json['referred'];
+    done = '${json['done'] ?? ''}';
+    result = '${json['result'] ?? ''}';
+    referred = '${json['referred'] ?? ''}';
   }
 
   @override
