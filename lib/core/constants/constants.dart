@@ -12,3 +12,4 @@ int selectedSideBarIndex = 0;
 const nameRegExp = r"^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
 const mobileRegExp = r'^[6-9]\d{9}$';
 const numberRegExp = r'^[0-9]*$';
+const emailRegExp = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$';

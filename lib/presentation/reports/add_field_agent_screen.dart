@@ -84,6 +84,23 @@ class AddFieldAgentScreen extends BaseScreenWidget {
           ..onDatachnage = (value) {
             fieldsData['name'] = value;
           },
+          FormEntity()
+          ..name = 'email_id'
+          ..labelEn = 'Email Id'
+          ..labelTe = 'Email Id'
+          ..type = 'text'
+          ..messages =
+              (FormMessageEntity()
+                ..regexEn = 'Please Enter Valid Email Id'
+                ..regexTe = 'Please Enter Valid Email Id')
+          ..validation =
+              (FormValidationEntity()
+                ..regex = emailRegExp)
+          ..placeholderEn = 'Email Id'
+          ..placeholderTe = 'Email Id'
+          ..onDatachnage = (value) {
+            fieldsData['email'] = value;
+          },
         FormEntity()
           ..name = 'contact_number'
           ..labelEn = 'Mobile Number'
@@ -101,6 +118,32 @@ class AddFieldAgentScreen extends BaseScreenWidget {
           ..placeholderTe = 'Mobile Number'
           ..onDatachnage = (value) {
             fieldsData['contact_number'] = value;
+          },
+          FormEntity()
+          ..name = 'password'
+          ..labelEn = 'Password'
+          ..labelTe = 'Password'
+          ..type = 'text'
+          ..messages =
+              (FormMessageEntity()
+              ..regexEn = 'Please Enter Password')
+          ..placeholderEn = 'Password'
+          ..placeholderTe = 'Password'
+          ..onDatachnage = (value) {
+            fieldsData['password'] = value;
+          },
+          FormEntity()
+          ..name = 'confirm_password'
+          ..labelEn = 'Confirm Password'
+          ..labelTe = 'Confirm Password'
+          ..type = 'text'
+          ..messages =
+              (FormMessageEntity()
+              ..regexEn = 'Please Enter Confirm Password')
+          ..placeholderEn = 'Confirm Password'
+          ..placeholderTe = 'Confirm Password'
+          ..onDatachnage = (value) {
+            fieldsData['conform_password'] = value;
           },
       ]);
     }
@@ -187,6 +230,8 @@ class AddFieldAgentScreen extends BaseScreenWidget {
                                           'mobile':
                                               fieldsData['contact_number'],
                                           'distict_id': fieldsData['dist_id'],
+                                          'email': fieldsData['email'],
+                                          'password': fieldsData['password'],
                                         }, emitResponse: true);
                                       }
                                     },

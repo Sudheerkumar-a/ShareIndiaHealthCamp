@@ -108,7 +108,7 @@ extension FieldEntityExtension on FormEntity {
             );
           },
         );
-      case 'text' || 'number' || 'phone' || 'textarea' || 'email':
+      case 'text' || 'number' || 'phone' || 'textarea' || 'email'||'password':
         final textEditingController = TextEditingController();
         textEditingController.text = fieldValue ?? '';
         return Visibility(
@@ -124,7 +124,7 @@ extension FieldEntityExtension on FormEntity {
               textInputType:
                   (type == 'number' || type == 'phone')
                       ? TextInputType.number
-                      : null,
+                      :  type == 'password' ? TextInputType.visiblePassword : null,
               textInputAction: TextInputAction.next,
               labelText: getLabel,
               hintText: getPlaceholder,

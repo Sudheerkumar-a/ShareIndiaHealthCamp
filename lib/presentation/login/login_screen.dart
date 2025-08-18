@@ -180,6 +180,7 @@ class LoginScreen extends BaseScreenWidget {
                                 RightIconTextWidget(
                                   labelText: resource.string.password,
                                   hintText: resource.string.password,
+                                  textInputType: TextInputType.visiblePassword,
                                   errorMessage:
                                       "${resource.string.pleaseEnter} ${resource.string.password}",
                                   textController: _passwordTextController,
