@@ -131,12 +131,12 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..placeholder = 'systolic'
             ..validation =
                 (FormValidationEntity()
-                  ..required = true
+                  ..isRequired = true
                   ..maxLength = 3
                   ..regex = numberRegExp)
             ..messages =
                 (FormMessageEntity()
-                  ..required = 'Please Enter systolic value'
+                  ..requiredText = 'Please Enter systolic value'
                   ..regex = 'Please Enter valid systolic value')
             ..onDatachnage = (value) {
               final child =
@@ -163,12 +163,12 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..placeholder = 'diastolic'
             ..validation =
                 (FormValidationEntity()
-                  ..required = true
+                  ..isRequired = true
                   ..maxLength = 3
                   ..regex = numberRegExp)
             ..messages =
                 (FormMessageEntity()
-                  ..required = 'Please Enter diastolic value'
+                  ..requiredText = 'Please Enter diastolic value'
                   ..regex = 'Please Enter valid diastolic value')
             ..onDatachnage = (value) {
               final child =
@@ -196,12 +196,12 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..placeholder = 'Random Blood sugar'
             ..validation =
                 (FormValidationEntity()
-                  ..required = true
+                  ..isRequired = true
                   ..maxLength = 3
                   ..regex = numberRegExp)
             ..messages =
                 (FormMessageEntity()
-                  ..required = 'Please Enter Blood sugar value'
+                  ..requiredText = 'Please Enter Blood sugar value'
                   ..regex = 'Please Enter valid Blood sugar: value')
             ..onDatachnage = (value) {
               final child =
@@ -224,7 +224,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..type = 'collection'
             ..verticalSpace = 5
             ..isHidden = true
-            ..validation = (FormValidationEntity()..required = true)
+            ..validation = (FormValidationEntity()..isRequired = true)
             ..placeholderEn = 'Select Result'
             ..inputFieldData = {
               'items':

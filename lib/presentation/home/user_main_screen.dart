@@ -6,6 +6,7 @@ import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/data/local/app_settings_db.dart';
+import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/side_bar.dart';
@@ -60,15 +61,28 @@ class _MainScreenState extends State<UserMainScreen> {
     if (currentScreen != null) {
       currentScreen?.doDispose();
     }
-    switch (index) {
-      case 0:
-        currentScreen = UserHomeNavigatorScreen();
-      case 1:
-        currentScreen = ReportsNavigatorScreen();
-      case 2:
-        currentScreen = ProfileNavigatorScreen();
-      default:
-        currentScreen = UserHomeNavigatorScreen();
+    if (UserCredentialsEntity.details(context).user?.isAdmin == 2) {
+      switch (index) {
+        case 0:
+          currentScreen = ReportsNavigatorScreen();
+        case 1:
+          currentScreen = ReportsNavigatorScreen();
+        case 2:
+          currentScreen = ProfileNavigatorScreen();
+        default:
+          currentScreen = ReportsNavigatorScreen();
+      }
+    } else {
+      switch (index) {
+        case 0:
+          currentScreen = UserHomeNavigatorScreen();
+        case 1:
+          currentScreen = ReportsNavigatorScreen();
+        case 2:
+          currentScreen = ProfileNavigatorScreen();
+        default:
+          currentScreen = UserHomeNavigatorScreen();
+      }
     }
     return currentScreen ?? UserHomeNavigatorScreen();
   }

@@ -81,8 +81,9 @@ class LKPchildrenEntity extends BaseEntity {
 }
 
 class FormValidationEntity extends BaseEntity {
-  bool? required;
+  bool? isRequired;
   int? maxLength;
+  int? minLength;
   int? maxSize;
   String? extensions;
   String? regex;
@@ -92,16 +93,19 @@ class FormValidationEntity extends BaseEntity {
   dynamic max;
 
   @override
-  List<Object?> get props => [required, maxLength];
+  List<Object?> get props => [isRequired, maxLength];
 }
 
 class FormMessageEntity extends BaseEntity {
-  String? required;
+  String? requiredText;
   String? requiredEn;
   String? requiredTe;
   String? maxLength;
   String? maxLengthEn;
-  String? maxLengthAr;
+  String? maxLengthTe;
+  String? minLength;
+  String? minLengthEn;
+  String? minLengthTe;
   String? regex;
   String? regexEn;
   String? regexTe;
@@ -110,23 +114,25 @@ class FormMessageEntity extends BaseEntity {
   String? maxTe;
   String? min;
   String? minEn;
-  String? minAr;
+  String? minTe;
   String? validate;
   String? validateEn;
-  String? validateAr;
+  String? validateTe;
 
   @override
   List<Object?> get props => [requiredEn, maxLengthEn];
 
   String? get requiredMessage =>
-      (isSelectedLocalEn ? requiredEn : requiredTe) ?? required;
+      (isSelectedLocalEn ? requiredEn : requiredTe) ?? requiredText;
   String? get maxLengthMessage =>
-      (isSelectedLocalEn ? maxLengthEn : maxLengthAr) ?? maxLength;
+      (isSelectedLocalEn ? maxLengthEn : maxLengthTe) ?? maxLength;
+  String? get minLengthMessage =>
+      (isSelectedLocalEn ? minLengthEn : minLengthTe) ?? minLength;
   String? get regexMessage => (isSelectedLocalEn ? regexEn : regexTe) ?? regex;
   String? get maxMessage => (isSelectedLocalEn ? maxEn : maxTe) ?? max;
-  String? get minMessage => (isSelectedLocalEn ? minEn : minAr) ?? min;
+  String? get minMessage => (isSelectedLocalEn ? minEn : minTe) ?? min;
   String? get validateMessage =>
-      (isSelectedLocalEn ? validateEn : validateAr) ?? validate;
+      (isSelectedLocalEn ? validateEn : validateTe) ?? validate;
 }
 
 class FieldParentEntity extends BaseEntity {

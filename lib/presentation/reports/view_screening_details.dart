@@ -93,22 +93,24 @@ class ViewScreeningDetails extends BaseScreenWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // InkWell(
+                  //   onTap: () {},
+                  //   child: ActionButtonWidget(
+                  //     text: 'Delete',
+                  //     width: 110,
+                  //     padding: EdgeInsets.symmetric(
+                  //       horizontal: context.resources.dimen.dp20,
+                  //       vertical: context.resources.dimen.dp7,
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(width: context.resources.dimen.dp20),
                   InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      Navigator.pop(context);
+                    },
                     child: ActionButtonWidget(
-                      text: 'Delete',
-                      width: 110,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: context.resources.dimen.dp20,
-                        vertical: context.resources.dimen.dp7,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: context.resources.dimen.dp20),
-                  InkWell(
-                    onTap: () async {},
-                    child: ActionButtonWidget(
-                      text: 'Edit',
+                      text: 'OK',
                       width: 120,
                       color: context.resources.color.viewBgColor,
                       padding: EdgeInsets.symmetric(

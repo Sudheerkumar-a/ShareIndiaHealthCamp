@@ -59,7 +59,7 @@ class AddFieldAgentScreen extends BaseScreenWidget {
           ..type = 'collection'
           ..url = mandalListApiUrl
           ..urlInputData = {'dist_id': fieldsData['dist_id']}
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Mandal'
           ..onDatachnage = (value) {
             fieldsData['mandal'] = value.id;
@@ -71,7 +71,7 @@ class AddFieldAgentScreen extends BaseScreenWidget {
           ..type = 'text'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -84,7 +84,7 @@ class AddFieldAgentScreen extends BaseScreenWidget {
           ..onDatachnage = (value) {
             fieldsData['name'] = value;
           },
-          FormEntity()
+        FormEntity()
           ..name = 'email_id'
           ..labelEn = 'Email Id'
           ..labelTe = 'Email Id'
@@ -93,9 +93,7 @@ class AddFieldAgentScreen extends BaseScreenWidget {
               (FormMessageEntity()
                 ..regexEn = 'Please Enter Valid Email Id'
                 ..regexTe = 'Please Enter Valid Email Id')
-          ..validation =
-              (FormValidationEntity()
-                ..regex = emailRegExp)
+          ..validation = (FormValidationEntity()..regex = emailRegExp)
           ..placeholderEn = 'Email Id'
           ..placeholderTe = 'Email Id'
           ..onDatachnage = (value) {
@@ -119,27 +117,24 @@ class AddFieldAgentScreen extends BaseScreenWidget {
           ..onDatachnage = (value) {
             fieldsData['contact_number'] = value;
           },
-          FormEntity()
+        FormEntity()
           ..name = 'password'
           ..labelEn = 'Password'
           ..labelTe = 'Password'
           ..type = 'text'
-          ..messages =
-              (FormMessageEntity()
-              ..regexEn = 'Please Enter Password')
+          ..messages = (FormMessageEntity()..regexEn = 'Please Enter Password')
           ..placeholderEn = 'Password'
           ..placeholderTe = 'Password'
           ..onDatachnage = (value) {
             fieldsData['password'] = value;
           },
-          FormEntity()
+        FormEntity()
           ..name = 'confirm_password'
           ..labelEn = 'Confirm Password'
           ..labelTe = 'Confirm Password'
           ..type = 'text'
           ..messages =
-              (FormMessageEntity()
-              ..regexEn = 'Please Enter Confirm Password')
+              (FormMessageEntity()..regexEn = 'Please Enter Confirm Password')
           ..placeholderEn = 'Confirm Password'
           ..placeholderTe = 'Confirm Password'
           ..onDatachnage = (value) {
@@ -183,7 +178,7 @@ class AddFieldAgentScreen extends BaseScreenWidget {
             child: Container(
               color: resource.color.colorWhite,
               child: Column(
-                children: [ 
+                children: [
                   MSearchUserAppBarWidget(
                     title: 'Integrated Health Services (IHS)',
                     showBack: true,

@@ -58,36 +58,40 @@ class SideBar extends StatelessWidget {
                 ),
               ),
               SizedBox(height: resources.dimen.dp20),
-              ListTile(
-                onTap: () {
-                  _selectedIndex.value = 0;
-                  onItemSelected(0);
-                  Scaffold.of(context).closeDrawer();
-                },
-                selected: true,
-                leading: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child:
-                      ImageWidget(
-                        path: DrawableAssets.icHome,
-                        backgroundTint:
-                            index == 0
-                                ? resources.color.viewBgColorLight
-                                : resources.color.sideBarItemUnselected,
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                      ).loadImageWithMoreTapArea,
-                ),
-                title: Text(
-                  resources.string.home,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.textFontWeight600.onFontSize(
-                    resources.fontSize.dp12,
+
+              if (UserCredentialsEntity.details(context).user?.isAdmin !=
+                  2) ...[
+                ListTile(
+                  onTap: () {
+                    _selectedIndex.value = 0;
+                    onItemSelected(0);
+                    Scaffold.of(context).closeDrawer();
+                  },
+                  selected: true,
+                  leading: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child:
+                        ImageWidget(
+                          path: DrawableAssets.icHome,
+                          backgroundTint:
+                              index == 0
+                                  ? resources.color.viewBgColorLight
+                                  : resources.color.sideBarItemUnselected,
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                        ).loadImageWithMoreTapArea,
+                  ),
+                  title: Text(
+                    resources.string.home,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.textFontWeight600.onFontSize(
+                      resources.fontSize.dp12,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: resources.dimen.dp10),
+                SizedBox(height: resources.dimen.dp10),
+              ],
               ListTile(
                 onTap: () {
                   _selectedIndex.value = 1;

@@ -128,7 +128,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'date'
           ..placeholderEn = 'dd/MM/yyyy'
           ..fieldValue = fieldsData['date_of_camp']
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..messages =
               (FormMessageEntity()..requiredEn = 'Please Enter DateOfCamp')
           ..suffixIcon = DrawableAssets.icCalendar
@@ -141,7 +141,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'District'
           ..labelTe = 'District'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select District'
           ..fieldValue = selectedDistrict
           ..inputFieldData = {
@@ -174,7 +174,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Mandal'
           ..labelTe = 'Mandal'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Mandal'
           ..onDatachnage = (value) {
             fieldsData['mandal'] = value.id;
@@ -203,7 +203,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           // }
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -222,7 +222,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'collection'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -275,7 +275,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'text'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -304,7 +304,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'radio'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -353,7 +353,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..isHidden = true
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -404,7 +404,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..isHidden = true
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -464,7 +464,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'text'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -485,7 +485,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'text'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -504,7 +504,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'number'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..max = 100)
           ..messages =
               (FormMessageEntity()
@@ -523,7 +523,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Sex'
           ..labelTe = 'Sex'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Sex'
           ..messages =
               (FormMessageEntity()
@@ -581,7 +581,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'date'
           ..isHidden = true
           ..placeholderEn = 'dd/MM/yyyy'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..messages =
               (FormMessageEntity()..requiredEn = 'Please Enter Date of LMP')
           ..suffixIcon = DrawableAssets.icCalendar
@@ -593,7 +593,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..name = 'maritalstatus'
           ..label = 'Marital status'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Marital status'
           ..inputFieldData = {
             'items':
@@ -654,7 +654,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Residential Address'
           ..labelTe = 'Residential Address'
           ..type = 'textarea'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..messages =
               (FormMessageEntity()
                 ..requiredEn = 'Please Enter Address'
@@ -687,7 +687,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'District'
           ..labelTe = 'District'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select District'
           ..inputFieldData = {
             'items':
@@ -719,7 +719,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Mandal'
           ..labelTe = 'Mandal'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Mandal'
           ..onDatachnage = (value) {
             fieldsData['client_mandal'] = value.id;
@@ -730,7 +730,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Occupation'
           ..labelTe = 'Occupation'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Occupation'
           ..lkpChildren = [
             LKPchildrenEntity()
@@ -775,7 +775,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..name = 'otheroccupation'
           ..type = 'text'
           ..isHidden = true
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Occupation'
           ..placeholderTe = 'Occupation'
           ..onDatachnage = (value) {
@@ -803,7 +803,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         FormEntity()
           ..name = 'consent'
           ..type = 'confirmcheck'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..labelEn = 'I give my consent'
           ..labelTe = 'I give my consent'
           ..messages =
@@ -1035,7 +1035,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelTe = 'Result'
           ..type = 'collection'
           ..isHidden = true
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Result'
           ..inputFieldData = {
             'items':
@@ -1134,7 +1134,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelTe = 'ICTC Name'
           ..type = 'text'
           ..isHidden = true
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'ICTC Name'
           // ..inputFieldData = {
           //   'items':
@@ -1196,7 +1196,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Partner Testing'
           ..labelTe = 'Partner Testing'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Partner Testing'
           ..inputFieldData = {
             'items':
@@ -1273,7 +1273,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'text'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
@@ -1294,7 +1294,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Partner Relationship'
           ..labelTe = 'Partner Relationship'
           ..type = 'collection'
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Partner Relationship'
           ..inputFieldData = {
             'items':
@@ -1324,7 +1324,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'number'
           ..validation =
               (FormValidationEntity()
-                ..required = true
+                ..isRequired = true
                 ..regex = numberRegExp)
           ..messages =
               (FormMessageEntity()
@@ -1369,7 +1369,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelTe = 'Syndromic case management'
           ..type = 'collection'
           ..multi = true
-          ..validation = (FormValidationEntity()..required = true)
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Partner Relationship'
           ..inputFieldData = {
             'items':
@@ -1493,22 +1493,38 @@ class OutreachCampFormScreen extends BaseScreenWidget {
     ];
     final formFields = _getFormFields(context);
     return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
-          Dialogs.showDialogWithClose(
-            context,
-            DiscardChangesDialog(
-              data: {
-                'title': 'Discard Changes',
-                'description': 'Do you want to discard this details',
-                'action': 'Proceed',
-              },
-              callback: () {
-                Navigator.pop(context);
-              },
-            ),
-          );
-        }
+      onPopInvokedWithResult: (didPop, result) async {
+        // if (didPop) {
+        //   Dialogs.showDialogWithClose(
+        //     context,
+        //     DiscardChangesDialog(
+        //       data: {
+        //         'title': 'Discard Changes',
+        //         'description': 'Do you want to discard this details',
+        //         'action': 'Proceed',
+        //       },
+        //       callback: () {
+        //         Navigator.pop(context);
+        //       },
+        //     ),
+        //   );
+        // }
+        if (didPop) return;
+
+        showDialog<bool>(
+          context: context,
+          builder:
+              (context) => DiscardChangesDialog(
+                data: {
+                  'title': 'Discard Changes',
+                  'description': 'Do you want to discard this details',
+                  'action': 'Proceed',
+                },
+                callback: () {
+                  Navigator.pop(context);
+                },
+              ),
+        );
       },
       child: SafeArea(
         bottom: true,
@@ -1565,7 +1581,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                     if (isDataValid) {
                       for (var field in formFields[_stepNotifier.value - 1]) {
                         if ((field.fieldValue ?? '').toString().isEmpty &&
-                            field.validation?.required == true &&
+                            field.validation?.isRequired == true &&
                             field.isHidden != true) {
                           isDataValid = false;
                           break;
@@ -1738,15 +1754,15 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                                     }
                                     Dialogs.dismiss(context);
                                     if (response is ServicesStateSuccess) {
-                                    Dialogs.showInfoDialog(
-                                      context,
-                                      PopupType.success,
-                                      'Successfully Submitted',
-                                    ).then((value) {
-                                      if (context.mounted) {
-                                        Navigator.pop(context);
-                                      }
-                                    });
+                                      Dialogs.showInfoDialog(
+                                        context,
+                                        PopupType.success,
+                                        'Successfully Submitted',
+                                      ).then((value) {
+                                        if (context.mounted) {
+                                          Navigator.pop(context);
+                                        }
+                                      });
                                     } else if (response
                                         is ServicesStateApiError) {
                                       Dialogs.showInfoDialog(

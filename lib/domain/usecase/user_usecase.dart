@@ -58,6 +58,25 @@ class UserUseCase extends BaseUseCase {
     );
   }
 
+  Future<Either<Failure, ApiEntity<LoginEntity>>> changePassword({
+    required Map<String, dynamic> requestParams,
+  }) async {
+    var apiResponse = await apisRepository.post<LoginModel>(
+      apiUrl: changePasswordApiUrl,
+      requestParams: requestParams,
+      responseModel: LoginModel.fromJson,
+    );
+    return apiResponse.fold(
+      (l) {
+        return Left(l);
+      },
+      (r) {
+        var apiResponseEntity = r.toEntity<LoginEntity>();
+        return Right(apiResponseEntity);
+      },
+    );
+  }
+
   @override
   Future<Either<Failure, ApiEntity<UserEntity>>> getUserData({
     required Map<String, dynamic> requestParams,

@@ -49,7 +49,7 @@ extension FieldEntityExtension on FormEntity {
   Widget getWidget(BuildContext context) {
     final resources = context.resources;
     bool isVisible = !(isHidden ?? false);
-    bool isMandetory = (isVisible && (validation?.required ?? false));
+    bool isMandetory = (isVisible && (validation?.isRequired ?? false));
     switch (type) {
       case 'collection':
         return FutureBuilder<List<NameIDEntity>?>(
@@ -108,7 +108,7 @@ extension FieldEntityExtension on FormEntity {
             );
           },
         );
-      case 'text' || 'number' || 'phone' || 'textarea' || 'email'||'password':
+      case 'text' || 'number' || 'phone' || 'textarea' || 'email' || 'password':
         final textEditingController = TextEditingController();
         textEditingController.text = fieldValue ?? '';
         return Visibility(
@@ -124,7 +124,9 @@ extension FieldEntityExtension on FormEntity {
               textInputType:
                   (type == 'number' || type == 'phone')
                       ? TextInputType.number
-                      :  type == 'password' ? TextInputType.visiblePassword : null,
+                      : type == 'password'
+                      ? TextInputType.visiblePassword
+                      : null,
               textInputAction: TextInputAction.next,
               labelText: getLabel,
               hintText: getPlaceholder,
@@ -141,6 +143,8 @@ extension FieldEntityExtension on FormEntity {
                   return messages?.regexMessage;
                 } else if (value.length > (validation?.maxLength ?? 2000)) {
                   return messages?.maxLengthMessage;
+                } else if (value.length < (validation?.minLength ?? 0)) {
+                  return messages?.minLengthMessage;
                 } else if ((validation?.max is int) &&
                     (int.tryParse(value) ?? 0) > (validation?.max ?? 2000)) {
                   return messages?.maxMessage;
@@ -380,11 +384,13 @@ extension FieldEntityExtension on FormEntity {
             horizontal: horizontalSpace ?? 0.0,
           ),
           child: Align(
-            alignment: Alignment.topLeft,
+            alignment: inputFieldData['alignment'],
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                onDatachnage?.call('');
+              },
               child: ActionButtonWidget(
-                width: 110,
+                width: inputFieldData['width'],
                 text: getLabel,
                 color:
                     fieldValue != null
@@ -489,7 +495,7 @@ extension FieldEntityExtension on FormEntity {
               ),
               child: YesNoconfirmWidget(
                 question: getLabel,
-                isMandetory: validation?.required ?? false,
+                isMandetory: validation?.isRequired ?? false,
                 selectedValue: fieldValue,
                 onSelected: (value) {
                   fieldValue = value;
@@ -512,7 +518,7 @@ extension FieldEntityExtension on FormEntity {
                 inputData: inputFieldData,
                 selectedData: fieldValue ?? {},
                 title: getLabel,
-                isMandetory: validation?.required ?? false,
+                isMandetory: validation?.isRequired ?? false,
                 onSelected: (value) {
                   fieldValue = value;
                   onDatachnage?.call(value);
@@ -533,7 +539,7 @@ extension FieldEntityExtension on FormEntity {
               child: NcdScreeningWidget(
                 inputData: inputFieldData,
                 title: getLabel,
-                isMandetory: validation?.required ?? false,
+                isMandetory: validation?.isRequired ?? false,
                 selctedData: fieldValue ?? {},
                 onSelected: (value) {
                   fieldValue = value;
