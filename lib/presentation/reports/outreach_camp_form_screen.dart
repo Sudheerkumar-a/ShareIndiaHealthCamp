@@ -9,6 +9,7 @@ import 'package:shareindia_health_camp/core/extensions/build_context_extension.d
 import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/data/remote/api_urls.dart';
+import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';
@@ -23,16 +24,20 @@ import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
 
 class OutreachCampFormScreen extends BaseScreenWidget {
-  static start(BuildContext context) {
+  static start(
+    BuildContext context, {
+    ScreeningDetailsEntity? screeningDetails,
+  }) {
     Navigator.of(context, rootNavigator: true).push(
       PageTransition(
         type: PageTransitionType.rightToLeft,
-        child: OutreachCampFormScreen(),
+        child: OutreachCampFormScreen(screeningDetails: screeningDetails),
       ),
     );
   }
 
-  OutreachCampFormScreen({super.key});
+  final ScreeningDetailsEntity? screeningDetails;
+  OutreachCampFormScreen({this.screeningDetails, super.key});
 
   final ValueNotifier<int> _stepNotifier = ValueNotifier(1);
   final ValueNotifier<bool> _doFormRefresh = ValueNotifier(false);
@@ -62,6 +67,36 @@ class OutreachCampFormScreen extends BaseScreenWidget {
   List<List<FormEntity>> _getFormFields(BuildContext context) {
     final resources = context.resources;
     if (step1formFields.isEmpty) {
+      final campLocations =
+          [
+                {'id': '1', 'name': 'CHC'},
+                {'id': '1', 'name': 'PHC'},
+                {'id': '2', 'name': 'CHC'},
+                {'id': '3', 'name': 'Sub centre'},
+                {'id': '4', 'name': 'Anganwadi'},
+                {'id': '5', 'name': 'UPHC'},
+                {'id': '6', 'name': 'Other (specify)'},
+              ]
+              .map(
+                (item) =>
+                    NameIDModel.fromDistrictsJson(
+                      item as Map<String, dynamic>,
+                    ).toEntity(),
+              )
+              .toList();
+      final selectedCamp =
+          campLocations
+              .where(
+                (e) =>
+                    (e.name?.toLowerCase() ==
+                        (fieldsData['camp_location'] ??
+                            UserCredentialsEntity.details(
+                              context,
+                            ).user?.mandal?.toLowerCase())) ||
+                    (e.id ==
+                        (int.tryParse(fieldsData['camp_location'] ?? '0'))),
+              )
+              .firstOrNull;
       final selectedDistrict =
           NameIDModel.fromDistrictsJson(
             districts
@@ -95,10 +130,13 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                   items
                       .where(
                         (e) =>
-                            e.name?.toLowerCase() ==
-                            UserCredentialsEntity.details(
-                              context,
-                            ).user?.mandal?.toLowerCase(),
+                            (e.name?.toLowerCase() ==
+                                (fieldsData['mandal'] ??
+                                    UserCredentialsEntity.details(
+                                      context,
+                                    ).user?.mandal?.toLowerCase())) ||
+                            (e.id ==
+                                (int.tryParse(fieldsData['mandal'] ?? '0'))),
                       )
                       .firstOrNull;
               final child =
@@ -111,10 +149,9 @@ class OutreachCampFormScreen extends BaseScreenWidget {
               _onDataChanged(true);
             }
           });
-      fieldsData['date_of_camp'] = getDateByformat(
-        'dd/MM/yyyy',
-        DateTime.now(),
-      );
+      fieldsData['date_of_camp'] =
+          fieldsData['date_of_camp'] ??
+          getDateByformat('dd/MM/yyyy', DateTime.now());
       step1formFields.addAll([
         FormEntity()
           ..name = 'integratedoutreachcampform'
@@ -201,6 +238,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           //           )
           //           .toList(),
           // }
+          ..fieldValue = fieldsData['village']
           ..validation =
               (FormValidationEntity()
                 ..isRequired = true
@@ -232,26 +270,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                 ..regexTe = 'Please Enter Valid Camp Village / Location')
           ..placeholderEn = 'Camp Village / Location'
           ..placeholderTe = 'Camp Village / Location'
-          ..inputFieldData = {
-            'items':
-                [
-                      {'id': '1', 'name': 'CHC'},
-                      {'id': '1', 'name': 'PHC'},
-                      {'id': '2', 'name': 'CHC'},
-                      {'id': '3', 'name': 'Sub centre'},
-                      {'id': '4', 'name': 'Anganwadi'},
-                      {'id': '5', 'name': 'UPHC'},
-                      {'id': '6', 'name': 'Other (specify)'},
-                    ]
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
+          ..fieldValue = selectedCamp
+          ..inputFieldData = {'items': campLocations, 'doSort': false}
           ..onDatachnage = (value) {
             // final child =
             //     step1formFields
@@ -286,6 +306,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..label = 'Camp Village / Location'
           ..placeholderEn = 'Camp Village / Location'
           ..placeholderTe = 'Camp Village / Location'
+          ..fieldValue = fieldsData['camp_location']
           ..onDatachnage = (value) {
             fieldsData['camp_location'] = value;
             _onDataChanged(false);
@@ -451,6 +472,16 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       ]);
     }
     if (step2formFields.isEmpty) {
+      final selectedOccupation =
+          occupation
+              .where(
+                (e) =>
+                    (e.name?.toLowerCase() ==
+                        (fieldsData['occupation'] ?? '')
+                            .toString()
+                            .toLowerCase()),
+              )
+              .firstOrNull;
       step2formFields.addAll([
         FormEntity()
           ..name = 'step2Header'
@@ -462,6 +493,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Name'
           ..labelTe = 'Name'
           ..type = 'text'
+          ..fieldValue = fieldsData['first_name']
           ..validation =
               (FormValidationEntity()
                 ..isRequired = true
@@ -495,6 +527,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                 ..regexTe = 'Please Enter Valid Surname')
           ..placeholderEn = 'Surname'
           ..placeholderTe = 'Surname'
+          ..fieldValue = fieldsData['last_name']
           ..onDatachnage = (value) {
             fieldsData['last_name'] = value;
             _onDataChanged(false);
@@ -514,6 +547,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..placeholderTe = 'Age'
           ..labelEn = 'Age'
           ..labelTe = 'Age'
+          ..fieldValue = fieldsData['age']
           ..onDatachnage = (value) {
             fieldsData['age'] = value;
             _onDataChanged(false);
@@ -529,18 +563,9 @@ class OutreachCampFormScreen extends BaseScreenWidget {
               (FormMessageEntity()
                 ..requiredEn = 'please Select Sex'
                 ..requiredTe = 'please Select Sex')
-          ..inputFieldData = {
-            'items':
-                gender
-                    .map(
-                      (item) =>
-                          NameIDModel.fromIdNameJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
+          ..inputFieldData = {'items': gender, 'doSort': false}
+          ..fieldValue =
+              gender.where((e) => e.name == fieldsData['sex']).firstOrNull
           ..onDatachnage = (value) {
             final child1 =
                 step2formFields
@@ -564,7 +589,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..horizontalSpace = 0
           ..labelEn = 'Pregnancy status'
           ..labelTe = 'Pregnancy status'
-          ..isHidden = true
+          ..isHidden = fieldsData['pregnancystatus'] == null
+          ..fieldValue = fieldsData['pregnancystatus']
           ..onDatachnage = (value) {
             final child =
                 step2formFields
@@ -579,12 +605,13 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Date of LMP'
           ..labelTe = 'Date of LMP'
           ..type = 'date'
-          ..isHidden = true
+          ..isHidden = fieldsData['date_of_LMP'] == null
           ..placeholderEn = 'dd/MM/yyyy'
           ..validation = (FormValidationEntity()..isRequired = true)
           ..messages =
               (FormMessageEntity()..requiredEn = 'Please Enter Date of LMP')
           ..suffixIcon = DrawableAssets.icCalendar
+          ..fieldValue = fieldsData['date_of_LMP']
           ..onDatachnage = (value) {
             fieldsData['date_of_LMP'] = value;
             _onDataChanged(false);
@@ -595,18 +622,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'collection'
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Marital status'
-          ..inputFieldData = {
-            'items':
-                maritalStatus
-                    .map(
-                      (item) =>
-                          NameIDModel.fromIdNameJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
+          ..inputFieldData = {'items': maritalStatus, 'doSort': false}
+          ..fieldValue =
+              maritalStatus
+                  .where((e) => e.name == fieldsData['maritalstatus'])
+                  .firstOrNull
           ..onDatachnage = (value) {
             fieldsData['maritalstatus'] = value.name;
             _onDataChanged(false);
@@ -626,6 +646,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                 ..regexTe = 'Please Enter Valid Aadhar No')
           ..placeholderEn = 'Aadhar No(optional)'
           ..placeholderTe = 'Aadhar No(optional)'
+          ..fieldValue = fieldsData['aadher_number']
           ..onDatachnage = (value) {
             fieldsData['aadher_number'] = value;
             _onDataChanged(false);
@@ -645,6 +666,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                 ..regex = numberRegExp)
           ..placeholderEn = 'Contact Number'
           ..placeholderTe = 'Contact Number'
+          ..fieldValue = fieldsData['contact_number']
           ..onDatachnage = (value) {
             fieldsData['contact_number'] = value;
             _onDataChanged(false);
@@ -661,6 +683,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                 ..requiredTe = 'Please Enter Address')
           ..placeholderEn = 'Street, Mandal, Village, Gram Panchayat (GP).'
           ..placeholderTe = 'Street, Mandal, Village, Gram Panchayat (GP).'
+          ..fieldValue = fieldsData['client_address']
           ..onDatachnage = (value) {
             final fieldAadhar =
                 step2formFields
@@ -737,18 +760,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
               ..childname = 'otheroccupation'
               ..parentValue = [10],
           ]
-          ..inputFieldData = {
-            'items':
-                occupation
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
+          ..inputFieldData = {'items': occupation, 'doSort': false}
+          ..fieldValue = selectedOccupation
           ..onDatachnage = (value) {
             if (value.id == 10) {
               final child =
@@ -774,10 +787,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
         FormEntity()
           ..name = 'otheroccupation'
           ..type = 'text'
-          ..isHidden = true
+          ..isHidden = selectedOccupation?.id != 10
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Occupation'
           ..placeholderTe = 'Occupation'
+          ..fieldValue = fieldsData['occupation']
           ..onDatachnage = (value) {
             fieldsData['occupation'] = value.name;
             _onDataChanged(false);
@@ -810,6 +824,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
               (FormMessageEntity()
                 ..requiredEn = 'I give my consent'
                 ..requiredTe = 'I give my consent')
+          ..fieldValue = fieldsData['consent'] == 1
           ..onDatachnage = (value) {
             fieldsData['consent'] = value ? 1 : 0;
             _onDataChanged(false);
@@ -828,6 +843,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'confirmcheck'
           ..labelEn = 'Known Diabetes'
           ..labelTe = 'Known Diabetes'
+          ..fieldValue = fieldsData['knowndiabetes'] == 1
           ..onDatachnage = (value) {
             final child =
                 step3formFields
@@ -847,7 +863,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..horizontalSpace = 25
           ..labelEn = 'On Treatment'
           ..labelTe = 'On Treatment'
-          ..isHidden = true
+          ..isHidden = fieldsData['knowndiabetes'] != 1
+          ..fieldValue = fieldsData['ontreatmentknowndiabetes'] == 1
           ..onDatachnage = (value) {
             fieldsData['ontreatmentknowndiabetes'] = value == true ? 1 : 0;
             _onDataChanged(false);
@@ -857,6 +874,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'confirmcheck'
           ..labelEn = 'Known HTN'
           ..labelTe = 'Known HTN'
+          ..fieldValue = fieldsData['knownhtn'] == 1
           ..onDatachnage = (value) {
             final child =
                 step3formFields
@@ -876,7 +894,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..horizontalSpace = 25
           ..labelEn = 'On Treatment'
           ..labelTe = 'On Treatment'
-          ..isHidden = true
+          ..isHidden = fieldsData['knownhtn'] != 1
+          ..fieldValue = fieldsData['ontreatmentknownhtn'] == 1
           ..onDatachnage = (value) {
             fieldsData['ontreatmentknownhtn'] = value == true ? 1 : 0;
             _onDataChanged(false);
@@ -886,6 +905,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'confirmcheck'
           ..labelEn = 'Known Hepatitis'
           ..labelTe = 'Known Hepatitis'
+          ..fieldValue = fieldsData['knownhepatitis'] == 1
           ..onDatachnage = (value) {
             final child =
                 step3formFields
@@ -905,7 +925,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..horizontalSpace = 25
           ..labelEn = 'On Treatment'
           ..labelTe = 'On Treatment'
-          ..isHidden = true
+          ..isHidden = fieldsData['knownhepatitis'] != 1
+          ..fieldValue = fieldsData['ontreatmentknownhepatitis'] == 1
           ..onDatachnage = (value) {
             fieldsData['ontreatmentknownhepatitis'] = value == true ? 1 : 0;
             _onDataChanged(false);
@@ -1005,6 +1026,23 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       ]);
     }
     if (step5formFields.isEmpty) {
+      final hivResults =
+          [
+                {'id': '1', 'name': 'Reactive'},
+                {'id': '2', 'name': 'Non Reactive'},
+                {'id': '3', 'name': 'Not Done'},
+              ]
+              .map(
+                (item) =>
+                    NameIDModel.fromDistrictsJson(
+                      item as Map<String, dynamic>,
+                    ).toEntity(),
+              )
+              .toList();
+      final selectHiv =
+          hivResults
+              .where((e) => e.name == fieldsData['hiv']?['result'])
+              .firstOrNull;
       step5formFields.addAll([
         FormEntity()
           ..name = 'step5header'
@@ -1016,6 +1054,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'confirmcheck'
           ..labelEn = 'Rapid Screening Offered?'
           ..labelTe = 'Rapid Screening Offered'
+          ..fieldValue = fieldsData['hiv']?['offered'] == 1
           ..onDatachnage = (value) {
             final child =
                 step5formFields
@@ -1026,7 +1065,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
               child.fieldValue = null;
             }
             fieldsData['hiv'] = {};
-            fieldsData['hiv']['offered'] = value ? 1 : 0;
+            fieldsData['hiv']?['offered'] = value ? 1 : 0;
             _onDataChanged(true);
           },
         FormEntity()
@@ -1034,25 +1073,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Result'
           ..labelTe = 'Result'
           ..type = 'collection'
-          ..isHidden = true
+          ..isHidden = fieldsData['hiv']?['offered'] != 1
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Result'
-          ..inputFieldData = {
-            'items':
-                [
-                      {'id': '1', 'name': 'Reactive'},
-                      {'id': '2', 'name': 'Non Reactive'},
-                      {'id': '3', 'name': 'Not Done'},
-                    ]
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
+          ..fieldValue = selectHiv
+          ..inputFieldData = {'items': hivResults, 'doSort': false}
           ..onDatachnage = (value) {
             final child =
                 step5formFields
@@ -1075,7 +1100,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..name = 'alreadAtART'
           ..type = 'confirmcheck'
           ..label = 'Already on ART?'
-          ..isHidden = true
+          ..isHidden = fieldsData['hiv']?['result'] != 'Reactive'
+          ..fieldValue = fieldsData['hiv']?['alreadAtART'] == 1
           ..onDatachnage = (value) {
             final child =
                 step5formFields
@@ -1097,7 +1123,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..name = 'alreadAtARTName'
           ..type = 'text'
           ..placeholder = 'ART Centre Name &amp; ART NO:'
-          ..isHidden = true
+          ..isHidden = fieldsData['hiv']?['alreadAtART'] != 1
+          ..fieldValue = fieldsData['hiv']?['alreadAtARTName']
           ..onDatachnage = (value) {
             fieldsData['hiv']['alreadAtARTName'] = value;
             _onDataChanged(false);
@@ -1107,7 +1134,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'confirmcheck'
           ..labelEn = 'Referred to ICTC?'
           ..labelTe = 'Referred to ICTC?'
-          ..isHidden = true
+          ..isHidden = fieldsData['hiv']?['alreadAtART'] != 0
+          ..fieldValue = fieldsData['hiv']?['referredICTC'] == 1
           ..onDatachnage = (value) {
             final child =
                 step5formFields
@@ -1133,7 +1161,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'ICTC Name'
           ..labelTe = 'ICTC Name'
           ..type = 'text'
-          ..isHidden = true
+          ..isHidden = fieldsData['hiv']?['referredICTC'] != 1
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'ICTC Name'
           // ..inputFieldData = {
@@ -1152,6 +1180,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           //           .toList(),
           //   'doSort': false,
           // }
+          ..fieldValue = fieldsData['hiv']?['nameOfICTC']
           ..onDatachnage = (value) {
             fieldsData['hiv']['nameOfICTC'] = value;
             _onDataChanged(false);
@@ -1161,7 +1190,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'confirmcheck'
           ..labelEn = 'Confirmed at ICTC?'
           ..labelTe = 'Confirmed at ICTC?'
-          ..isHidden = true
+          ..isHidden = fieldsData['hiv']?['referredICTC'] != 1
+          ..fieldValue = fieldsData['hiv']?['confirmedICTC'] == 1
           ..onDatachnage = (value) {
             final childs = step5formFields.where(
               (item) => ['referredtoART'].contains(item.name),
@@ -1178,7 +1208,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'confirmcheck'
           ..labelEn = 'Referred to ART?'
           ..labelTe = 'Referred to ART?'
-          ..isHidden = true
+          ..isHidden = fieldsData['hiv']?['confirmedICTC'] != 1
+          ..fieldValue = fieldsData['hiv']?['referredART'] == 1
           ..onDatachnage = (value) {
             fieldsData['hiv']['referredART'] = value ? 1 : 0;
             _onDataChanged(false);
@@ -1341,17 +1372,17 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       ]);
     }
     fieldsData['sti'] ??= {};
-    fieldsData['sti']['syphilis'] = {
+    fieldsData['sti']['syphilis'] ??= {
       'done': 0,
       'result': 'Non Reactive',
       'referred': 0,
     };
-    fieldsData['sti']['hepB'] = {
+    fieldsData['sti']['hepB'] ??= {
       'done': 0,
       'result': 'Non Reactive',
       'referred': 0,
     };
-    fieldsData['sti']['hepC'] = {
+    fieldsData['sti']['hepC'] ??= {
       'done': 0,
       'result': 'Non Reactive',
       'referred': 0,
@@ -1397,7 +1428,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'confirmcheck'
           ..labelEn = 'Referred?'
           ..labelTe = 'Referred?'
-          ..isHidden = true
+          ..isHidden = fieldsData['syndromicreferred'] == null
+          ..fieldValue = fieldsData['syndromicreferred'] == 1
           ..onDatachnage = (value) {
             fieldsData['syndromicreferred'] = value ? 1 : 0;
             _onDataChanged(false);
@@ -1477,7 +1509,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-
+    fieldsData.addAll(screeningDetails?.toEditJson() ?? {});
     List<String> stepButtonTexts = [
       'Next',
       //'Next',

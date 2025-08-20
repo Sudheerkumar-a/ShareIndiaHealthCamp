@@ -84,33 +84,75 @@ const districts = [
   {"id": "23", "name": "YSR"},
 ];
 
-const occupation = [
-  {"id": "1", "name": "Agriculture Labourer"},
-  {"id": "2", "name": "Agricultural Cultivator / Landholder"},
-  {"id": "3", "name": "Housewife"},
-  {"id": "4", "name": "Student"},
-  {"id": "5", "name": "Business"},
-  {"id": "6", "name": "Govt / Pvt Employee"},
-  {"id": "7", "name": "Truck Driver / Helper"},
-  {"id": "8", "name": "Hotel Staff"},
-  {"id": "9", "name": "Unemployed / Retired"},
-  {"id": "10", "name": "Others (Specify…)"},
+final occupation = [
+  NameIDEntity()
+    ..id = 1
+    ..name = 'Agriculture Labourer',
+  NameIDEntity()
+    ..id = 2
+    ..name = 'Agricultural Cultivator / Landholder',
+  NameIDEntity()
+    ..id = 3
+    ..name = 'Housewife',
+  NameIDEntity()
+    ..id = 4
+    ..name = 'Student',
+  NameIDEntity()
+    ..id = 5
+    ..name = 'Business',
+  NameIDEntity()
+    ..id = 6
+    ..name = 'Govt / Pvt Employee',
+  NameIDEntity()
+    ..id = 7
+    ..name = 'Truck Driver / Helper',
+  NameIDEntity()
+    ..id = 8
+    ..name = 'Hotel Staff',
+  NameIDEntity()
+    ..id = 9
+    ..name = 'Unemployed / Retired',
+  NameIDEntity()
+    ..id = 10
+    ..name = 'Others (Specify…)',
 ];
-const gender = [
-  {"id": "1", "name": "M"},
-  {"id": "2", "name": "F"},
-  {"id": "3", "name": "TG"},
+final gender = [
+  NameIDEntity()
+    ..id = 1
+    ..name = 'M',
+  NameIDEntity()
+    ..id = 2
+    ..name = 'F',
+  NameIDEntity()
+    ..id = 3
+    ..name = 'TG',
 ];
 
-const maritalStatus = [
-  {"id": '1', "name": "Single"},
-  {"id": '2', "name": "Married"},
-  {"id": '3', "name": "Living together / Cohabiting"},
-  {"id": '4', "name": "Separated"},
-  {"id": '5', "name": "Divorced"},
-  {"id": '6', "name": "Widowed"},
-  {"id": '7', "name": "Prefer not to say"},
-  {"id": '8', "name": "Not applicable"},
+final maritalStatus = [
+  NameIDEntity()
+    ..id = 1
+    ..name = 'Single',
+  NameIDEntity()
+    ..id = 2
+    ..name = 'Married',
+  NameIDEntity()
+    ..id = 3
+    ..name = 'Living together / Cohabiting',
+  NameIDEntity()
+    ..id = 4
+    ..name = 'Separated',
+  NameIDEntity()
+    ..id = 5
+    ..name = 'Divorced',
+  NameIDEntity()
+    ..id = 6
+    ..name = 'Widowed',
+  NameIDEntity()
+    ..id = 7
+    ..name = 'Prefer not to say',
+  NameIDEntity()
+    ..id = 8
+    ..name = 'Not applicable',
 ];
 const syndromicCases = [
   {"id": '1', "name": "Urethral Discharge"},

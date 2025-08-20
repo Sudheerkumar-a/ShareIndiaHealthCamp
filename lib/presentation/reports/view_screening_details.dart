@@ -7,6 +7,7 @@ import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
+import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
 
 class ViewScreeningDetails extends BaseScreenWidget {
   static start(BuildContext context, ScreeningDetailsEntity screeningDetails) {
@@ -93,24 +94,27 @@ class ViewScreeningDetails extends BaseScreenWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // InkWell(
-                  //   onTap: () {},
-                  //   child: ActionButtonWidget(
-                  //     text: 'Delete',
-                  //     width: 110,
-                  //     padding: EdgeInsets.symmetric(
-                  //       horizontal: context.resources.dimen.dp20,
-                  //       vertical: context.resources.dimen.dp7,
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(width: context.resources.dimen.dp20),
+                  InkWell(
+                    onTap: () {},
+                    child: ActionButtonWidget(
+                      text: 'Delete',
+                      width: 110,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: context.resources.dimen.dp20,
+                        vertical: context.resources.dimen.dp7,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: context.resources.dimen.dp20),
                   InkWell(
                     onTap: () async {
-                      Navigator.pop(context);
+                      OutreachCampFormScreen.start(
+                        context,
+                        screeningDetails: screeningDetails,
+                      );
                     },
                     child: ActionButtonWidget(
-                      text: 'OK',
+                      text: 'Edit',
                       width: 120,
                       color: context.resources.color.viewBgColor,
                       padding: EdgeInsets.symmetric(

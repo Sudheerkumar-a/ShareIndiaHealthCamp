@@ -95,6 +95,82 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['remarks'] = remarks;
     return data;
   }
+
+  Map<String, dynamic> toEditJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    //data['action'] = action;
+    data['date_of_camp'] = dateOfCamp;
+    data['mandal'] = mandal;
+    data['district'] = district;
+    data['village'] = '';
+    data['location_of_the_camp'] = '';
+    data['camp_location'] = campLocation;
+    data['state'] = state;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['age'] = age;
+    data['sex'] = sex;
+    data['maritalstatus'] = '';
+    data['pregnancystatus'] = pregnancystatus;
+    data['date_of_LMP'] = dateOfLMP;
+    data['contact_number'] = contactNumber;
+    data['aadher_number'] = aadherNumber;
+    data['client_address'] = clientAddress;
+    data['client_district'] = '';
+    data['client_mandal'] = clientMandal;
+    data['occupation'] = occupation;
+    data['consent'] = consent;
+    data['knowndiabetes'] = medHistory?.diabetes;
+    data['knownhtn'] = medHistory?.hTN;
+    data['knownhepatitis'] = medHistory?.hepatitis;
+    data['ontreatmentknowndiabetes'] = onTreatment?.diabetes;
+    data['ontreatmentknownhtn'] = onTreatment?.hTN;
+    data['ontreatmentknownhepatitis'] = onTreatment?.hepatitis;
+
+    data['hypertension'] = {
+      'screened': int.tryParse(ncd?.hypertension?.screened ?? ''),
+      'systolic': ncd?.hypertension?.systolic,
+      'diastolic': ncd?.hypertension?.diastolic,
+      'abnormal': int.tryParse(ncd?.hypertension?.abnormal ?? ''),
+    };
+    data['diabetes'] = {
+      'screened': int.tryParse(ncd?.diabetes?.screened ?? ''),
+      'bloodsugar': ncd?.diabetes?.bloodsugar,
+      'abnormal': int.tryParse(ncd?.diabetes?.abnormal ?? ''),
+    };
+    data['hiv'] = {
+      'offered': hiv?.offered,
+      'result': hiv?.result,
+      'alreadAtART': hiv?.alreadAtART,
+      'alreadAtARTName': hiv?.alreadAtART,
+      'referredICTC': hiv?.referredICTC,
+      'nameOfICTC': hiv?.nameOfICTC,
+      'confirmedICTC': hiv?.confirmedICTC,
+      'referredART': hiv?.referredART,
+    };
+    data['syndromiccases'] = syndromiccases;
+    data['syndromicreferred'] = syndromicreferred;
+
+    data['sti'] = {
+      'syphilis': {
+        'done': int.tryParse(sti?.syphilis?.done ?? '0'),
+        'result': sti?.syphilis?.result,
+        'referred': int.tryParse(sti?.syphilis?.referred ?? '0'),
+      },
+      'hepB': {
+        'done': int.tryParse(sti?.hepB?.done ?? '0'),
+        'result': sti?.hepB?.result,
+        'referred': int.tryParse(sti?.hepB?.referred ?? '0'),
+      },
+      'hepC': {
+        'done': int.tryParse(sti?.hepC?.done ?? '0'),
+        'result': sti?.hepC?.result,
+        'referred': int.tryParse(sti?.hepC?.referred ?? '0'),
+      },
+    };
+    data['remarks'] = remarks;
+    return data;
+  }
 }
 
 class MedHistoryEntity extends BaseEntity {
