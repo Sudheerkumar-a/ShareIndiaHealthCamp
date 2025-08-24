@@ -121,9 +121,11 @@ class ServicesBloc extends Cubit<ServicesState> {
   }
 
   Future<ServicesState> submitData({
+    required String apiUrl,
     required Map<String, dynamic> requestParams,
   }) async {
     final result = await servicesUseCase.submitData(
+      apiUrl: apiUrl,
       requestParams: requestParams,
     );
     final responseState = result.fold(

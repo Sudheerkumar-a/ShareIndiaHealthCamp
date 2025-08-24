@@ -98,6 +98,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
           ..verticalSpace = 5
           ..labelEn = 'Screened'
           ..labelTe = 'Screened'
+          ..fieldValue = data["screened"] == 1
           ..onDatachnage = (value) {
             final childrens = items.sublist(1, items.length - 1);
             for (var child in childrens) {
@@ -112,11 +113,12 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
           ..name = 'referred'
           ..type = 'confirmcheck'
           ..verticalSpace = 5
-          ..isHidden = true
+          ..isHidden = data["referred"] == null
           ..labelEn = 'Referred'
           ..labelTe = 'Referred'
+          ..fieldValue = data["referred"] == 1
           ..onDatachnage = (value) {
-            data["abnormal"] = value == true ? 1 : 0;
+            data["referred"] = value == true ? 1 : 0;
             widget.onSelected.call(data);
           },
       ]);
@@ -127,7 +129,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..name = 'systolic'
             ..type = 'number'
             ..verticalSpace = 5
-            ..isHidden = true
+            ..isHidden = data["screened"] != 1
             ..placeholder = 'systolic'
             ..validation =
                 (FormValidationEntity()
@@ -138,6 +140,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
                 (FormMessageEntity()
                   ..requiredText = 'Please Enter systolic value'
                   ..regex = 'Please Enter valid systolic value')
+            ..fieldValue = data["systolic"]
             ..onDatachnage = (value) {
               final child =
                   items.where((item) => item.name == 'referred').firstOrNull;
@@ -159,7 +162,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..name = 'diastolic'
             ..type = 'number'
             ..verticalSpace = 5
-            ..isHidden = true
+            ..isHidden = data["screened"] != 1
             ..placeholder = 'diastolic'
             ..validation =
                 (FormValidationEntity()
@@ -170,6 +173,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
                 (FormMessageEntity()
                   ..requiredText = 'Please Enter diastolic value'
                   ..regex = 'Please Enter valid diastolic value')
+            ..fieldValue = data["diastolic"]
             ..onDatachnage = (value) {
               final child =
                   items.where((item) => item.name == 'referred').firstOrNull;
@@ -192,7 +196,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..name = 'bloodsugar:'
             ..type = 'number'
             ..verticalSpace = 5
-            ..isHidden = true
+            ..isHidden = data["screened"] != 1
             ..placeholder = 'Random Blood sugar'
             ..validation =
                 (FormValidationEntity()
@@ -279,12 +283,16 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(items.length, (index) {
-              return (index == 0 || index == items.length - 1)
-                  ? items[index].getWidget(context)
-                  : SizedBox(
-                    width: 200,
-                    child: items[index].getWidget(context),
-                  );
+              return KeyedSubtree(
+                key: ValueKey(items[index].name),
+                child:
+                    (index == 0 || index == items.length - 1)
+                        ? items[index].getWidget(context)
+                        : SizedBox(
+                          width: 200,
+                          child: items[index].getWidget(context),
+                        ),
+              );
             }),
           ),
         ),

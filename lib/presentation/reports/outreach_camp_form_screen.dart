@@ -16,14 +16,13 @@ import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/discard_changes_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/step_meter_widget.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
 
-class OutreachCampFormScreen extends BaseScreenWidget {
+class OutreachCampFormScreen extends StatefulWidget {
   static start(
     BuildContext context, {
     ScreeningDetailsEntity? screeningDetails,
@@ -37,30 +36,48 @@ class OutreachCampFormScreen extends BaseScreenWidget {
   }
 
   final ScreeningDetailsEntity? screeningDetails;
-  OutreachCampFormScreen({this.screeningDetails, super.key});
+  const OutreachCampFormScreen({this.screeningDetails, super.key});
 
+  @override
+  State<OutreachCampFormScreen> createState() => _OutreachCampFormScreenState();
+}
+
+class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
   final ValueNotifier<int> _stepNotifier = ValueNotifier(1);
-  final ValueNotifier<bool> _doFormRefresh = ValueNotifier(false);
+
   final ValueNotifier<bool> _doDatavalidation = ValueNotifier(false);
+
   final _formKey = GlobalKey<FormState>();
+
   final Map fieldsData = {};
+
   final step1formFields = List<FormEntity>.empty(growable: true);
+
   final step2formFields = List<FormEntity>.empty(growable: true);
+
   final step3formFields = List<FormEntity>.empty(growable: true);
+
   final step4formFields = List<FormEntity>.empty(growable: true);
+
   final step5formFields = List<FormEntity>.empty(growable: true);
+
   final step6formFields = List<FormEntity>.empty(growable: true);
+
   final referralFormFields = List<FormEntity>.empty(growable: true);
+
   final consentFormFields = List<FormEntity>.empty(growable: true);
+
   final indexTestingFormFields = List<FormEntity>.empty(growable: true);
+
   final stepCount = 7;
+
   _onDataChanged(bool doRefresh) {
     Future.delayed(Duration(milliseconds: 500), () {
       _formKey.currentState?.validate();
     });
     _doDatavalidation.value = !_doDatavalidation.value;
     if (doRefresh) {
-      _doFormRefresh.value = !_doFormRefresh.value;
+      setState(() {});
     }
   }
 
@@ -589,7 +606,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..horizontalSpace = 0
           ..labelEn = 'Pregnancy status'
           ..labelTe = 'Pregnancy status'
-          ..isHidden = fieldsData['pregnancystatus'] == null
+          ..isHidden = fieldsData['sex'] == 'F'
           ..fieldValue = fieldsData['pregnancystatus']
           ..onDatachnage = (value) {
             final child =
@@ -605,7 +622,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelEn = 'Date of LMP'
           ..labelTe = 'Date of LMP'
           ..type = 'date'
-          ..isHidden = fieldsData['date_of_LMP'] == null
+          ..isHidden = fieldsData['pregnancystatus'] != 1
           ..placeholderEn = 'dd/MM/yyyy'
           ..validation = (FormValidationEntity()..isRequired = true)
           ..messages =
@@ -968,6 +985,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             {'label': 'Abnormal', 'value': false},
             {'label': 'Referred', 'value': false},
           ]
+          ..fieldValue = fieldsData['hypertension']
           ..onDatachnage = (value) {
             fieldsData['hypertension'] = value;
           },
@@ -981,6 +999,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
             {'label': 'Abnormal', 'value': false},
             {'label': 'Referred', 'value': false},
           ]
+          ..fieldValue = fieldsData['diabetes']
           ..onDatachnage = (value) {
             fieldsData['diabetes'] = value;
           },
@@ -1439,7 +1458,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Syphilis'
           ..labelTe = 'Syphilis'
-          ..fieldValue = {'done': 0, 'result': 'Non Reactive', 'referred': 0}
+          ..fieldValue = fieldsData['sti']['syphilis']
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
             {'label': 'Result', 'value': null, 'type': 'collection'},
@@ -1454,7 +1473,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Hepatitis-B'
           ..labelTe = 'Hepatitis-B'
-          ..fieldValue = {'done': 0, 'result': 'Non Reactive', 'referred': 0}
+          ..fieldValue = fieldsData['sti']['hepB']
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
             {'label': 'Result', 'value': null, 'type': 'collection'},
@@ -1469,7 +1488,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..type = 'listcheckbox'
           ..labelEn = 'Hepatitis-C'
           ..labelTe = 'Hepatitis-C'
-          ..fieldValue = {'done': 0, 'result': 'Non Reactive', 'referred': 0}
+          ..fieldValue = fieldsData['sti']['hepC']
           ..inputFieldData = [
             {'label': 'Done', 'value': false},
             {'label': 'Result', 'value': null, 'type': 'collection'},
@@ -1487,6 +1506,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
           ..labelTe = 'Notes'
           ..placeholderEn = 'Remarks / Notes'
           ..placeholderTe = 'Remarks / Notes'
+          ..fieldValue = fieldsData['remarks']
           ..onDatachnage = (value) {
             fieldsData['remarks'] = value;
             _onDataChanged(false);
@@ -1509,7 +1529,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    fieldsData.addAll(screeningDetails?.toEditJson() ?? {});
+    fieldsData.addAll(widget.screeningDetails?.toEditJson() ?? {});
     List<String> stepButtonTexts = [
       'Next',
       //'Next',
@@ -1524,6 +1544,8 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       resources.string.submit,
     ];
     final formFields = _getFormFields(context);
+
+    final currentStepFormFields = formFields[_stepNotifier.value - 1];
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         // if (didPop) {
@@ -1561,6 +1583,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
       child: SafeArea(
         bottom: true,
         child: Scaffold(
+          resizeToAvoidBottomInset: true,
           body: Container(
             color: resources.color.colorWhite,
             child: Column(
@@ -1582,26 +1605,26 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                   },
                 ),
                 Expanded(
-                  child: ValueListenableBuilder(
-                    valueListenable: _doFormRefresh,
-                    builder: (context, doFormRefresh, child) {
-                      final currentStepFormFields =
-                          formFields[_stepNotifier.value - 1];
-                      return Form(
-                        key: _formKey,
-                        child: ListView.builder(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: resources.dimen.dp20,
-                          ),
-                          itemBuilder: (context, index) {
-                            return currentStepFormFields[index].getWidget(
+                  child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: resources.dimen.dp20,
+                      ),
+                      child: Column(
+                        children: List.generate(
+                          currentStepFormFields.length,
+                          (index) => KeyedSubtree(
+                            key: ValueKey(
+                              currentStepFormFields[index].name,
+                            ), // unique identifier
+                            child: currentStepFormFields[index].getWidget(
                               context,
-                            );
-                          },
-                          itemCount: currentStepFormFields.length,
+                            ),
+                          ),
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 ),
 
@@ -1641,7 +1664,7 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                           InkWell(
                             onTap: () {
                               _stepNotifier.value = _stepNotifier.value - 1;
-                              _doFormRefresh.value = !_doFormRefresh.value;
+                              setState(() {});
                             },
                             child: ActionButtonWidget(
                               text: 'Previous',
@@ -1656,14 +1679,14 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                         ],
                         InkWell(
                           onTap: () async {
-                            // if (!isDataValid ||
-                            //     _formKey.currentState?.validate() != true) {
-                            //   return;
-                            // }
+                            if (!isDataValid ||
+                                _formKey.currentState?.validate() != true) {
+                              return;
+                            }
 
                             if (!isLastStep) {
                               _stepNotifier.value = _stepNotifier.value + 1;
-                              _doFormRefresh.value = !_doFormRefresh.value;
+                              setState(() {});
                             } else {
                               Dialogs.showContentHeightBottomSheetDialog(
                                 context,
@@ -1778,6 +1801,11 @@ class OutreachCampFormScreen extends BaseScreenWidget {
                                     Dialogs.loader(context);
                                     final response = await sl<ServicesBloc>()
                                         .submitData(
+                                          apiUrl:
+                                              widget.screeningDetails?.id !=
+                                                      null
+                                                  ? screenEditApiUrl
+                                                  : submitApiUrl,
                                           requestParams: requestParams,
                                         );
 

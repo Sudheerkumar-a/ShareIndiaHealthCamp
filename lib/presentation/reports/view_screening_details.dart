@@ -3,11 +3,17 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/string_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
+import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
+import 'package:shareindia_health_camp/injection_container.dart';
+import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/discard_changes_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
 import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
+import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 
 class ViewScreeningDetails extends BaseScreenWidget {
   static start(BuildContext context, ScreeningDetailsEntity screeningDetails) {
@@ -95,7 +101,47 @@ class ViewScreeningDetails extends BaseScreenWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Dialogs.showContentHeightBottomSheetDialog(
+                        context,
+                        DiscardChangesDialog(
+                          data: {
+                            'title': 'Alert',
+                            'description': 'Do you want to delete this details',
+                            'action': 'Proceed',
+                          },
+                          callback: () async {
+                            Dialogs.loader(context);
+                            final response = await sl<ServicesBloc>()
+                                .submitData(
+                                  apiUrl: screenDeleteApiUrl,
+                                  requestParams: {'id': screeningDetails.id},
+                                );
+                            if (!context.mounted) {
+                              return;
+                            }
+                            Dialogs.dismiss(context);
+                            if (response is ServicesStateSuccess) {
+                              Dialogs.showInfoDialog(
+                                context,
+                                PopupType.success,
+                                'Successfully Submitted',
+                              ).then((value) {
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                }
+                              });
+                            } else if (response is ServicesStateApiError) {
+                              Dialogs.showInfoDialog(
+                                context,
+                                PopupType.fail,
+                                response.message,
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    },
                     child: ActionButtonWidget(
                       text: 'Delete',
                       width: 110,

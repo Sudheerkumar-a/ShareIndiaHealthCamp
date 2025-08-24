@@ -4,6 +4,7 @@ import 'package:shareindia_health_camp/data/model/base_model.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 
 class ScreeningDetailsModel extends BaseModel {
+  int? id;
   String? action;
   String? dateOfCamp;
   String? mandal;
@@ -32,6 +33,7 @@ class ScreeningDetailsModel extends BaseModel {
   String? remarks;
 
   ScreeningDetailsModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     action = json['action'];
     dateOfCamp = json['date_of_camp'];
     mandal = json['mandal'];
@@ -72,6 +74,7 @@ class ScreeningDetailsModel extends BaseModel {
   @override
   ScreeningDetailsEntity toEntity() {
     return ScreeningDetailsEntity()
+      ..id = id
       ..action = action
       ..dateOfCamp = dateOfCamp
       ..mandal = mandal

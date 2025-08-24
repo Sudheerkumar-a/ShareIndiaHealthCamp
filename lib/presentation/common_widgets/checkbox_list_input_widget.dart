@@ -7,7 +7,7 @@ import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class CheckboxListInputWidget extends StatelessWidget {
   final List<Map<String, dynamic>> inputData;
-  final Map<dynamic, dynamic> selectedData;
+  final Map<String, dynamic> selectedData;
   final String title;
   final bool isMandetory;
   final Function(Map) onSelected;
@@ -21,11 +21,23 @@ class CheckboxListInputWidget extends StatelessWidget {
   });
 
   final _onDataChanged = ValueNotifier(false);
-  Map data = {};
+  Map<String, dynamic> data = {};
   final ValueNotifier _isReactive = ValueNotifier(false);
 
   List<Widget> _getWidgetsByData(BuildContext context, int row) {
     final widgets = List<Widget>.empty(growable: true);
+    final dropdownItems =
+        [
+              {'id': '1', 'name': 'Reactive'},
+              {'id': '2', 'name': 'Non Reactive'},
+            ]
+            .map(
+              (item) =>
+                  NameIDModel.fromDistrictsJson(
+                    item as Map<String, dynamic>,
+                  ).toEntity(),
+            )
+            .toList();
     for (int c = 0; c < 2; c++) {
       final index = c + (row * 2);
       if (index >= inputData.length) {
@@ -41,20 +53,13 @@ class CheckboxListInputWidget extends StatelessWidget {
                           ..type = 'collection'
                           ..placeholderEn = 'Select Result'
                           ..inputFieldData = {
-                            'items':
-                                [
-                                      {'id': '1', 'name': 'Reactive'},
-                                      {'id': '2', 'name': 'Non Reactive'},
-                                    ]
-                                    .map(
-                                      (item) =>
-                                          NameIDModel.fromDistrictsJson(
-                                            item as Map<String, dynamic>,
-                                          ).toEntity(),
-                                    )
-                                    .toList(),
+                            'items': dropdownItems,
                             'doSort': false,
                           }
+                          ..fieldValue =
+                              dropdownItems
+                                  .where((e) => e.name == data['result'])
+                                  .firstOrNull
                           ..onDatachnage = (value) {
                             _isReactive.value = value.id == 1;
                             data['result'] = value.name;
@@ -68,12 +73,10 @@ class CheckboxListInputWidget extends StatelessWidget {
                         return (FormEntity()
                               ..name = 'referred'
                               ..type = 'confirmcheck'
-                              ..isHidden = !isReactive
+                              ..isHidden =
+                                  data['result'] != dropdownItems[0].name
                               ..horizontalSpace = 20
-                              ..fieldValue =
-                                  item['value'] == null
-                                      ? null
-                                      : bool.tryParse(item['value'])
+                              ..fieldValue = data['referred'] == 1
                               ..labelEn = item['label']
                               ..labelTe = item['label']
                               ..onDatachnage = (value) {
@@ -86,7 +89,7 @@ class CheckboxListInputWidget extends StatelessWidget {
                     )
                     : CheckboxListTile(
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      value: item['value'] ?? false,
+                      value: data['done'] == 1,
                       title: Text(
                         item['label'],
                         style: context.textFontWeight400,

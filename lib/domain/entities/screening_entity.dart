@@ -3,6 +3,7 @@
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 
 class ScreeningDetailsEntity extends BaseEntity {
+  int? id;
   String? action;
   String? dateOfCamp;
   String? mandal;
@@ -131,22 +132,22 @@ class ScreeningDetailsEntity extends BaseEntity {
       'screened': int.tryParse(ncd?.hypertension?.screened ?? ''),
       'systolic': ncd?.hypertension?.systolic,
       'diastolic': ncd?.hypertension?.diastolic,
-      'abnormal': int.tryParse(ncd?.hypertension?.abnormal ?? ''),
+      'referred': int.tryParse(ncd?.hypertension?.abnormal ?? ''),
     };
     data['diabetes'] = {
       'screened': int.tryParse(ncd?.diabetes?.screened ?? ''),
       'bloodsugar': ncd?.diabetes?.bloodsugar,
-      'abnormal': int.tryParse(ncd?.diabetes?.abnormal ?? ''),
+      'referred': int.tryParse(ncd?.diabetes?.abnormal ?? ''),
     };
     data['hiv'] = {
-      'offered': hiv?.offered,
+      'offered': int.tryParse(hiv?.offered ?? '0'),
       'result': hiv?.result,
-      'alreadAtART': hiv?.alreadAtART,
+      'alreadAtART': int.tryParse(hiv?.alreadAtART ?? '0'),
       'alreadAtARTName': hiv?.alreadAtART,
-      'referredICTC': hiv?.referredICTC,
+      'referredICTC': int.tryParse(hiv?.referredICTC ?? '0'),
       'nameOfICTC': hiv?.nameOfICTC,
-      'confirmedICTC': hiv?.confirmedICTC,
-      'referredART': hiv?.referredART,
+      'confirmedICTC': int.tryParse(hiv?.confirmedICTC ?? '0'),
+      'referredART': int.tryParse(hiv?.referredART ?? '0'),
     };
     data['syndromiccases'] = syndromiccases;
     data['syndromicreferred'] = syndromicreferred;

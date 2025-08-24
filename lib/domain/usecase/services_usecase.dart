@@ -121,10 +121,11 @@ class ServicesUseCase extends BaseUseCase {
   }
 
   Future<Either<Failure, ApiEntity<SingleDataEntity>>> submitData({
+    required String apiUrl,
     required Map<String, dynamic> requestParams,
   }) async {
     var apiResponse = await apisRepository.post<SingleDataModel>(
-      apiUrl: submitApiUrl,
+      apiUrl: apiUrl,
       requestParams: requestParams,
       responseModel: SingleDataModel.fromCreateRequest,
     );
