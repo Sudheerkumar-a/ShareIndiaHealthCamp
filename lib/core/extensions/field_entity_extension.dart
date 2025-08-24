@@ -92,7 +92,7 @@ extension FieldEntityExtension on FormEntity {
                           },
                         )
                         : DropDownWidget<NameIDEntity>(
-                          list: snapshot.data ?? [],
+                          list: inputFieldData?['items'] ?? [],
                           height: resources.dimen.dp27,
                           labelText: getLabel,
                           errorMessage: isMandetory ? getLabel : '',

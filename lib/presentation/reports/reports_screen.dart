@@ -111,7 +111,7 @@ class ReportsScreen extends BaseScreenWidget {
         InkWell(
           onTap: () async {
             index = 1;
-            _updateTickets(context);
+            _updateReport(context);
           },
           child: ActionButtonWidget(
             text: 'Search',
@@ -128,7 +128,7 @@ class ReportsScreen extends BaseScreenWidget {
         InkWell(
           onTap: () {
             index = 1;
-            _updateTickets(context);
+            _updateReport(context);
           },
           child: ActionButtonWidget(
             text: resources.string.clear,
@@ -183,7 +183,11 @@ class ReportsScreen extends BaseScreenWidget {
             SizedBox(width: resources.dimen.dp10),
             InkWell(
               onTap: () async {
-                OutreachCampFormScreen.start(context);
+                OutreachCampFormScreen.start(context).then((doRefresh){
+                  if(doRefresh&&context.mounted){
+                    _updateReport(context);
+                  }
+                });
               },
               child: ActionButtonWidget(
                 text: 'Add New Record',
@@ -296,7 +300,7 @@ class ReportsScreen extends BaseScreenWidget {
                                         ),
                                       );
                                 if (context.mounted) {
-                                  _updateTickets(context);
+                                  _updateReport(context);
                                 }
                               }
                             });
@@ -340,7 +344,7 @@ class ReportsScreen extends BaseScreenWidget {
                         onTap: () {
                           if (filteredDates.value.isNotEmpty) {
                             filteredDates.value = List.empty();
-                            _updateTickets(context);
+                            _updateReport(context);
                           }
                         },
                         child: const Padding(
@@ -387,7 +391,7 @@ class ReportsScreen extends BaseScreenWidget {
     ];
   }
 
-  _updateTickets(BuildContext context) async {
+  _updateReport(BuildContext context) async {
     Dialogs.loader(context);
     final responseState = await _servicesBloc.getReportsData(
       requestParams: _getFilteredData(index ?? 1),
@@ -431,7 +435,7 @@ class ReportsScreen extends BaseScreenWidget {
     final resources = context.resources;
     Future.delayed(Duration.zero, () {
       if (context.mounted) {
-        _updateTickets(context);
+        _updateReport(context);
       }
     });
     return Padding(
@@ -472,7 +476,7 @@ class ReportsScreen extends BaseScreenWidget {
                       onPageChange: (page) {
                         index = page;
                         if (page <= (reportData?.pages ?? 0)) {
-                          _updateTickets(context);
+                          _updateReport(context);
                         }
                       },
                     );

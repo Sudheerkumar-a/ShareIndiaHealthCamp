@@ -23,11 +23,11 @@ import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
 
 class OutreachCampFormScreen extends StatefulWidget {
-  static start(
+  static Future<dynamic> start(
     BuildContext context, {
     ScreeningDetailsEntity? screeningDetails,
-  }) {
-    Navigator.of(context, rootNavigator: true).push(
+  }) async {
+    return await Navigator.of(context, rootNavigator: true).push(
       PageTransition(
         type: PageTransitionType.rightToLeft,
         child: OutreachCampFormScreen(screeningDetails: screeningDetails),
@@ -841,7 +841,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
               (FormMessageEntity()
                 ..requiredEn = 'I give my consent'
                 ..requiredTe = 'I give my consent')
-          ..fieldValue = fieldsData['consent'] == 1
+          ..fieldValue =
+              fieldsData['consent'] != null ? fieldsData['consent'] == 1 : null
           ..onDatachnage = (value) {
             fieldsData['consent'] = value ? 1 : 0;
             _onDataChanged(false);
@@ -860,7 +861,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..type = 'confirmcheck'
           ..labelEn = 'Known Diabetes'
           ..labelTe = 'Known Diabetes'
-          ..fieldValue = fieldsData['knowndiabetes'] == 1
+          ..fieldValue =
+              fieldsData['knowndiabetes'] != null
+                  ? fieldsData['knowndiabetes'] == 1
+                  : null
           ..onDatachnage = (value) {
             final child =
                 step3formFields
@@ -881,7 +885,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'On Treatment'
           ..labelTe = 'On Treatment'
           ..isHidden = fieldsData['knowndiabetes'] != 1
-          ..fieldValue = fieldsData['ontreatmentknowndiabetes'] == 1
+          ..fieldValue =
+              fieldsData['knownhtn'] != null
+                  ? fieldsData['ontreatmentknowndiabetes'] == 1
+                  : null
           ..onDatachnage = (value) {
             fieldsData['ontreatmentknowndiabetes'] = value == true ? 1 : 0;
             _onDataChanged(false);
@@ -891,7 +898,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..type = 'confirmcheck'
           ..labelEn = 'Known HTN'
           ..labelTe = 'Known HTN'
-          ..fieldValue = fieldsData['knownhtn'] == 1
+          ..fieldValue =
+              fieldsData['knownhtn'] != null
+                  ? fieldsData['knownhtn'] == 1
+                  : null
           ..onDatachnage = (value) {
             final child =
                 step3formFields
@@ -912,7 +922,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'On Treatment'
           ..labelTe = 'On Treatment'
           ..isHidden = fieldsData['knownhtn'] != 1
-          ..fieldValue = fieldsData['ontreatmentknownhtn'] == 1
+          ..fieldValue =
+              fieldsData['ontreatmentknownhtn'] != null
+                  ? fieldsData['ontreatmentknownhtn'] == 1
+                  : null
           ..onDatachnage = (value) {
             fieldsData['ontreatmentknownhtn'] = value == true ? 1 : 0;
             _onDataChanged(false);
@@ -922,7 +935,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..type = 'confirmcheck'
           ..labelEn = 'Known Hepatitis'
           ..labelTe = 'Known Hepatitis'
-          ..fieldValue = fieldsData['knownhepatitis'] == 1
+          ..fieldValue =
+              fieldsData['knownhepatitis'] != null
+                  ? fieldsData['knownhepatitis'] == 1
+                  : null
           ..onDatachnage = (value) {
             final child =
                 step3formFields
@@ -943,7 +959,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'On Treatment'
           ..labelTe = 'On Treatment'
           ..isHidden = fieldsData['knownhepatitis'] != 1
-          ..fieldValue = fieldsData['ontreatmentknownhepatitis'] == 1
+          ..fieldValue =
+              fieldsData['ontreatmentknownhepatitis'] != null
+                  ? fieldsData['ontreatmentknownhepatitis'] == 1
+                  : null
           ..onDatachnage = (value) {
             fieldsData['ontreatmentknownhepatitis'] = value == true ? 1 : 0;
             _onDataChanged(false);
@@ -1720,6 +1739,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                           fieldsData['aadher_number'],
                                       "client_address":
                                           fieldsData['client_address'],
+                                      "client_district":
+                                          fieldsData['client_district'],
                                       "client_mandal":
                                           fieldsData['client_mandal'],
                                       "occupation": fieldsData['occupation'],
@@ -1797,7 +1818,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                       "sti": fieldsData['sti'],
                                       "remarks": fieldsData['remarks'],
                                     };
-                                    jsonEncode(requestParams);
+                                    //jsonEncode(requestParams);
                                     Dialogs.loader(context);
                                     final response = await sl<ServicesBloc>()
                                         .submitData(
@@ -1820,7 +1841,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                         'Successfully Submitted',
                                       ).then((value) {
                                         if (context.mounted) {
-                                          Navigator.pop(context);
+                                          Navigator.pop(context, true);
                                         }
                                       });
                                     } else if (response

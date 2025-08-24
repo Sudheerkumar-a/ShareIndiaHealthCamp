@@ -211,47 +211,55 @@ class DistrictWiseMonthlyModel extends BaseModel {
 }
 
 class DistrictWiseTotalModel extends BaseModel {
-  String? district;
+  String? districtId;
+  String? districtName;
+  String? mandalId;
+  String? mandalName;
+  String? totalClient;
   String? totalScreened;
   String? hivReactive;
-  String? hypertensionAbnormal;
-  String? diabetesAbnormal;
-  String? cancerAbnormal;
-  String? iecParticipants;
-  String? tbDiagnosed;
-  String? syphilisPositive;
-  String? hepBPositive;
-  String? hepCPositive;
+  String? hypertension;
+  String? diabetes;
+  String? syphilis;
+  String? hepatitisA;
+  String? hepatitisB;
+  String? hepatitisC;
+  String? stiCases;
 
   DistrictWiseTotalModel();
 
   DistrictWiseTotalModel.fromJson(Map<String, dynamic> json) {
-    district = json['district'];
+    districtId = json['district_id'];
+    districtName = json['district_name'];
+    mandalId = json['mandal_id'];
+    mandalName = json['mandal_name'];
+    totalClient = json['total_client'];
     totalScreened = json['total_screened'];
     hivReactive = json['hiv_reactive'];
-    hypertensionAbnormal = json['hypertension_abnormal'];
-    diabetesAbnormal = json['diabetes_abnormal'];
-    cancerAbnormal = json['cancer_abnormal'];
-    iecParticipants = json['iec_participants'];
-    tbDiagnosed = json['tb_diagnosed'];
-    syphilisPositive = json['syphilis_positive'];
-    hepBPositive = json['hep_b_positive'];
-    hepCPositive = json['hep_c_positive'];
+    hypertension = json['hypertension'];
+    diabetes = json['diabetes'];
+    syphilis = json['syphilis'];
+    hepatitisA = json['hepatitis_a'];
+    hepatitisB = json['hepatitis_b'];
+    hepatitisC = json['hepatitis_c'];
+    stiCases = json['sti_cases'];
   }
 
   @override
   DistrictWiseTotalEntity toEntity() {
     return DistrictWiseTotalEntity()
-      ..district = district
+      ..districtId = districtId
+      ..districtName = districtName
+      ..mandalId=mandalId
+      ..mandalName=mandalName
       ..totalScreened = totalScreened
       ..hivReactive = hivReactive
-      ..hypertensionAbnormal = hypertensionAbnormal
-      ..diabetesAbnormal = diabetesAbnormal
-      ..cancerAbnormal = cancerAbnormal
-      ..iecParticipants = iecParticipants
-      ..tbDiagnosed = tbDiagnosed
-      ..syphilisPositive = syphilisPositive
-      ..hepBPositive = hepBPositive
-      ..hepCPositive = hepCPositive;
+      ..hypertension = hypertension
+      ..diabetes = diabetes
+      ..syphilis = syphilis
+      ..hepatitisA = hepatitisA
+      ..hepatitisB = hepatitisB
+      ..hepatitisC = hepatitisC
+      ..stiCases=stiCases;
   }
 }

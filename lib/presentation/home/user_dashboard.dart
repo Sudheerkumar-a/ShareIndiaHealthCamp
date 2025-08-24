@@ -8,6 +8,7 @@ import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
+import 'package:shareindia_health_camp/data/model/api_response_model.dart';
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/dashboard_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
@@ -98,7 +99,7 @@ class UserDashboard extends BaseScreenWidget {
                               ),
                             ],
                           ),
-                          (FormEntity()
+                         isAdmin? (FormEntity()
                                 ..type = 'collection'
                                 ..placeholder = filterTitle
                                 ..inputFieldData = {
@@ -120,7 +121,30 @@ class UserDashboard extends BaseScreenWidget {
                                 ..onDatachnage = (value) {
                                   _onDistrictChanged.value = value.id;
                                 })
-                              .getWidget(context),
+                              .getWidget(context):FutureBuilder(future: _serviceBloc.getMandalList(requestParams: {'dist_id': UserCredentialsEntity.details(context).user?.district}), builder: (context,snapShot){
+                                final items = [NameIDEntity()
+                                            ..id = 0
+                                            ..name = 'ALL',];
+                                            final responseState = snapShot.data;
+                                  if(responseState is ServicesStateSuccess){
+                                    final mandals = cast<ListEntity>(
+                          responseState.responseEntity.entity,
+                        ).items;
+                                    items.addAll(mandals.cast<NameIDEntity>());
+                                  }
+                                return (FormEntity()
+                                ..type = 'collection'
+                                ..placeholder = filterTitle
+                                ..inputFieldData = {
+                                  'doSort':false,
+                                  'items':
+                                     items,
+                                }
+                                ..onDatachnage = (value) {
+                                  _onDistrictChanged.value = value.id;
+                                })
+                              .getWidget(context);
+                              }),
                           SizedBox(height: resources.dimen.dp10),
                           ValueListenableBuilder(
                             valueListenable: _onDistrictChanged,
@@ -129,7 +153,7 @@ class UserDashboard extends BaseScreenWidget {
                                   value == 0
                                       ? dashboardEntity.overallTotal
                                       : dashboardEntity.districtWiseTotal
-                                          ?.where((e) => e.district == '$value')
+                                          ?.where((e) => isAdmin? (e.districtId == '$value'):(e.mandalId=='$value'))
                                           .firstOrNull;
                               return Column(
                                 children: [
@@ -161,7 +185,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   TextSpan(
                                                     text:
                                                         overalData
-                                                            ?.totalScreened ??
+                                                            ?.totalClient ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600
@@ -259,7 +283,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   TextSpan(
                                                     text:
                                                         overalData
-                                                            ?.hypertensionAbnormal ??
+                                                            ?.hypertension ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600
@@ -305,7 +329,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   TextSpan(
                                                     text:
                                                         overalData
-                                                            ?.diabetesAbnormal ??
+                                                            ?.diabetes ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600
@@ -371,7 +395,7 @@ class UserDashboard extends BaseScreenWidget {
                                                           children: [
                                                             TextSpan(
                                                               text:
-                                                                  '\n${overalData?.cancerAbnormal ?? '0'}',
+                                                                  '\n${overalData?.hepatitisA ?? '0'}',
                                                               style: context
                                                                   .textFontWeight600
                                                                   .onFontSize(
@@ -401,7 +425,7 @@ class UserDashboard extends BaseScreenWidget {
                                                           children: [
                                                             TextSpan(
                                                               text:
-                                                                  '\n${overalData?.cancerScreened ?? '10'}',
+                                                                  '\n${overalData?.hepatitisB ?? '10'}',
                                                               style: context
                                                                   .textFontWeight600
                                                                   .onFontSize(
@@ -502,7 +526,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   TextSpan(
                                                     text:
                                                         overalData
-                                                            ?.totalScreened ??
+                                                            ?.syphilis ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600
@@ -547,7 +571,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   TextSpan(
                                                     text:
                                                         overalData
-                                                            ?.totalScreened ??
+                                                            ?.stiCases ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600

@@ -77,17 +77,18 @@ class DistrictWiseMonthlyEntity extends BaseEntity {
 }
 
 class DistrictWiseTotalEntity extends BaseEntity {
-  String? district;
+  String? districtId;
+  String? districtName;
+  String? mandalId;
+  String? mandalName;
+  String? totalClient;
   String? totalScreened;
   String? hivReactive;
-  String? hypertensionAbnormal;
-  String? diabetesAbnormal;
-  String? cancerAbnormal;
-  String? cancerScreened;
-  String? cancerReferred;
-  String? iecParticipants;
-  String? tbDiagnosed;
-  String? syphilisPositive;
-  String? hepBPositive;
-  String? hepCPositive;
+  String? hypertension;
+  String? diabetes;
+  String? syphilis;
+  String? hepatitisA;
+  String? hepatitisB;
+  String? hepatitisC;
+  String? stiCases;
 }
