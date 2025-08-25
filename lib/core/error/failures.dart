@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 
@@ -5,24 +7,36 @@ const String unknownErroeMessage = 'An unknown error has occured';
 
 abstract class Failure extends Equatable {
   String get errorMessage;
+
   @override
   List<Object?> get props => [];
 }
 
 class ServerFailure extends Failure {
   final String message;
-  ServerFailure(this.message);
+  final dynamic response;
+  ServerFailure(this.message, {this.response});
 
   @override
   List<Object> get props => [errorMessage];
 
   @override
   String toString() {
-    return 'ServerFailure{errorMessage: $errorMessage}';
+    return 'ServerFailure{errorMessage: $_getServerMessage()}';
   }
 
   @override
-  String get errorMessage => message.isNotEmpty ? message : unknownErroeMessage;
+  String get errorMessage => _getServerMessage();
+
+  String _getServerMessage() {
+    final serverMessage = message.isNotEmpty ? message : unknownErroeMessage;
+    try {
+      final res = jsonDecode(response);
+      return res['message'] ?? serverMessage;
+    } catch (e) {
+      return serverMessage;
+    }
+  }
 }
 
 class ConnectionFailure extends Failure {

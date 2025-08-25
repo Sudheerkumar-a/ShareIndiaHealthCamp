@@ -66,7 +66,9 @@ class ApisRepositoryImpl extends ApisRepository {
         );
         return Right(apiResponseModel);
       } on DioException catch (error) {
-        return Left(ServerFailure(error.message ?? ''));
+        return Left(
+          ServerFailure(error.message ?? '', response: error.response?.data),
+        );
       } catch (error) {
         return Left(Exception(error.toString()));
       }
