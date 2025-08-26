@@ -83,11 +83,13 @@ class AgentEntity extends BaseEntity {
   String? mandalId;
   String? name;
   String? mobile;
+  String? email;
   String? createdAt;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['Name'] = name;
+    data['Email'] = email;
     data['mobile'] = mobile;
     data['action'] = 'Delete';
     return data;

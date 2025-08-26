@@ -185,106 +185,143 @@ class ProfileScreen extends BaseScreenWidget {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    Dialogs.showDialogWithClose(
-                                      context,
-                                      Form(
-                                        key: formKey,
-                                        child: Column(
-                                          children: [
-                                            (FormEntity()
-                                                  ..type = 'text'
-                                                  ..label = 'Password'
-                                                  ..placeholder = 'Password'
-                                                  ..validation =
-                                                      (FormValidationEntity()
-                                                        ..isRequired = true
-                                                        ..minLength = 8)
-                                                  ..messages =
-                                                      (FormMessageEntity()
-                                                        ..requiredText =
-                                                            'Please Enter Password'
-                                                        ..minLength =
-                                                            'Password should be 8 chracters')
-                                                  ..horizontalSpace = 20
-                                                  ..onDatachnage = (data) {
-                                                    inputData['password'] =
-                                                        data;
-                                                  })
-                                                .getWidget(context),
-                                            (FormEntity()
-                                                  ..type = 'text'
-                                                  ..label = 'Confirm Password'
-                                                  ..placeholder =
-                                                      'Confirm Password'
-                                                  ..horizontalSpace = 20
-                                                  ..onDatachnage = (data) {
-                                                    inputData['confirm_password'] =
-                                                        data;
-                                                  })
-                                                .getWidget(context),
-                                            (FormEntity()
-                                                  ..type = 'button'
-                                                  ..label = 'Change'
-                                                  ..inputFieldData = {
-                                                    'alignment':
-                                                        Alignment.topCenter,
-                                                  }
-                                                  ..horizontalSpace = 20
-                                                  ..onDatachnage = (
-                                                    data,
-                                                  ) async {
-                                                    if (formKey.currentState
-                                                            ?.validate() ==
-                                                        true) {
-                                                      if (inputData['confirm_password'] !=
-                                                          inputData['password']) {
-                                                        Dialogs.showInfoDialog(
-                                                          context,
-                                                          PopupType.fail,
-                                                          'Confirm password not matched',
-                                                        );
-                                                        return;
-                                                      }
-                                                      Dialogs.loader(context);
-                                                      final response = await _userBloc
-                                                          .changePassword({
-                                                            'password':
-                                                                inputData['password'],
-                                                            'confirm_password':
-                                                                inputData['confirm_password'],
-                                                          });
-                                                      if (!context.mounted) {
-                                                        return;
-                                                      }
-                                                      Dialogs.dismiss(context);
-                                                      if (response
-                                                          is OnApiResponse) {
-                                                        Dialogs.showInfoDialog(
-                                                          context,
-                                                          PopupType.success,
-                                                          'Password has been changed',
-                                                        ).then((value) {
-                                                          if (context.mounted) {
-                                                            logout(context);
+                                    if (true) {
+                                      showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        context: context,
+                                        builder: (context) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                              top: resources.dimen.dp20,
+                                              bottom:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).viewInsets.bottom +
+                                                  resources.dimen.dp10,
+                                            ),
+                                            child: SingleChildScrollView(
+                                              child: Form(
+                                                key: formKey,
+                                                child: Column(
+                                                  children: [
+                                                    (FormEntity()
+                                                          ..type = 'text'
+                                                          ..label = 'Password'
+                                                          ..placeholder =
+                                                              'Password'
+                                                          ..validation =
+                                                              (FormValidationEntity()
+                                                                ..isRequired =
+                                                                    true
+                                                                ..minLength = 8)
+                                                          ..messages =
+                                                              (FormMessageEntity()
+                                                                ..requiredText =
+                                                                    'Please Enter Password'
+                                                                ..minLength =
+                                                                    'Password should be 8 chracters')
+                                                          ..horizontalSpace = 20
+                                                          ..onDatachnage = (
+                                                            data,
+                                                          ) {
+                                                            inputData['password'] =
+                                                                data;
+                                                          })
+                                                        .getWidget(context),
+                                                    (FormEntity()
+                                                          ..type = 'text'
+                                                          ..label =
+                                                              'Confirm Password'
+                                                          ..placeholder =
+                                                              'Confirm Password'
+                                                          ..horizontalSpace = 20
+                                                          ..onDatachnage = (
+                                                            data,
+                                                          ) {
+                                                            inputData['confirm_password'] =
+                                                                data;
+                                                          })
+                                                        .getWidget(context),
+                                                    (FormEntity()
+                                                          ..type = 'button'
+                                                          ..label = 'Change'
+                                                          ..inputFieldData = {
+                                                            'alignment':
+                                                                Alignment
+                                                                    .topCenter,
                                                           }
-                                                        });
-                                                      } else if (response
-                                                          is OnLoginApiError) {
-                                                        Dialogs.showInfoDialog(
-                                                          context,
-                                                          PopupType.fail,
-                                                          response.message,
-                                                        );
-                                                      }
-                                                    }
-                                                  })
-                                                .getWidget(context),
-                                          ],
-                                        ),
-                                      ),
-                                      maxWidth:
-                                          getScrrenSize(context).width - 40,
-                                    );
+                                                          ..horizontalSpace = 20
+                                                          ..onDatachnage = (
+                                                            data,
+                                                          ) async {
+                                                            if (formKey
+                                                                    .currentState
+                                                                    ?.validate() ==
+                                                                true) {
+                                                              if (inputData['confirm_password'] !=
+                                                                  inputData['password']) {
+                                                                Dialogs.showInfoDialog(
+                                                                  context,
+                                                                  PopupType
+                                                                      .fail,
+                                                                  'Confirm password not matched',
+                                                                );
+                                                                return;
+                                                              }
+                                                              Dialogs.loader(
+                                                                context,
+                                                              );
+                                                              final response = await _userBloc
+                                                                  .changePassword({
+                                                                    'password':
+                                                                        inputData['password'],
+                                                                    'confirm_password':
+                                                                        inputData['confirm_password'],
+                                                                  });
+                                                              if (!context
+                                                                  .mounted) {
+                                                                return;
+                                                              }
+                                                              Dialogs.dismiss(
+                                                                context,
+                                                              );
+                                                              if (response
+                                                                  is OnApiResponse) {
+                                                                Dialogs.showInfoDialog(
+                                                                  context,
+                                                                  PopupType
+                                                                      .success,
+                                                                  'Password has been changed',
+                                                                ).then((value) {
+                                                                  if (context
+                                                                      .mounted) {
+                                                                    logout(
+                                                                      context,
+                                                                    );
+                                                                  }
+                                                                });
+                                                              } else if (response
+                                                                  is OnLoginApiError) {
+                                                                Dialogs.showInfoDialog(
+                                                                  context,
+                                                                  PopupType
+                                                                      .fail,
+                                                                  response
+                                                                      .message,
+                                                                );
+                                                              }
+                                                            }
+                                                          })
+                                                        .getWidget(context),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                      return;
+                                    }
                                   },
                           ),
                         ],

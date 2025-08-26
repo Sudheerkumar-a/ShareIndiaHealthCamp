@@ -166,10 +166,10 @@ class AddFieldAgentScreen extends BaseScreenWidget {
                 Dialogs.dismiss(context);
                 Dialogs.showInfoDialog(
                   context,
-                  PopupType.success,
-                  "Agent Add Successfully",
-                  // PopupType.fail,
-                  // state.message,
+                  // PopupType.success,
+                  // "Agent Add Successfully",
+                  PopupType.fail,
+                  state.message,
                 ).then((v) {
                   if (context.mounted) {
                     Navigator.pop(context);

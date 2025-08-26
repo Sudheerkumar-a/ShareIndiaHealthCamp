@@ -76,7 +76,10 @@ class CheckboxListInputWidget extends StatelessWidget {
                               ..isHidden =
                                   data['result'] != dropdownItems[0].name
                               ..horizontalSpace = 20
-                              ..fieldValue = data['referred'] == 1
+                              ..fieldValue =
+                                  data['referred'] != null
+                                      ? data['referred'] == 1
+                                      : null
                               ..labelEn = item['label']
                               ..labelTe = item['label']
                               ..onDatachnage = (value) {

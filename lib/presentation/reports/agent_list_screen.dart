@@ -94,11 +94,12 @@ class AgentListScreen extends BaseScreenWidget {
         _updateTickets(context);
       }
     });
-    final ticketsHeaderData = ['Name', 'Mobile Number', 'Action'];
+    final ticketsHeaderData = ['Name', 'Email', 'Mobile Number', 'Action'];
     final ticketsTableColunwidths = {
       0: const FlexColumnWidth(4),
       1: const FlexColumnWidth(4),
-      2: const FlexColumnWidth(2),
+      2: const FlexColumnWidth(4),
+      3: const FlexColumnWidth(3),
     };
     return SafeArea(
       child: Scaffold(
@@ -133,41 +134,43 @@ class AgentListScreen extends BaseScreenWidget {
                           onColumnClick: (p0, p1) async {
                             if (p0 == 'action') {
                               Dialogs.showContentHeightBottomSheetDialog(
-                                context, DiscardChangesDialog(
-                                data: {
-                                  'title': 'Alert',
-                                  'description': 'Do you want delete Agent',
-                                  'action': 'Proceed',
-                                },
-                                callback: () async {
-                                  Dialogs.loader(context);
-                                  final response = await _servicesBloc
-                                      .deleteAgent(
-                                        requestParams: {'agent_id': p1.id},
-                                      );
-                                  if (context.mounted) {
-                                    Dialogs.dismiss(context);
-                                    if (response is ServicesStateSuccess) {
-                                      Dialogs.showInfoDialog(
-                                        context,
-                                        PopupType.success,
-                                        'Deleted Successfuly',
-                                      ).then((value){
-                                        if(context.mounted) {
-                                          _updateTickets(context);
-                                        }
-                                      });
-                                    } else if (response
-                                        is ServicesStateApiError) {
-                                      Dialogs.showInfoDialog(
-                                        context,
-                                        PopupType.fail,
-                                        response.message,
-                                      );
+                                context,
+                                DiscardChangesDialog(
+                                  data: {
+                                    'title': 'Alert',
+                                    'description': 'Do you want delete Agent',
+                                    'action': 'Proceed',
+                                  },
+                                  callback: () async {
+                                    Dialogs.loader(context);
+                                    final response = await _servicesBloc
+                                        .deleteAgent(
+                                          requestParams: {'agent_id': p1.id},
+                                        );
+                                    if (context.mounted) {
+                                      Dialogs.dismiss(context);
+                                      if (response is ServicesStateSuccess) {
+                                        Dialogs.showInfoDialog(
+                                          context,
+                                          PopupType.success,
+                                          'Deleted Successfuly',
+                                        ).then((value) {
+                                          if (context.mounted) {
+                                            _updateTickets(context);
+                                          }
+                                        });
+                                      } else if (response
+                                          is ServicesStateApiError) {
+                                        Dialogs.showInfoDialog(
+                                          context,
+                                          PopupType.fail,
+                                          response.message,
+                                        );
+                                      }
                                     }
-                                  }
-                                },
-                              ));
+                                  },
+                                ),
+                              );
                             }
                           },
                           onPageChange: (page) {

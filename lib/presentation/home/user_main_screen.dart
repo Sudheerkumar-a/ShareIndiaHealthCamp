@@ -125,7 +125,7 @@ class _MainScreenState extends State<UserMainScreen> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: resources.color.appScaffoldBg,
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           drawer: SizedBox(
             width: 200,
             child: SideBar(

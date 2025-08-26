@@ -148,6 +148,7 @@ class AgentModel extends BaseModel {
   String? mandalId;
   String? name;
   String? mobile;
+  String? email;
   String? createdAt;
   List<ReportEntity> reportList = [];
 
@@ -158,6 +159,7 @@ class AgentModel extends BaseModel {
     districtId = response['district_id'];
     mandalId = response['mandal_id'];
     name = response['name'];
+    email = response['email'];
     mobile = response['mobile'];
     createdAt = response['created_at'];
   }
@@ -170,6 +172,7 @@ class AgentModel extends BaseModel {
       ..districtId = districtId
       ..mandalId = mandalId
       ..name = name
+      ..email = email
       ..mobile = mobile
       ..createdAt = createdAt;
   }

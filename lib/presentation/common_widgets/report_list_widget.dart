@@ -82,7 +82,7 @@ class ReportListWidget extends StatelessWidget {
                       : getScrrenSize(context).width - 40,
               child: Table(
                 defaultColumnWidth: IntrinsicColumnWidth(),
-                //columnWidths: ticketsTableColunwidths,
+                columnWidths: ticketsTableColunwidths,
                 children: [
                   TableRow(
                     decoration:

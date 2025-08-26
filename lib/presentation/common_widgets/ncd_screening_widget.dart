@@ -98,7 +98,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
           ..verticalSpace = 5
           ..labelEn = 'Screened'
           ..labelTe = 'Screened'
-          ..fieldValue = data["screened"] == 1
+          ..fieldValue = data["screened"] != null ? data["screened"] == 1 : null
           ..onDatachnage = (value) {
             final childrens = items.sublist(1, items.length - 1);
             for (var child in childrens) {
@@ -116,7 +116,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
           ..isHidden = data["referred"] == null
           ..labelEn = 'Referred'
           ..labelTe = 'Referred'
-          ..fieldValue = data["referred"] == 1
+          ..fieldValue = data["referred"] != null ? data["referred"] == 1 : null
           ..onDatachnage = (value) {
             data["referred"] = value == true ? 1 : 0;
             widget.onSelected.call(data);
@@ -207,6 +207,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
                 (FormMessageEntity()
                   ..requiredText = 'Please Enter Blood sugar value'
                   ..regex = 'Please Enter valid Blood sugar: value')
+            ..fieldValue = data["bloodsugar"]
             ..onDatachnage = (value) {
               final child =
                   items.where((item) => item.name == 'referred').firstOrNull;

@@ -47,6 +47,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
 
   final ValueNotifier<bool> _doDatavalidation = ValueNotifier(false);
 
+  final ScrollController _scrollController = ScrollController();
+
   final _formKey = GlobalKey<FormState>();
 
   final Map fieldsData = {};
@@ -195,6 +197,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'District'
           ..labelTe = 'District'
           ..type = 'collection'
+          ..isEnabled = false
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select District'
           ..fieldValue = selectedDistrict
@@ -1092,7 +1095,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..type = 'confirmcheck'
           ..labelEn = 'Rapid Screening Offered?'
           ..labelTe = 'Rapid Screening Offered'
-          ..fieldValue = fieldsData['hiv']?['offered'] == 1
+          ..fieldValue =
+              fieldsData['hiv']?['offered'] != null
+                  ? (fieldsData['hiv']?['offered'] == 1)
+                  : null
           ..onDatachnage = (value) {
             final child =
                 step5formFields
@@ -1412,19 +1418,11 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
     fieldsData['sti'] ??= {};
     fieldsData['sti']['syphilis'] ??= {
       'done': 0,
-      'result': 'Non Reactive',
-      'referred': 0,
+      'result': null,
+      'referred': null,
     };
-    fieldsData['sti']['hepB'] ??= {
-      'done': 0,
-      'result': 'Non Reactive',
-      'referred': 0,
-    };
-    fieldsData['sti']['hepC'] ??= {
-      'done': 0,
-      'result': 'Non Reactive',
-      'referred': 0,
-    };
+    fieldsData['sti']['hepB'] ??= {'done': 0, 'result': null, 'referred': null};
+    fieldsData['sti']['hepC'] ??= {'done': 0, 'result': null, 'referred': null};
     if (step6formFields.isEmpty) {
       step6formFields.addAll([
         FormEntity()
@@ -1627,10 +1625,12 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                   child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(
+                      controller: _scrollController,
                       padding: EdgeInsets.symmetric(
                         horizontal: resources.dimen.dp20,
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(
                           currentStepFormFields.length,
                           (index) => KeyedSubtree(
@@ -1698,14 +1698,16 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                         ],
                         InkWell(
                           onTap: () async {
-                            if (!isDataValid ||
-                                _formKey.currentState?.validate() != true) {
-                              return;
-                            }
+                            // if (!isDataValid ||
+                            //     _formKey.currentState?.validate() != true) {
+                            //   return;
+                            // }
 
                             if (!isLastStep) {
                               _stepNotifier.value = _stepNotifier.value + 1;
-                              setState(() {});
+                              setState(() {
+                                _scrollController.jumpTo(0);
+                              });
                             } else {
                               Dialogs.showContentHeightBottomSheetDialog(
                                 context,

@@ -92,6 +92,7 @@ extension FieldEntityExtension on FormEntity {
                           },
                         )
                         : DropDownWidget<NameIDEntity>(
+                          isEnabled: isEnabled ?? true,
                           list: inputFieldData?['items'] ?? [],
                           height: resources.dimen.dp27,
                           labelText: getLabel,
@@ -392,10 +393,7 @@ extension FieldEntityExtension on FormEntity {
               child: ActionButtonWidget(
                 width: inputFieldData['width'],
                 text: getLabel,
-                color:
-                    fieldValue != null
-                        ? resources.color.viewBgColor
-                        : resources.iconBgColor,
+                color: resources.color.viewBgColor,
                 padding: EdgeInsets.symmetric(
                   horizontal: context.resources.dimen.dp20,
                   vertical: context.resources.dimen.dp7,
