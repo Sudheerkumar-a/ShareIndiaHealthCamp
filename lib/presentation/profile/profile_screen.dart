@@ -89,7 +89,18 @@ class ProfileScreen extends BaseScreenWidget {
                                     ),
                                     children: [
                                       TextSpan(
-                                        text: user?.role ?? '',
+                                        text:
+                                            UserCredentialsEntity.details(
+                                                      context,
+                                                    ).user?.isAdmin ==
+                                                    1
+                                                ? 'APSACS'
+                                                : UserCredentialsEntity.details(
+                                                      context,
+                                                    ).user?.isAdmin ==
+                                                    2
+                                                ? 'Facility'
+                                                : 'DISHA',
                                         style: context.textFontWeight600
                                             .onFontSize(
                                               resources.fontSize.dp12,

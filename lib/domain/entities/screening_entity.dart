@@ -14,7 +14,7 @@ class ScreeningDetailsEntity extends BaseEntity {
   String? lastName;
   String? age;
   String? sex;
-  int? pregnancystatus;
+  String? pregnancystatus;
   String? dateOfLMP;
   String? contactNumber;
   String? aadherNumber;
@@ -27,7 +27,7 @@ class ScreeningDetailsEntity extends BaseEntity {
   NcdEntity? ncd;
   HivEntity? hiv;
   String? syndromiccases;
-  int? syndromicreferred;
+  String? syndromicreferred;
   StiEntity? sti;
   String? remarks;
 

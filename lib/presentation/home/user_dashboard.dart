@@ -388,7 +388,7 @@ class UserDashboard extends BaseScreenWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         TextSpan(
-                                                          text: 'A',
+                                                          text: 'B',
                                                           style:
                                                               context
                                                                   .textFontWeight600,
@@ -418,7 +418,7 @@ class UserDashboard extends BaseScreenWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         TextSpan(
-                                                          text: 'B',
+                                                          text: 'C',
                                                           style:
                                                               context
                                                                   .textFontWeight600,

@@ -15,7 +15,7 @@ class ScreeningDetailsModel extends BaseModel {
   String? lastName;
   String? age;
   String? sex;
-  int? pregnancystatus;
+  String? pregnancystatus;
   String? dateOfLMP;
   String? contactNumber;
   String? aadherNumber;
@@ -28,7 +28,7 @@ class ScreeningDetailsModel extends BaseModel {
   NcdEntity? ncd;
   HivEntity? hiv;
   String? syndromiccases;
-  int? syndromicreferred;
+  String? syndromicreferred;
   StiEntity? sti;
   String? remarks;
 
