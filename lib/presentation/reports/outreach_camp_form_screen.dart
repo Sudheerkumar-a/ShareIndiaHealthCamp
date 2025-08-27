@@ -108,10 +108,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
               .where(
                 (e) =>
                     (e.name?.toLowerCase() ==
-                        (fieldsData['camp_location'] ??
-                            UserCredentialsEntity.details(
-                              context,
-                            ).user?.mandal?.toLowerCase())) ||
+                        (fieldsData['camp_location'] ?? '')) ||
                     (e.id ==
                         (int.tryParse(fieldsData['camp_location'] ?? '0'))),
               )
@@ -150,10 +147,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                       .where(
                         (e) =>
                             (e.name?.toLowerCase() ==
-                                (fieldsData['mandal'] ??
-                                    UserCredentialsEntity.details(
-                                      context,
-                                    ).user?.mandal?.toLowerCase())) ||
+                                (fieldsData['mandal'] ?? '')) ||
                             (e.id ==
                                 (int.tryParse(fieldsData['mandal'] ?? '0'))),
                       )

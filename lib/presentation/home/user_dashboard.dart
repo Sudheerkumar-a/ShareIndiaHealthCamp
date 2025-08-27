@@ -8,7 +8,6 @@ import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
-import 'package:shareindia_health_camp/data/model/api_response_model.dart';
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/dashboard_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
@@ -425,7 +424,7 @@ class UserDashboard extends BaseScreenWidget {
                                                           children: [
                                                             TextSpan(
                                                               text:
-                                                                  '\n${overalData?.hepatitisB ?? '10'}',
+                                                                  '\n${overalData?.hepatitisB ?? '0'}',
                                                               style: context
                                                                   .textFontWeight600
                                                                   .onFontSize(
@@ -658,7 +657,7 @@ class UserDashboard extends BaseScreenWidget {
                                     districtWiseMonthly.addAll(
                                       cast<DashboardEntity>(
                                             state.responseEntity.entity,
-                                          ).districtWiseMonthly ??
+                                          ).districtWiseTotal ??
                                           [],
                                     );
                                     (districtWiseMonthly).sort(
@@ -673,18 +672,21 @@ class UserDashboard extends BaseScreenWidget {
                                           : resources.string.mandal,
                                       resources.string.total,
                                       resources.string.hiv,
-                                      resources.string.cancer,
                                       resources.string.diabetes,
                                       resources.string.hypertension,
+                                      'HepatitisB',
+                                      'Syphilis',
+                                      'HepatitisC',
+                                      'StiCases',
                                     ],
-                                    ticketsTableColunwidths: {
-                                      0: const FlexColumnWidth(4),
-                                      1: const FlexColumnWidth(2),
-                                      2: const FlexColumnWidth(2),
-                                      3: const FlexColumnWidth(2),
-                                      4: const FlexColumnWidth(2),
-                                      5: const FlexColumnWidth(2),
-                                    },
+                                    // ticketsTableColunwidths: {
+                                    //   0: const FlexColumnWidth(4),
+                                    //   1: const FlexColumnWidth(2),
+                                    //   2: const FlexColumnWidth(2),
+                                    //   3: const FlexColumnWidth(2),
+                                    //   4: const FlexColumnWidth(2),
+                                    //   5: const FlexColumnWidth(2),
+                                    // },
                                     totalPagecount:
                                         (districtWiseMonthly.length / 10)
                                             .ceil(),

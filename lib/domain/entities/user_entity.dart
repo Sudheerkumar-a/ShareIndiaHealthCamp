@@ -17,7 +17,7 @@ class UserEntity extends BaseEntity {
   String? role;
   String? district;
   int? districtId;
-  String? mandal;
+  int? mandalId;
   int? isAdmin;
 
   @override
@@ -35,7 +35,7 @@ class UserEntity extends BaseEntity {
     data['email'] = email;
     data['role'] = role;
     data['district'] = district;
-    data['mandal'] = mandal;
+    data['mandal'] = mandalId;
     data['is_admin'] = isAdmin;
     return data;
   }

@@ -37,6 +37,9 @@ class ReportsScreen extends BaseScreenWidget {
   int? totalPagecount;
   final ValueNotifier<bool> _onFilterChange = ValueNotifier(false);
   // final ValueNotifier<UserEntity?> _selectedEmployee = ValueNotifier(null);
+  int isAdmin = 1;
+  int? districtId;
+  int? mandalId;
   String? selectedStatus;
   Map<String, dynamic>? filteredData;
   final ValueNotifier<List<String>> filteredDates = ValueNotifier([]);
@@ -418,14 +421,30 @@ class ReportsScreen extends BaseScreenWidget {
       startDate = dateFormat.format(startTime);
       endDate = dateFormat.format(endTime);
     }
-    Map<String, dynamic> requestParams = {
+    Map<String, dynamic> requestParams = isAdmin==0? {
+      'limit': 10,
+      'page': index,
+      'district': districtId,
+      'mandal': null,
+      'state': 'Andhra Pradesh',
+      'date_from': startDate,
+      'date_to': endDate,
+    }:isAdmin==2?{
+      'limit': 10,
+      'page': index,
+      'district': districtId,
+      'mandal': mandalId,
+      'state': 'Andhra Pradesh',
+      'date_from': startDate,
+      'date_to': endDate,
+    }:{
       'limit': 10,
       'page': index,
       'district': filteredData?['dist_id'],
       'mandal': filteredData?['mandal_id'],
       'state': 'Andhra Pradesh',
-      // 'date_from': startDate,
-      // 'date_to': endDate,
+      'date_from': startDate,
+      'date_to': endDate,
     };
     return requestParams;
   }
@@ -438,6 +457,11 @@ class ReportsScreen extends BaseScreenWidget {
         _updateReport(context);
       }
     });
+    
+    isAdmin =
+                  UserCredentialsEntity.details(context).user?.isAdmin??1;
+    districtId = UserCredentialsEntity.details(context).user?.districtId;
+    mandalId = UserCredentialsEntity.details(context).user?.mandalId;
     return Padding(
       padding: EdgeInsets.all(resources.dimen.dp20),
       child: SingleChildScrollView(

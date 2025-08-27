@@ -59,7 +59,7 @@ class UserModel extends BaseModel {
     userEntity.email = email;
     userEntity.role = role;
     userEntity.district = district;
-    userEntity.mandal = mandal;
+    userEntity.mandalId = int.tryParse(mandal??'');
     userEntity.isAdmin =  isAdmin;
     return userEntity;
   }

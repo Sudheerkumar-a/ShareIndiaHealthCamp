@@ -159,7 +159,7 @@ class ProfileScreen extends BaseScreenWidget {
                       ),
                     ),
                     SizedBox(height: resources.dimen.dp15),
-                    if ((user?.mandal ?? '').isNotEmpty) ...[
+                    if ((user?.mandalId ??0) == 0) ...[
                       Text(
                         'Mandal',
                         style: context.textFontWeight400.onFontSize(
@@ -167,7 +167,7 @@ class ProfileScreen extends BaseScreenWidget {
                         ),
                       ),
                       Text(
-                        user?.mandal ?? '',
+                        '${user?.mandalId?? ''}',
                         style: context.textFontWeight600.onFontSize(
                           resources.fontSize.dp12,
                         ),
