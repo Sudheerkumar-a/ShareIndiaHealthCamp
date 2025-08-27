@@ -1465,7 +1465,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'Referred?'
           ..labelTe = 'Referred?'
           ..isHidden = fieldsData['syndromicreferred'] == null
-          ..fieldValue = fieldsData['syndromicreferred'] == 1
+          ..fieldValue =
+              fieldsData['syndromicreferred'] != null
+                  ? fieldsData['syndromicreferred'] == 1
+                  : null
           ..onDatachnage = (value) {
             fieldsData['syndromicreferred'] = value ? 1 : 0;
             _onDataChanged(false);
