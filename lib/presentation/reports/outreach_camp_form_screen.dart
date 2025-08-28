@@ -322,7 +322,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..placeholderTe = 'Camp Village / Location'
           ..fieldValue = fieldsData['camp_location']
           ..onDatachnage = (value) {
-            fieldsData['camp_location'] = value;
+            fieldsData['camp_location_other'] = value;
             _onDataChanged(false);
           },
       ]);
@@ -1724,6 +1724,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                       "district": fieldsData['district'],
                                       "camp_location":
                                           fieldsData['camp_location'],
+                                      "village":
+                                          fieldsData['village'],
+                                      "camp_village":
+                                          fieldsData['camp_location_other'],
                                       "state": "Andhra Pradesh",
                                       "first_name": fieldsData['first_name'],
                                       "last_name": fieldsData['last_name'],
@@ -1733,6 +1737,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                           fieldsData['pregnancystatus'] ?? 0,
                                       "date_of_LMP":
                                           fieldsData['date_of_LMP'] ?? '',
+                                      "maritalstatus":
+                                          fieldsData['maritalstatus'] ?? 0,
                                       "contact_number":
                                           fieldsData['contact_number'],
                                       "aadher_number":

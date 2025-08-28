@@ -44,7 +44,9 @@ class ReportListWidget extends StatelessWidget {
               '$value',
               maxLines: 2,
               textAlign: list.isEmpty ? TextAlign.left : TextAlign.center,
-              style: context.textFontWeight600.onFontSize(
+              style: key=='action'? context.textFontWeight600.onFontSize(
+                context.resources.fontSize.dp10,
+              ).onColor(context.resources.color.rejected).copyWith(decoration: TextDecoration.underline):context.textFontWeight600.onFontSize(
                 context.resources.fontSize.dp10,
               ),
             ),
