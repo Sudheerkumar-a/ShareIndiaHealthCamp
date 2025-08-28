@@ -39,8 +39,8 @@ class ScreeningDetailsEntity extends BaseEntity {
     final Map<String, dynamic> data = <String, dynamic>{};
     //data['action'] = action;
     data['date_of_camp'] = dateOfCamp;
-    data['mandal'] = mandal;
     data['district'] = district;
+    data['mandal'] = mandal;
     data['camp_location'] = campLocation;
     data['state'] = state;
     data['first_name'] = firstName;

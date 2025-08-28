@@ -16,6 +16,7 @@ const mobileRegx = r'^05[0-9]{8}$';
 const emailTemplatePath = 'assets/json/email_template.txt';
 const requestService = 'assets/json/request_service.json';
 
+final mandals = List<NameIDEntity>.empty(growable: true);
 final months = [
   NameIDEntity()
     ..id = 1

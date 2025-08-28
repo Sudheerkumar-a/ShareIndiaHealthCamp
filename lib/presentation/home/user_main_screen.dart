@@ -1,12 +1,17 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:dartz/dartz.dart' show cast;
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
+import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/data/local/app_settings_db.dart';
+import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
+import 'package:shareindia_health_camp/injection_container.dart';
+import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/side_bar.dart';
@@ -98,12 +103,28 @@ class _MainScreenState extends State<UserMainScreen> {
       },
       seletedItem: _selectedIndex.value,
     );
+
     UserMainScreen.onUnAuthorizedResponse.addListener(() {
       if (UserMainScreen.onUnAuthorizedResponse.value && context.mounted) {
         UserMainScreen.onUnAuthorizedResponse.value = false;
         logout(context);
       }
     });
+    if (mandals.isEmpty) {
+      sl<ServicesBloc>()
+          .getMandalList(
+            requestParams: {
+              'dist_id': UserCredentialsEntity.details(context).user?.district,
+            },
+          )
+          .then((value) {
+            if (value is ServicesStateSuccess) {
+              final mandals =
+                  cast<ListEntity>(value.responseEntity.entity).items;
+              mandals.addAll(mandals.cast<NameIDEntity>());
+            }
+          });
+    }
   }
 
   @override

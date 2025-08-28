@@ -1730,8 +1730,9 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                       "age": fieldsData['age'],
                                       "sex": fieldsData['sex'],
                                       "pregnancystatus":
-                                          fieldsData['pregnancystatus'],
-                                      "date_of_LMP": fieldsData['date_of_LMP'],
+                                          fieldsData['pregnancystatus'] ?? 0,
+                                      "date_of_LMP":
+                                          fieldsData['date_of_LMP'] ?? '',
                                       "contact_number":
                                           fieldsData['contact_number'],
                                       "aadher_number":

@@ -250,8 +250,9 @@ class DistrictWiseTotalModel extends BaseModel {
     return DistrictWiseTotalEntity()
       ..districtId = districtId
       ..districtName = districtName
-      ..mandalId=mandalId
-      ..mandalName=mandalName
+      ..mandalId = mandalId
+      ..mandalName = mandalName
+      ..totalClient = totalClient
       ..totalScreened = totalScreened
       ..hivReactive = hivReactive
       ..hypertension = hypertension
@@ -260,6 +261,6 @@ class DistrictWiseTotalModel extends BaseModel {
       ..hepatitisA = hepatitisA
       ..hepatitisB = hepatitisB
       ..hepatitisC = hepatitisC
-      ..stiCases=stiCases;
+      ..stiCases = stiCases;
   }
 }

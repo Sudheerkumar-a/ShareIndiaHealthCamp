@@ -44,8 +44,8 @@ class UserModel extends BaseModel {
     email = userJson['email'];
     role = userJson['role'];
     district = userJson['district'];
-    mandal = userJson['mandal'];
-    isAdmin = int.tryParse('${userJson['is_admin']??'0'}');
+    mandal = '${userJson['mandal']}';
+    isAdmin = int.tryParse('${userJson['is_admin']}');
   }
 
   @override
@@ -59,8 +59,8 @@ class UserModel extends BaseModel {
     userEntity.email = email;
     userEntity.role = role;
     userEntity.district = district;
-    userEntity.mandalId = int.tryParse(mandal??'');
-    userEntity.isAdmin =  isAdmin;
+    userEntity.mandalId = int.tryParse(mandal ?? '');
+    userEntity.isAdmin = isAdmin;
     return userEntity;
   }
 }

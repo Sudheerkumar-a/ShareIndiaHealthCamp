@@ -98,52 +98,70 @@ class UserDashboard extends BaseScreenWidget {
                               ),
                             ],
                           ),
-                         isAdmin? (FormEntity()
-                                ..type = 'collection'
-                                ..placeholder = filterTitle
-                                ..inputFieldData = {
-                                  'items':
-                                      districts
-                                          .map(
-                                            (item) =>
-                                                NameIDModel.fromDistrictsJson(
-                                                  item as Map<String, dynamic>,
-                                                ).toEntity(),
-                                          )
-                                          .toList()
-                                        ..add(
-                                          NameIDEntity()
-                                            ..id = 0
-                                            ..name = 'ALL',
-                                        ),
-                                }
-                                ..onDatachnage = (value) {
-                                  _onDistrictChanged.value = value.id;
-                                })
-                              .getWidget(context):FutureBuilder(future: _serviceBloc.getMandalList(requestParams: {'dist_id': UserCredentialsEntity.details(context).user?.district}), builder: (context,snapShot){
-                                final items = [NameIDEntity()
-                                            ..id = 0
-                                            ..name = 'ALL',];
-                                            final responseState = snapShot.data;
-                                  if(responseState is ServicesStateSuccess){
-                                    final mandals = cast<ListEntity>(
-                          responseState.responseEntity.entity,
-                        ).items;
+                          isAdmin
+                              ? (FormEntity()
+                                    ..type = 'collection'
+                                    ..placeholder = filterTitle
+                                    ..inputFieldData = {
+                                      'items':
+                                          districts
+                                              .map(
+                                                (item) =>
+                                                    NameIDModel.fromDistrictsJson(
+                                                      item
+                                                          as Map<
+                                                            String,
+                                                            dynamic
+                                                          >,
+                                                    ).toEntity(),
+                                              )
+                                              .toList()
+                                            ..add(
+                                              NameIDEntity()
+                                                ..id = 0
+                                                ..name = 'ALL',
+                                            ),
+                                    }
+                                    ..onDatachnage = (value) {
+                                      _onDistrictChanged.value = value.id;
+                                    })
+                                  .getWidget(context)
+                              : FutureBuilder(
+                                future: _serviceBloc.getMandalList(
+                                  requestParams: {
+                                    'dist_id':
+                                        UserCredentialsEntity.details(
+                                          context,
+                                        ).user?.district,
+                                  },
+                                ),
+                                builder: (context, snapShot) {
+                                  final items = [
+                                    NameIDEntity()
+                                      ..id = 0
+                                      ..name = 'ALL',
+                                  ];
+                                  final responseState = snapShot.data;
+                                  if (responseState is ServicesStateSuccess) {
+                                    final mandals =
+                                        cast<ListEntity>(
+                                          responseState.responseEntity.entity,
+                                        ).items;
                                     items.addAll(mandals.cast<NameIDEntity>());
                                   }
-                                return (FormEntity()
-                                ..type = 'collection'
-                                ..placeholder = filterTitle
-                                ..inputFieldData = {
-                                  'doSort':false,
-                                  'items':
-                                     items,
-                                }
-                                ..onDatachnage = (value) {
-                                  _onDistrictChanged.value = value.id;
-                                })
-                              .getWidget(context);
-                              }),
+                                  return (FormEntity()
+                                        ..type = 'collection'
+                                        ..placeholder = filterTitle
+                                        ..inputFieldData = {
+                                          'doSort': false,
+                                          'items': items,
+                                        }
+                                        ..onDatachnage = (value) {
+                                          _onDistrictChanged.value = value.id;
+                                        })
+                                      .getWidget(context);
+                                },
+                              ),
                           SizedBox(height: resources.dimen.dp10),
                           ValueListenableBuilder(
                             valueListenable: _onDistrictChanged,
@@ -152,7 +170,12 @@ class UserDashboard extends BaseScreenWidget {
                                   value == 0
                                       ? dashboardEntity.overallTotal
                                       : dashboardEntity.districtWiseTotal
-                                          ?.where((e) => isAdmin? (e.districtId == '$value'):(e.mandalId=='$value'))
+                                          ?.where(
+                                            (e) =>
+                                                isAdmin
+                                                    ? (e.districtId == '$value')
+                                                    : (e.mandalId == '$value'),
+                                          )
                                           .firstOrNull;
                               return Column(
                                 children: [
@@ -174,7 +197,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   radious: resources.dimen.dp10,
                                                 ).roundedCornerBox,
                                             child: Text.rich(
-                                              textAlign: TextAlign.end,
+                                              textAlign: TextAlign.center,
                                               TextSpan(
                                                 text:
                                                     '${resources.string.totalClient}\n',
@@ -191,7 +214,7 @@ class UserDashboard extends BaseScreenWidget {
                                                         .onFontSize(
                                                           resources
                                                               .fontSize
-                                                              .dp18,
+                                                              .dp20,
                                                         )
                                                         .onColor(
                                                           resources
@@ -220,7 +243,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   radious: resources.dimen.dp10,
                                                 ).roundedCornerBox,
                                             child: Text.rich(
-                                              textAlign: TextAlign.end,
+                                              textAlign: TextAlign.center,
                                               TextSpan(
                                                 text:
                                                     '${resources.string.totalScreened}\n',
@@ -237,7 +260,7 @@ class UserDashboard extends BaseScreenWidget {
                                                         .onFontSize(
                                                           resources
                                                               .fontSize
-                                                              .dp18,
+                                                              .dp20,
                                                         )
                                                         .onColor(
                                                           resources
@@ -272,7 +295,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   radious: resources.dimen.dp10,
                                                 ).roundedCornerBox,
                                             child: Text.rich(
-                                              textAlign: TextAlign.end,
+                                              textAlign: TextAlign.center,
                                               TextSpan(
                                                 text:
                                                     '${resources.string.hypertension}\n',
@@ -289,7 +312,7 @@ class UserDashboard extends BaseScreenWidget {
                                                         .onFontSize(
                                                           resources
                                                               .fontSize
-                                                              .dp18,
+                                                              .dp20,
                                                         )
                                                         .onColor(
                                                           resources
@@ -318,7 +341,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   radious: resources.dimen.dp10,
                                                 ).roundedCornerBox,
                                             child: Text.rich(
-                                              textAlign: TextAlign.end,
+                                              textAlign: TextAlign.center,
                                               TextSpan(
                                                 text:
                                                     '${resources.string.diabetes}\n',
@@ -327,15 +350,14 @@ class UserDashboard extends BaseScreenWidget {
                                                 children: [
                                                   TextSpan(
                                                     text:
-                                                        overalData
-                                                            ?.diabetes ??
+                                                        overalData?.diabetes ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600
                                                         .onFontSize(
                                                           resources
                                                               .fontSize
-                                                              .dp18,
+                                                              .dp20,
                                                         )
                                                         .onColor(
                                                           resources
@@ -371,7 +393,7 @@ class UserDashboard extends BaseScreenWidget {
                                                 ).roundedCornerBox,
                                             child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                                  CrossAxisAlignment.center,
                                               children: [
                                                 Text(
                                                   resources.string.hepatitis,
@@ -400,7 +422,7 @@ class UserDashboard extends BaseScreenWidget {
                                                                   .onFontSize(
                                                                     resources
                                                                         .fontSize
-                                                                        .dp18,
+                                                                        .dp20,
                                                                   )
                                                                   .onColor(
                                                                     resources
@@ -430,7 +452,7 @@ class UserDashboard extends BaseScreenWidget {
                                                                   .onFontSize(
                                                                     resources
                                                                         .fontSize
-                                                                        .dp18,
+                                                                        .dp20,
                                                                   )
                                                                   .onColor(
                                                                     resources
@@ -464,7 +486,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   radious: resources.dimen.dp10,
                                                 ).roundedCornerBox,
                                             child: Text.rich(
-                                              textAlign: TextAlign.end,
+                                              textAlign: TextAlign.center,
                                               TextSpan(
                                                 text:
                                                     '${resources.string.huvReactive}\n',
@@ -481,7 +503,7 @@ class UserDashboard extends BaseScreenWidget {
                                                         .onFontSize(
                                                           resources
                                                               .fontSize
-                                                              .dp18,
+                                                              .dp20,
                                                         )
                                                         .onColor(
                                                           resources
@@ -516,7 +538,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   radious: resources.dimen.dp10,
                                                 ).roundedCornerBox,
                                             child: Text.rich(
-                                              textAlign: TextAlign.end,
+                                              textAlign: TextAlign.center,
                                               TextSpan(
                                                 text: 'Syphilis\n',
                                                 style:
@@ -524,15 +546,14 @@ class UserDashboard extends BaseScreenWidget {
                                                 children: [
                                                   TextSpan(
                                                     text:
-                                                        overalData
-                                                            ?.syphilis ??
+                                                        overalData?.syphilis ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600
                                                         .onFontSize(
                                                           resources
                                                               .fontSize
-                                                              .dp18,
+                                                              .dp20,
                                                         )
                                                         .onColor(
                                                           resources
@@ -561,7 +582,7 @@ class UserDashboard extends BaseScreenWidget {
                                                   radious: resources.dimen.dp10,
                                                 ).roundedCornerBox,
                                             child: Text.rich(
-                                              textAlign: TextAlign.end,
+                                              textAlign: TextAlign.center,
                                               TextSpan(
                                                 text: 'STI Cases\n',
                                                 style:
@@ -569,15 +590,14 @@ class UserDashboard extends BaseScreenWidget {
                                                 children: [
                                                   TextSpan(
                                                     text:
-                                                        overalData
-                                                            ?.stiCases ??
+                                                        overalData?.stiCases ??
                                                         '',
                                                     style: context
                                                         .textFontWeight600
                                                         .onFontSize(
                                                           resources
                                                               .fontSize
-                                                              .dp18,
+                                                              .dp20,
                                                         )
                                                         .onColor(
                                                           resources

@@ -94,7 +94,7 @@ class DistrictWiseTotalEntity extends BaseEntity {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['district'] = districtName??mandalName;
+    data['district'] = districtName ?? mandalName;
     data['totalScreened'] = totalScreened;
     data['hiv'] = hivReactive ?? '';
     data['diabetes'] = diabetes;

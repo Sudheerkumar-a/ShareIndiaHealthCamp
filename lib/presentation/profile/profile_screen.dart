@@ -159,7 +159,7 @@ class ProfileScreen extends BaseScreenWidget {
                       ),
                     ),
                     SizedBox(height: resources.dimen.dp15),
-                    if ((user?.mandalId ??0) == 0) ...[
+                    if ((user?.mandalId ?? 0) != 0) ...[
                       Text(
                         'Mandal',
                         style: context.textFontWeight400.onFontSize(
@@ -167,7 +167,11 @@ class ProfileScreen extends BaseScreenWidget {
                         ),
                       ),
                       Text(
-                        '${user?.mandalId?? ''}',
+                        mandals
+                                .where((e) => e.id == user?.mandalId)
+                                .firstOrNull
+                                ?.name ??
+                            '',
                         style: context.textFontWeight600.onFontSize(
                           resources.fontSize.dp12,
                         ),
