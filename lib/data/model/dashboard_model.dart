@@ -229,19 +229,19 @@ class DistrictWiseTotalModel extends BaseModel {
   DistrictWiseTotalModel();
 
   DistrictWiseTotalModel.fromJson(Map<String, dynamic> json) {
-    districtId = json['district_id'];
-    districtName = json['district_name'];
+    districtId = json['district_id'] ?? json['dist_id'];
+    districtName = json['district_name'] ?? json['dist_name'];
     mandalId = json['mandal_id'];
     mandalName = json['mandal_name'];
     totalClient = json['total_client'];
     totalScreened = json['total_screened'];
     hivReactive = json['hiv_reactive'];
-    hypertension = json['hypertension'];
-    diabetes = json['diabetes'];
-    syphilis = json['syphilis'];
+    hypertension = json['hypertension'] ?? json['hypertension_referred'];
+    diabetes = json['diabetes'] ?? json['diabetes_abnormal'];
+    syphilis = json['syphilis'] ?? json['syphilis_positive'];
     hepatitisA = json['hepatitis_a'];
-    hepatitisB = json['hepatitis_b'];
-    hepatitisC = json['hepatitis_c'];
+    hepatitisB = json['hepatitis_b'] ?? json['hep_b_positive'];
+    hepatitisC = json['hepatitis_c'] ?? json['hep_c_positive'];
     stiCases = json['sti_cases'];
   }
 
