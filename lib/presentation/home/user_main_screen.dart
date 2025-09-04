@@ -125,6 +125,11 @@ class _MainScreenState extends State<UserMainScreen> {
             }
           });
     }
+    Future.delayed(const Duration(milliseconds: 400), () {
+      if (mounted) {
+        checkIsUpdateAvailabe(context);
+      }
+    });
   }
 
   @override

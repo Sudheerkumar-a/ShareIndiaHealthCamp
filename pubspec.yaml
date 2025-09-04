@@ -68,6 +68,7 @@ dependencies:
   dropdown_search: ^6.0.2
   google_maps_flutter: ^2.12.3
   geolocator: ^14.0.2
+  app_version_update: ^6.1.0
 
 dev_dependencies:
   flutter_test:

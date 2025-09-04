@@ -17,8 +17,10 @@ import 'package:map_launcher/map_launcher.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/data/local/user_data_db.dart';
 import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/update_dialog_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mime/mime.dart';
+import 'package:app_version_update/app_version_update.dart';
 
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as excel;
 
@@ -448,4 +450,18 @@ Future<bool> exportToExcel(ExportDataEntity exportData) async {
     return false;
   }
   return true;
+}
+
+checkIsUpdateAvailabe(BuildContext context) {
+  AppVersionUpdate.checkForUpdates().then((data) {
+    if (data.canUpdate == true && context.mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return const UpdateDialogWidget();
+        },
+      );
+    }
+  });
 }
