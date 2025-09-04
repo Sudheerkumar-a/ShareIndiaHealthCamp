@@ -110,7 +110,7 @@ launchAppUrl() {
   if (Platform.isAndroid || Platform.isIOS) {
     final url = Uri.parse(
       Platform.isAndroid
-          ? "market://details?id=uaq.gov.shareindia"
+          ? "market://details?id=com.ihs.apsacs"
           : "https://apps.apple.com/app/id1063110068",
     );
     launchUrl(url, mode: LaunchMode.externalApplication);
