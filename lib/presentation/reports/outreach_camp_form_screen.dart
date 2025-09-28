@@ -88,13 +88,13 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
     if (step1formFields.isEmpty) {
       final campLocations =
           [
-                {'id': '1', 'name': 'CHC'},
-                {'id': '1', 'name': 'PHC'},
-                {'id': '2', 'name': 'CHC'},
-                {'id': '3', 'name': 'Sub centre'},
-                {'id': '4', 'name': 'Anganwadi'},
+                {'id': '1', 'name': 'VHC'},
+                {'id': '2', 'name': 'Sub centre'},
+                {'id': '3', 'name': 'Anganwadi'},
+                {'id': '4', 'name': 'PHC'},
                 {'id': '5', 'name': 'UPHC'},
-                {'id': '6', 'name': 'Other (specify)'},
+                {'id': '6', 'name': 'CHC'},
+                {'id': '7', 'name': 'Other (specify)'},
               ]
               .map(
                 (item) =>
@@ -186,6 +186,21 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
             fieldsData['date_of_camp'] = value;
             _onDataChanged(false);
           },
+        // FormEntity()
+        //   ..name = 'image_camp'
+        //   ..labelEn = 'Photo Of Camp'
+        //   ..labelTe = 'Photo Of Camp'
+        //   ..type = 'image'
+        //   ..placeholderEn = 'Photo Of Camp'
+        //   ..fieldValue = fieldsData['image_camp']
+        //   ..validation = (FormValidationEntity()..isRequired = true)
+        //   ..messages =
+        //       (FormMessageEntity()..requiredEn = 'Please take Photo Of Camp')
+        //   ..suffixIcon = DrawableAssets.icUpload
+        //   ..onDatachnage = (value) {
+        //     fieldsData['image_camp'] = value;
+        //     _onDataChanged(false);
+        //   },
         FormEntity()
           ..name = 'district'
           ..labelEn = 'District'
@@ -227,47 +242,72 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..type = 'collection'
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Mandal'
+          ..canSearch = true
           ..onDatachnage = (value) {
+            final child =
+                step1formFields
+                    .where((item) => item.name == 'village')
+                    .firstOrNull;
+            if (child != null) {
+              child.inputFieldData?.remove('items');
+              child.url = villageListApiUrl;
+              child.urlInputData = {'mandal_id': value.id};
+              child.inputFieldData = null;
+              child.fieldValue = null;
+            }
             fieldsData['mandal'] = value.id;
-            _onDataChanged(false);
+            _onDataChanged(true);
           },
         FormEntity()
           ..name = 'village'
           ..labelEn = 'Village'
           ..labelTe = 'Village'
-          ..type = 'text'
-          // ..inputFieldData = {
-          //   'items':
-          //       [
-          //             {'id': 1, 'name': 'Village1'},
-          //             {'id': 2, 'name': 'Village2'},
-          //             {'id': 3, 'name': 'Village3'},
-          //             {'id': 4, 'name': 'Village4'},
-          //           ]
-          //           .map(
-          //             (item) =>
-          //                 NameIDModel.fromDistrictsJson(
-          //                   item as Map<String, dynamic>,
-          //                 ).toEntity(),
-          //           )
-          //           .toList(),
-          // }
-          ..fieldValue = fieldsData['village']
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Enter Village'
-                ..requiredTe = 'Please Enter Village'
-                ..regexEn = 'Please Enter Valid Village'
-                ..regexTe = 'Please Enter Valid Village')
-          ..placeholderEn = 'Enter Village'
+          ..type = 'collection'
+          ..canSearch = true
+          ..requestModel = ListModel.fromvillageJson
+          ..validation = (FormValidationEntity()..isRequired = true)
+          ..placeholderEn = 'Select Village'
           ..onDatachnage = (value) {
-            fieldsData['village'] = value;
+            fieldsData['village'] = value.id;
             _onDataChanged(false);
           },
+        // FormEntity()
+        //   ..name = 'village'
+        //   ..labelEn = 'Village'
+        //   ..labelTe = 'Village'
+        //   ..type = 'text'
+        //   // ..inputFieldData = {
+        //   //   'items':
+        //   //       [
+        //   //             {'id': 1, 'name': 'Village1'},
+        //   //             {'id': 2, 'name': 'Village2'},
+        //   //             {'id': 3, 'name': 'Village3'},
+        //   //             {'id': 4, 'name': 'Village4'},
+        //   //           ]
+        //   //           .map(
+        //   //             (item) =>
+        //   //                 NameIDModel.fromDistrictsJson(
+        //   //                   item as Map<String, dynamic>,
+        //   //                 ).toEntity(),
+        //   //           )
+        //   //           .toList(),
+        //   // }
+        //   ..fieldValue = fieldsData['village']
+        //   ..validation =
+        //       (FormValidationEntity()
+        //         ..isRequired = true
+        //         ..regex = nameRegExp)
+        //   ..messages =
+        //       (FormMessageEntity()
+        //         ..requiredEn = 'Please Enter Village'
+        //         ..requiredTe = 'Please Enter Village'
+        //         ..regexEn = 'Please Enter Valid Village'
+        //         ..regexTe = 'Please Enter Valid Village')
+        //   ..placeholderEn = 'Enter Village'
+        //   ..onDatachnage = (value) {
+        //     fieldsData['village'] = value;
+        //     _onDataChanged(false);
+        //   },
         FormEntity()
           ..name = 'camp_location'
           ..label = resources.string.locationoftheCamp
@@ -287,26 +327,27 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..fieldValue = selectedCamp
           ..inputFieldData = {'items': campLocations, 'doSort': false}
           ..onDatachnage = (value) {
-            // final child =
-            //     step1formFields
-            //         .where((item) => item.name == 'camp_location_other')
-            //         .firstOrNull;
-            // if (value.id == 6) {
-            //   if (child != null) {
-            //     child.isHidden = false;
-            //   }
-            // } else {
-            //   if (child != null) {
-            //     child.isHidden = true;
-            //     child.fieldValue = null;
-            //   }
-            // }
+            final child =
+                step1formFields
+                    .where((item) => item.name == 'camp_location_other')
+                    .firstOrNull;
+            if (value.id == 7) {
+              if (child != null) {
+                child.isHidden = false;
+              }
+            } else {
+              if (child != null) {
+                child.isHidden = true;
+                child.fieldValue = null;
+              }
+            }
             fieldsData['camp_location'] = value.name;
             _onDataChanged(true);
           },
         FormEntity()
           ..name = 'camp_location_other'
           ..type = 'text'
+          ..isHidden = true
           ..validation =
               (FormValidationEntity()
                 ..isRequired = true
@@ -323,6 +364,49 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..fieldValue = fieldsData['camp_location']
           ..onDatachnage = (value) {
             fieldsData['camp_location_other'] = value;
+            _onDataChanged(false);
+          },
+        FormEntity()
+          ..name = 'camp_local_poc_name'
+          ..type = 'text'
+          ..validation =
+              (FormValidationEntity()
+                ..isRequired = true
+                ..regex = nameRegExp)
+          ..messages =
+              (FormMessageEntity()
+                ..requiredEn = 'Please Enter Local POC (ASHA/ANM) Name'
+                ..requiredTe = 'Please Enter Local POC (ASHA/ANM) Name'
+                ..regexEn = 'Please Enter Valid Local POC (ASHA/ANM) Name'
+                ..regexTe = 'Please Enter Valid Local POC (ASHA/ANM) Name')
+          ..label = 'Local POC (ASHA/ANM) Name'
+          ..placeholderEn = 'Local POC (ASHA/ANM) Name'
+          ..placeholderTe = 'Local POC (ASHA/ANM) Name'
+          ..fieldValue = fieldsData['camp_local_poc_name']
+          ..onDatachnage = (value) {
+            fieldsData['camp_local_poc_name'] = value;
+            _onDataChanged(false);
+          },
+        FormEntity()
+          ..name = 'camp_local_poc_number'
+          ..type = 'number'
+          ..validation =
+              (FormValidationEntity()
+                ..isRequired = true
+                ..maxLength = 10
+                ..regex = numberRegExp)
+          ..messages =
+              (FormMessageEntity()
+                ..requiredEn = 'Please Enter Local POC (ASHA/ANM) Number'
+                ..requiredTe = 'Please Enter Local POC (ASHA/ANM) Number'
+                ..regexEn = 'Please Enter Valid Local POC (ASHA/ANM) Number'
+                ..regexTe = 'Please Enter Valid Local POC (ASHA/ANM) Number')
+          ..label = 'Local POC (ASHA/ANM) Number'
+          ..placeholderEn = 'Local POC (ASHA/ANM) Number'
+          ..placeholderTe = 'Local POC (ASHA/ANM) Number'
+          ..fieldValue = fieldsData['camp_local_poc_number']
+          ..onDatachnage = (value) {
+            fieldsData['camp_local_poc_number'] = value;
             _onDataChanged(false);
           },
       ]);
@@ -529,14 +613,9 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'Surname'
           ..labelTe = 'Surname'
           ..type = 'text'
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
+          ..validation = (FormValidationEntity()..regex = nameRegExp)
           ..messages =
               (FormMessageEntity()
-                ..requiredEn = 'Please Enter Surname'
-                ..requiredTe = 'Please Enter Surname'
                 ..regexEn = 'Please Enter Valid Surname'
                 ..regexTe = 'Please Enter Valid Surname')
           ..placeholderEn = 'Surname'
@@ -582,53 +661,19 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
               gender.where((e) => e.name == fieldsData['sex']).firstOrNull
           ..onDatachnage = (value) {
             final child1 =
-                step2formFields
+                step5formFields
                     .where((item) => ['pregnancystatus'].contains(item.name))
                     .firstOrNull;
             child1?.isHidden = value.id != 2;
             child1?.fieldValue = null;
             final child2 =
-                step2formFields
+                step5formFields
                     .where((item) => ['date_of_LMP'].contains(item.name))
                     .firstOrNull;
             child2?.isHidden = true;
             child2?.fieldValue = null;
             fieldsData['sex'] = value.name;
             _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'pregnancystatus'
-          ..type = 'confirmcheck'
-          ..verticalSpace = 0
-          ..horizontalSpace = 0
-          ..labelEn = 'Pregnancy status'
-          ..labelTe = 'Pregnancy status'
-          ..isHidden = fieldsData['sex'] == 'F'
-          ..fieldValue = fieldsData['pregnancystatus']
-          ..onDatachnage = (value) {
-            final child =
-                step2formFields
-                    .where((item) => item.name == 'date_of_LMP')
-                    .firstOrNull;
-            child?.isHidden = !value;
-            fieldsData['pregnancystatus'] = value == true ? 1 : 0;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'date_of_LMP'
-          ..labelEn = 'Date of LMP'
-          ..labelTe = 'Date of LMP'
-          ..type = 'date'
-          ..isHidden = fieldsData['pregnancystatus'] != 1
-          ..placeholderEn = 'dd/MM/yyyy'
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..messages =
-              (FormMessageEntity()..requiredEn = 'Please Enter Date of LMP')
-          ..suffixIcon = DrawableAssets.icCalendar
-          ..fieldValue = fieldsData['date_of_LMP']
-          ..onDatachnage = (value) {
-            fieldsData['date_of_LMP'] = value;
-            _onDataChanged(false);
           },
         FormEntity()
           ..name = 'maritalstatus'
@@ -756,6 +801,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'Mandal'
           ..labelTe = 'Mandal'
           ..type = 'collection'
+          ..canSearch = true
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Mandal'
           ..onDatachnage = (value) {
@@ -1063,9 +1109,9 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
     if (step5formFields.isEmpty) {
       final hivResults =
           [
-                {'id': '1', 'name': 'Reactive'},
-                {'id': '2', 'name': 'Non Reactive'},
-                {'id': '3', 'name': 'Not Done'},
+                {'id': '1', 'name': 'Positive'},
+                {'id': '2', 'name': 'Reactive'},
+                {'id': '3', 'name': 'Negative'},
               ]
               .map(
                 (item) =>
@@ -1081,26 +1127,78 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
       step5formFields.addAll([
         FormEntity()
           ..name = 'step5header'
-          ..labelEn = 'HIV Screening'
-          ..labelTe = 'HIV Screening'
+          ..labelEn = 'HIV testing details'
+          ..labelTe = 'HIV testing details'
           ..type = 'labelheader',
+        FormEntity()
+          ..name = 'pregnancystatus'
+          ..type = 'confirmcheck'
+          ..verticalSpace = 0
+          ..horizontalSpace = 0
+          ..labelEn = 'Pregnancy status'
+          ..labelTe = 'Pregnancy status'
+          ..isHidden = fieldsData['sex'] != 'F'
+          ..fieldValue = fieldsData['pregnancystatus']
+          ..onDatachnage = (value) {
+            final child =
+                step5formFields
+                    .where((item) => item.name == 'date_of_LMP')
+                    .firstOrNull;
+            child?.isHidden = !value;
+            fieldsData['pregnancystatus'] = value == true ? 1 : 0;
+            _onDataChanged(true);
+          },
+        FormEntity()
+          ..name = 'date_of_LMP'
+          ..labelEn = 'Date of LMP'
+          ..labelTe = 'Date of LMP'
+          ..type = 'date'
+          ..isHidden = fieldsData['pregnancystatus'] != 1
+          ..placeholderEn = 'dd/MM/yyyy'
+          ..validation = (FormValidationEntity()..isRequired = true)
+          ..messages =
+              (FormMessageEntity()..requiredEn = 'Please Enter Date of LMP')
+          ..suffixIcon = DrawableAssets.icCalendar
+          ..fieldValue = fieldsData['date_of_LMP']
+          ..onDatachnage = (value) {
+            fieldsData['date_of_LMP'] = value;
+            _onDataChanged(false);
+          },
         FormEntity()
           ..name = 'rapidscreeningoffered'
           ..type = 'confirmcheck'
-          ..labelEn = 'Rapid Screening Offered?'
-          ..labelTe = 'Rapid Screening Offered'
+          ..labelEn = 'HIV test done?'
+          ..labelTe = 'HIV test done?'
           ..fieldValue =
               fieldsData['hiv']?['offered'] != null
                   ? (fieldsData['hiv']?['offered'] == 1)
                   : null
           ..onDatachnage = (value) {
-            final child =
-                step5formFields
-                    .where((item) => item.name == 'hiveresult')
-                    .firstOrNull;
-            if (child != null) {
-              child.isHidden = !value;
-              child.fieldValue = null;
+            if (!value) {
+              final childrens = step5formFields.where(
+                (item) => [
+                  'hiveresult',
+                  'alreadAtART',
+                  'alreadAtARTName',
+                  'referredtoART',
+                  'referredtoICTC'
+                      'ictcnames',
+                ].contains(item.name),
+              );
+              for (var child in childrens) {
+                child.isHidden = !value;
+                child.fieldValue = null;
+              }
+            } else {
+              final child =
+                  step5formFields
+                      .where((item) => item.name == 'hiveresult')
+                      .firstOrNull;
+
+              if (child != null) {
+                child.isHidden = !value;
+                child.fieldValue = null;
+              }
             }
             fieldsData['hiv'] = {};
             fieldsData['hiv']?['offered'] = value ? 1 : 0;
@@ -1122,7 +1220,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                     .where((item) => item.name == 'alreadAtART')
                     .firstOrNull;
             if (child != null) {
-              if (value.id == 1) {
+              if (value.id == 1 || value.id == 2) {
                 child.isHidden = false;
                 child.fieldValue = null;
               } else {
@@ -1130,7 +1228,20 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                 child.fieldValue = null;
               }
             }
+            final childrens = step5formFields.where(
+              (item) => [
+                'alreadAtARTName',
+                'referredtoICTC',
+                'ictcnames',
+                'confirmedatICTC',
+                'referredtoART',
+              ].contains(item.name),
+            );
             fieldsData['hiv']['result'] = value.name;
+            for (var child in childrens) {
+              child.isHidden = true;
+              child.fieldValue = null;
+            }
             _onDataChanged(true);
           },
 
@@ -1138,22 +1249,30 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..name = 'alreadAtART'
           ..type = 'confirmcheck'
           ..label = 'Already on ART?'
-          ..isHidden = fieldsData['hiv']?['result'] != 'Reactive'
+          ..isHidden = fieldsData['hiv']?['result'] ?? 'Negative' == 'Negative'
           ..fieldValue = fieldsData['hiv']?['alreadAtART'] == 1
           ..onDatachnage = (value) {
             final child =
                 step5formFields
                     .where((item) => item.name == 'alreadAtARTName')
                     .firstOrNull;
-
             child?.isHidden = !value;
             child?.fieldValue = null;
-            final child2 =
-                step5formFields
-                    .where((item) => item.name == 'referredtoICTC')
-                    .firstOrNull;
-            child2?.isHidden = value;
-            child2?.fieldValue = null;
+            if (fieldsData['hiv']?['result'] == 'Reactive') {
+              final child2 =
+                  step5formFields
+                      .where((item) => item.name == 'referredtoICTC')
+                      .firstOrNull;
+              child2?.isHidden = value;
+              child2?.fieldValue = null;
+            } else {
+              final child2 =
+                  step5formFields
+                      .where((item) => item.name == 'referredtoART')
+                      .firstOrNull;
+              child2?.isHidden = value;
+              child2?.fieldValue = null;
+            }
             fieldsData['hiv']['alreadAtART'] = value ? 1 : 0;
             _onDataChanged(true);
           },
@@ -1198,29 +1317,37 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..name = 'ictcnames'
           ..labelEn = 'ICTC Name'
           ..labelTe = 'ICTC Name'
-          ..type = 'text'
+          ..type = 'collection'
           ..isHidden = fieldsData['hiv']?['referredICTC'] != 1
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'ICTC Name'
-          // ..inputFieldData = {
-          //   'items':
-          //       [
-          //             {'id': '1', 'name': 'ICTC-1'},
-          //             {'id': '2', 'name': 'ICTC-2'},
-          //             {'id': '3', 'name': 'ICTC-3'},
-          //           ]
-          //           .map(
-          //             (item) =>
-          //                 NameIDModel.fromDistrictsJson(
-          //                   item as Map<String, dynamic>,
-          //                 ).toEntity(),
-          //           )
-          //           .toList(),
-          //   'doSort': false,
-          // }
+          ..inputFieldData = {
+            'items':
+                [
+                      {'id': '1', 'name': 'Anakapalli'},
+                      {'id': '2', 'name': 'Chittoor'},
+                      {'id': '3', 'name': 'Visakhapatnam'},
+                      {'id': '4', 'name': 'Anantapur'},
+                      {'id': '5', 'name': 'Eluru'},
+                      {'id': '6', 'name': 'SPSR Nellore'},
+                      {'id': '7', 'name': 'NTR'},
+                      {'id': '8', 'name': 'Kakinada'},
+                      {'id': '9', 'name': 'Guntur'},
+                      {'id': '10', 'name': 'Vizianagaram'},
+                      {'id': '11', 'name': 'Srikakulam'},
+                    ]
+                    .map(
+                      (item) =>
+                          NameIDModel.fromDistrictsJson(
+                            item as Map<String, dynamic>,
+                          ).toEntity(),
+                    )
+                    .toList(),
+            'doSort': false,
+          }
           ..fieldValue = fieldsData['hiv']?['nameOfICTC']
           ..onDatachnage = (value) {
-            fieldsData['hiv']['nameOfICTC'] = value;
+            fieldsData['hiv']['nameOfICTC'] = value.name;
             _onDataChanged(false);
           },
         FormEntity()
@@ -1464,7 +1591,34 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                   ? fieldsData['syndromicreferred'] == 1
                   : null
           ..onDatachnage = (value) {
+            final child =
+                step6formFields
+                    .where((item) => item.name == 'treatmentprovided')
+                    .firstOrNull;
+            child?.isHidden = !value;
             fieldsData['syndromicreferred'] = value ? 1 : 0;
+            _onDataChanged(true);
+          },
+        FormEntity()
+          ..name = 'treatmentprovided'
+          ..isHidden = fieldsData['syndromicreferred'] != 1
+          ..labelEn = 'Treatment Provided'
+          ..labelTe = 'Treatment Provided'
+          ..type = 'text'
+          ..validation =
+              (FormValidationEntity()
+                ..isRequired = true
+                ..regex = nameRegExp)
+          ..messages =
+              (FormMessageEntity()
+                ..requiredEn = 'Please Enter Treatment Provided'
+                ..requiredTe = 'Please Enter Treatment Provided'
+                ..regexEn = 'Please Enter Valid Treatment Provided'
+                ..regexTe = 'Please Enter Valid Treatment Provided')
+          ..placeholderEn = 'Treatment Provided'
+          ..placeholderTe = 'Treatment Provided'
+          ..onDatachnage = (value) {
+            fieldsData['treatmentprovided'] = value;
             _onDataChanged(false);
           },
         FormEntity()
@@ -1695,10 +1849,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                         ],
                         InkWell(
                           onTap: () async {
-                            // if (!isDataValid ||
-                            //     _formKey.currentState?.validate() != true) {
-                            //   return;
-                            // }
+                            if (!isDataValid ||
+                                _formKey.currentState?.validate() != true) {
+                              return;
+                            }
 
                             if (!isLastStep) {
                               _stepNotifier.value = _stepNotifier.value + 1;
@@ -1724,10 +1878,15 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                       "district": fieldsData['district'],
                                       "camp_location":
                                           fieldsData['camp_location'],
-                                      "village":
-                                          fieldsData['village'],
+                                      "village": fieldsData['village'],
                                       "camp_village":
                                           fieldsData['camp_location_other'],
+                                      "camp_local_poc_number":
+                                          fieldsData['camp_local_poc_number'],
+                                      "camp_local_poc_name":
+                                          fieldsData['camp_local_poc_name'],
+                                      "treatmentprovided":
+                                          fieldsData['treatmentprovided'],
                                       "state": "Andhra Pradesh",
                                       "first_name": fieldsData['first_name'],
                                       "last_name": fieldsData['last_name'],

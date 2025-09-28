@@ -100,12 +100,13 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
           ..labelTe = 'Screened'
           ..fieldValue = data["screened"] != null ? data["screened"] == 1 : null
           ..onDatachnage = (value) {
-            final childrens = items.sublist(1, items.length - 1);
+            final childrens = items.sublist(1, items.length-(value?1:0));
             for (var child in childrens) {
               child.isHidden = !value;
               child.fieldValue = null;
             }
             data["screened"] = value ? 1 : 0;
+            data["referred"] = null;
             widget.onSelected.call(data);
             setState(() {});
           },
@@ -146,8 +147,8 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
                   items.where((item) => item.name == 'referred').firstOrNull;
               final isHiiden = child?.isHidden;
               child?.isHidden =
-                  ((int.tryParse(value) ?? 0) <= 140 &&
-                      (int.tryParse(data["diastolic"] ?? '0') ?? 0) <= 90);
+                  ((int.tryParse(value) ?? 0) <= 160 &&
+                      (int.tryParse(data["diastolic"] ?? '0') ?? 0) <= 100);
               child?.fieldValue = null;
               data["systolic"] = value;
               widget.onSelected.call(data);

@@ -42,6 +42,15 @@ class ListModel extends BaseModel {
     }
   }
 
+  ListModel.fromvillageJson(Map<String, dynamic> json) {
+    final response = json['data']?['villages'];
+    if (response != null) {
+      response.forEach((v) {
+        items.add(NameIDModel.fromMandalJson(v).toEntity());
+      });
+    }
+  }
+
   ListModel.fromAgents(Map<String, dynamic> json) {
     final response = json['data']?['data'];
     if (response != null) {
@@ -77,8 +86,8 @@ class NameIDModel extends BaseModel {
 
   factory NameIDModel.fromMandalJson(Map<String, dynamic> json) {
     var nameIDModel = NameIDModel();
-    nameIDModel.id = int.tryParse(json['mandal_id']);
-    nameIDModel.name = json['mandal_name'];
+    nameIDModel.id = int.tryParse(json['mandal_id']??json['vilage_id']);
+    nameIDModel.name = json['mandal_name']??json['vilagename'];
     return nameIDModel;
   }
 

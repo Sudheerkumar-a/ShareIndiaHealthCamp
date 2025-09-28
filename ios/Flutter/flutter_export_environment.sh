@@ -1,13 +1,12 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=D:\Users\sudheer.akula\flutter_windows_3.19.5-stable\flutter"
-export "FLUTTER_APPLICATION_PATH=D:\Users\sudheer.akula\Documents\GitHub\ShareIndiaHealthCamp"
+export "FLUTTER_ROOT=/Users/mac/Documents/SDKs/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/mac/Documents/GitHub/ShareIndiaHealthCamp"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-export "FLUTTER_TARGET=lib\main.dart"
+export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
-export "FLUTTER_BUILD_NUMBER=10"
-export "FLUTTER_CLI_BUILD_MODE=debug"
+export "FLUTTER_BUILD_NUMBER=14"
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"

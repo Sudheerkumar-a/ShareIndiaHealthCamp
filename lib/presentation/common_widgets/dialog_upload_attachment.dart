@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
@@ -28,7 +29,7 @@ class DialogUploadAttachmentWidget extends StatelessWidget {
     String fileName = '';
     String filePath = '';
     Uint8List? fileBytes;
-    // if (selectedOption == UploadOptions.file) {
+    if (selectedOption == UploadOptions.file) {
     FilePickerResult? result;
     if (allowedExtensions.isNotEmpty) {
       result = await FilePicker.platform.pickFiles(
@@ -46,22 +47,22 @@ class DialogUploadAttachmentWidget extends StatelessWidget {
         fileBytes = result.files.first.bytes;
       }
     }
-    // } else {
-    //   try {
-    //     final ImagePicker picker = ImagePicker();
-    //     final XFile? pickedFile = await picker.pickImage(
-    //       source: selectedOption == UploadOptions.takephoto
-    //           ? ImageSource.camera
-    //           : ImageSource.gallery,
-    //       maxWidth: 1024,
-    //       maxHeight: 1024,
-    //     );
-    //     fileName = pickedFile?.name ?? '';
-    //     filePath = pickedFile?.path ?? '';
-    //   } catch (e) {
-    //     printLog(e.toString());
-    //   }
-    // }
+    } else {
+      try {
+        final ImagePicker picker = ImagePicker();
+        final XFile? pickedFile = await picker.pickImage(
+          source: selectedOption == UploadOptions.takephoto
+              ? ImageSource.camera
+              : ImageSource.gallery,
+          maxWidth: 1024,
+          maxHeight: 1024,
+        );
+        fileName = pickedFile?.name ?? '';
+        filePath = pickedFile?.path ?? '';
+      } catch (e) {
+        //printLog(e.toString());
+      }
+    }
     if (filePath.isNotEmpty) {
       File file = File(filePath);
       if (file.lengthSync() <= maxSize * maxUploadFilesize) {

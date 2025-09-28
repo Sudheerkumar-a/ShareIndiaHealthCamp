@@ -10,6 +10,8 @@ import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/checkbox_list_input_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/dialog_upload_attachment.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_search_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/location_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/multi_select_dropdown_widget.dart';
@@ -86,6 +88,21 @@ extension FieldEntityExtension on FormEntity {
                           selectedItems:
                               fieldValue ??
                               List<NameIDEntity>.empty(growable: true),
+                          callback: (value) async {
+                            fieldValue = value;
+                            onDatachnage?.call(value);
+                          },
+                        )
+                        : canSearch == true
+                        ? DropdownSearchWidget<NameIDEntity>(
+                          isEnabled: isEnabled ?? true,
+                          list: inputFieldData?['items'] ?? [],
+                          height: resources.dimen.dp27,
+                          labelText: getLabel,
+                          errorMessage: isMandetory ? getLabel : '',
+                          isMandetory: isMandetory,
+                          hintText: getPlaceholder,
+                          selectedValue: fieldValue,
                           callback: (value) async {
                             fieldValue = value;
                             onDatachnage?.call(value);
@@ -337,6 +354,9 @@ extension FieldEntityExtension on FormEntity {
                   validation?.extensions?.replaceAll('.', '').split(', ') ?? [],
               maxSize: validation?.maxSize ?? 1,
               selectedFileData: inputFieldData,
+              fillColor: resources.color.colorWhite,
+              fileType: UploadOptions.takephoto,
+              borderSide: BorderSide(),
               onSelected: (uploadResponseEntity) async {
                 if (uploadResponseEntity?.documentData != null) {
                   uploadResponseEntity?.documentData = uploadResponseEntity

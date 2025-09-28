@@ -53,7 +53,7 @@ class AgentListScreen extends BaseScreenWidget {
               AddFieldAgentScreen.start(context);
             },
             child: ActionButtonWidget(
-              text: 'Add Field Agent',
+              text: 'Add M-ICTC counsellor/LT',
               radious: resources.dimen.dp15,
               textSize: resources.fontSize.dp12,
               padding: EdgeInsets.symmetric(

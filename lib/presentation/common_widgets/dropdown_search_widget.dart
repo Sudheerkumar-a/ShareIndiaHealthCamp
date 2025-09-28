@@ -76,7 +76,7 @@ class DropdownSearchWidget<T extends Object> extends StatelessWidget {
                 color: context.resources.color.sideBarItemUnselected,
                 width: 1,
               ),
-              borderRadius: 0,
+              borderRadius: 10,
             );
           },
           optionsViewBuilder:

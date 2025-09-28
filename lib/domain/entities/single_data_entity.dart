@@ -45,6 +45,7 @@ class FormEntity extends BaseEntity {
   String? suffixIcon;
   bool? repeated;
   bool? multi;
+  bool? canSearch;
   bool? isHidden;
   bool? isEnabled;
   bool? timeOnly;
