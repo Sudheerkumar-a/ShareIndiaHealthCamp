@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:math';
 
 import 'package:dartz/dartz.dart';
@@ -16,6 +18,7 @@ import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
+import 'package:shareindia_health_camp/presentation/home/filter_by_category_screen.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 
 class UserDashboard extends BaseScreenWidget {
@@ -23,6 +26,20 @@ class UserDashboard extends BaseScreenWidget {
   final _serviceBloc = sl<ServicesBloc>();
   final _onMonthChanged = ValueNotifier('');
   final _onDistrictChanged = ValueNotifier(0);
+  int? districtId;
+  int? mandalId;
+  _navigateToFilterScreen(BuildContext context, int category, bool isAdmin) {
+    FilterByCategoryScreen.start(
+      context,
+      category,
+      districtId:
+          isAdmin
+              ? districtId
+              : UserCredentialsEntity.details(context).user?.districtId,
+      mandalId: mandalId,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
@@ -123,6 +140,7 @@ class UserDashboard extends BaseScreenWidget {
                                             ),
                                     }
                                     ..onDatachnage = (value) {
+                                      districtId = value.id;
                                       _onDistrictChanged.value = value.id;
                                     })
                                   .getWidget(context)
@@ -157,6 +175,7 @@ class UserDashboard extends BaseScreenWidget {
                                           'items': items,
                                         }
                                         ..onDatachnage = (value) {
+                                          mandalId = value.id;
                                           _onDistrictChanged.value = value.id;
                                         })
                                       .getWidget(context);
@@ -183,92 +202,112 @@ class UserDashboard extends BaseScreenWidget {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: Container(
-                                            height: double.infinity,
-                                            padding: EdgeInsets.all(
-                                              resources.dimen.dp10,
-                                            ),
-                                            decoration:
-                                                BackgroundBoxDecoration(
-                                                  boxColor:
-                                                      resources
-                                                          .color
-                                                          .colorWhite,
-                                                  radious: resources.dimen.dp10,
-                                                ).roundedCornerBox,
-                                            child: Text.rich(
-                                              textAlign: TextAlign.center,
-                                              TextSpan(
-                                                text:
-                                                    '${resources.string.totalClient}\n',
-                                                style:
-                                                    context.textFontWeight600,
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        overalData
-                                                            ?.totalClient ??
-                                                        '',
-                                                    style: context
-                                                        .textFontWeight600
-                                                        .onFontSize(
-                                                          resources
-                                                              .fontSize
-                                                              .dp20,
-                                                        )
-                                                        .onColor(
-                                                          resources
-                                                              .color
-                                                              .viewBgColor,
-                                                        ),
-                                                  ),
-                                                ],
+                                          child: InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                1,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: double.infinity,
+                                              padding: EdgeInsets.all(
+                                                resources.dimen.dp10,
+                                              ),
+                                              decoration:
+                                                  BackgroundBoxDecoration(
+                                                    boxColor:
+                                                        resources
+                                                            .color
+                                                            .colorWhite,
+                                                    radious:
+                                                        resources.dimen.dp10,
+                                                  ).roundedCornerBox,
+                                              child: Text.rich(
+                                                textAlign: TextAlign.center,
+                                                TextSpan(
+                                                  text:
+                                                      '${resources.string.totalClient}\n',
+                                                  style:
+                                                      context.textFontWeight600,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          overalData
+                                                              ?.totalClient ??
+                                                          '',
+                                                      style: context
+                                                          .textFontWeight600
+                                                          .onFontSize(
+                                                            resources
+                                                                .fontSize
+                                                                .dp20,
+                                                          )
+                                                          .onColor(
+                                                            resources
+                                                                .color
+                                                                .viewBgColor,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                         SizedBox(width: resources.dimen.dp20),
                                         Expanded(
-                                          child: Container(
-                                            height: double.infinity,
-                                            padding: EdgeInsets.all(
-                                              resources.dimen.dp10,
-                                            ),
-                                            decoration:
-                                                BackgroundBoxDecoration(
-                                                  boxColor:
-                                                      resources
-                                                          .color
-                                                          .colorWhite,
-                                                  radious: resources.dimen.dp10,
-                                                ).roundedCornerBox,
-                                            child: Text.rich(
-                                              textAlign: TextAlign.center,
-                                              TextSpan(
-                                                text:
-                                                    '${resources.string.totalScreened}\n',
-                                                style:
-                                                    context.textFontWeight600,
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        overalData
-                                                            ?.totalScreened ??
-                                                        '',
-                                                    style: context
-                                                        .textFontWeight600
-                                                        .onFontSize(
-                                                          resources
-                                                              .fontSize
-                                                              .dp20,
-                                                        )
-                                                        .onColor(
-                                                          resources
-                                                              .color
-                                                              .viewBgColor,
-                                                        ),
-                                                  ),
-                                                ],
+                                          child: InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                2,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: double.infinity,
+                                              padding: EdgeInsets.all(
+                                                resources.dimen.dp10,
+                                              ),
+                                              decoration:
+                                                  BackgroundBoxDecoration(
+                                                    boxColor:
+                                                        resources
+                                                            .color
+                                                            .colorWhite,
+                                                    radious:
+                                                        resources.dimen.dp10,
+                                                  ).roundedCornerBox,
+                                              child: Text.rich(
+                                                textAlign: TextAlign.center,
+                                                TextSpan(
+                                                  text:
+                                                      '${resources.string.totalScreened}\n',
+                                                  style:
+                                                      context.textFontWeight600,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          overalData
+                                                              ?.totalScreened ??
+                                                          '',
+                                                      style: context
+                                                          .textFontWeight600
+                                                          .onFontSize(
+                                                            resources
+                                                                .fontSize
+                                                                .dp20,
+                                                          )
+                                                          .onColor(
+                                                            resources
+                                                                .color
+                                                                .viewBgColor,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -281,91 +320,112 @@ class UserDashboard extends BaseScreenWidget {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: Container(
-                                            height: double.infinity,
-                                            padding: EdgeInsets.all(
-                                              resources.dimen.dp10,
-                                            ),
-                                            decoration:
-                                                BackgroundBoxDecoration(
-                                                  boxColor:
-                                                      resources
-                                                          .color
-                                                          .colorWhite,
-                                                  radious: resources.dimen.dp10,
-                                                ).roundedCornerBox,
-                                            child: Text.rich(
-                                              textAlign: TextAlign.center,
-                                              TextSpan(
-                                                text:
-                                                    '${resources.string.hypertension}\n',
-                                                style:
-                                                    context.textFontWeight600,
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        overalData
-                                                            ?.hypertension ??
-                                                        '',
-                                                    style: context
-                                                        .textFontWeight600
-                                                        .onFontSize(
-                                                          resources
-                                                              .fontSize
-                                                              .dp20,
-                                                        )
-                                                        .onColor(
-                                                          resources
-                                                              .color
-                                                              .viewBgColor,
-                                                        ),
-                                                  ),
-                                                ],
+                                          child: InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                3,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: double.infinity,
+                                              padding: EdgeInsets.all(
+                                                resources.dimen.dp10,
+                                              ),
+                                              decoration:
+                                                  BackgroundBoxDecoration(
+                                                    boxColor:
+                                                        resources
+                                                            .color
+                                                            .colorWhite,
+                                                    radious:
+                                                        resources.dimen.dp10,
+                                                  ).roundedCornerBox,
+                                              child: Text.rich(
+                                                textAlign: TextAlign.center,
+                                                TextSpan(
+                                                  text:
+                                                      '${resources.string.hypertension}\n',
+                                                  style:
+                                                      context.textFontWeight600,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          overalData
+                                                              ?.hypertension ??
+                                                          '',
+                                                      style: context
+                                                          .textFontWeight600
+                                                          .onFontSize(
+                                                            resources
+                                                                .fontSize
+                                                                .dp20,
+                                                          )
+                                                          .onColor(
+                                                            resources
+                                                                .color
+                                                                .viewBgColor,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                         SizedBox(width: resources.dimen.dp10),
                                         Expanded(
-                                          child: Container(
-                                            height: double.infinity,
-                                            padding: EdgeInsets.all(
-                                              resources.dimen.dp10,
-                                            ),
-                                            decoration:
-                                                BackgroundBoxDecoration(
-                                                  boxColor:
-                                                      resources
-                                                          .color
-                                                          .colorWhite,
-                                                  radious: resources.dimen.dp10,
-                                                ).roundedCornerBox,
-                                            child: Text.rich(
-                                              textAlign: TextAlign.center,
-                                              TextSpan(
-                                                text:
-                                                    '${resources.string.diabetes}\n',
-                                                style:
-                                                    context.textFontWeight600,
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        overalData?.diabetes ??
-                                                        '',
-                                                    style: context
-                                                        .textFontWeight600
-                                                        .onFontSize(
-                                                          resources
-                                                              .fontSize
-                                                              .dp20,
-                                                        )
-                                                        .onColor(
-                                                          resources
-                                                              .color
-                                                              .viewBgColor,
-                                                        ),
-                                                  ),
-                                                ],
+                                          child: InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                4,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: double.infinity,
+                                              padding: EdgeInsets.all(
+                                                resources.dimen.dp10,
+                                              ),
+                                              decoration:
+                                                  BackgroundBoxDecoration(
+                                                    boxColor:
+                                                        resources
+                                                            .color
+                                                            .colorWhite,
+                                                    radious:
+                                                        resources.dimen.dp10,
+                                                  ).roundedCornerBox,
+                                              child: Text.rich(
+                                                textAlign: TextAlign.center,
+                                                TextSpan(
+                                                  text:
+                                                      '${resources.string.diabetes}\n',
+                                                  style:
+                                                      context.textFontWeight600,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          overalData
+                                                              ?.diabetes ??
+                                                          '',
+                                                      style: context
+                                                          .textFontWeight600
+                                                          .onFontSize(
+                                                            resources
+                                                                .fontSize
+                                                                .dp20,
+                                                          )
+                                                          .onColor(
+                                                            resources
+                                                                .color
+                                                                .viewBgColor,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -378,140 +438,162 @@ class UserDashboard extends BaseScreenWidget {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: Container(
-                                            height: double.infinity,
-                                            padding: EdgeInsets.all(
-                                              resources.dimen.dp10,
-                                            ),
-                                            decoration:
-                                                BackgroundBoxDecoration(
-                                                  boxColor:
-                                                      resources
-                                                          .color
-                                                          .colorWhite,
-                                                  radious: resources.dimen.dp10,
-                                                ).roundedCornerBox,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  resources.string.hepatitis,
-                                                  style:
-                                                      context.textFontWeight600,
-                                                ),
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text.rich(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        TextSpan(
-                                                          text: 'A',
-                                                          style:
-                                                              context
-                                                                  .textFontWeight600,
-                                                          children: [
-                                                            TextSpan(
-                                                              text:
-                                                                  '\n${overalData?.hepatitisA ?? '0'}',
-                                                              style: context
-                                                                  .textFontWeight600
-                                                                  .onFontSize(
-                                                                    resources
-                                                                        .fontSize
-                                                                        .dp20,
-                                                                  )
-                                                                  .onColor(
-                                                                    resources
-                                                                        .color
-                                                                        .viewBgColor,
-                                                                  ),
-                                                            ),
-                                                          ],
+                                          child: InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                5,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: double.infinity,
+                                              padding: EdgeInsets.all(
+                                                resources.dimen.dp10,
+                                              ),
+                                              decoration:
+                                                  BackgroundBoxDecoration(
+                                                    boxColor:
+                                                        resources
+                                                            .color
+                                                            .colorWhite,
+                                                    radious:
+                                                        resources.dimen.dp10,
+                                                  ).roundedCornerBox,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    resources.string.hepatitis,
+                                                    style:
+                                                        context
+                                                            .textFontWeight600,
+                                                  ),
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text.rich(
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          TextSpan(
+                                                            text: 'A',
+                                                            style:
+                                                                context
+                                                                    .textFontWeight600,
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    '\n${overalData?.hepatitisA ?? '0'}',
+                                                                style: context
+                                                                    .textFontWeight600
+                                                                    .onFontSize(
+                                                                      resources
+                                                                          .fontSize
+                                                                          .dp20,
+                                                                    )
+                                                                    .onColor(
+                                                                      resources
+                                                                          .color
+                                                                          .viewBgColor,
+                                                                    ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text.rich(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        TextSpan(
-                                                          text: 'B',
-                                                          style:
-                                                              context
-                                                                  .textFontWeight600,
-                                                          children: [
-                                                            TextSpan(
-                                                              text:
-                                                                  '\n${overalData?.hepatitisB ?? '0'}',
-                                                              style: context
-                                                                  .textFontWeight600
-                                                                  .onFontSize(
-                                                                    resources
-                                                                        .fontSize
-                                                                        .dp20,
-                                                                  )
-                                                                  .onColor(
-                                                                    resources
-                                                                        .color
-                                                                        .viewBgColor,
-                                                                  ),
-                                                            ),
-                                                          ],
+                                                      Expanded(
+                                                        child: Text.rich(
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          TextSpan(
+                                                            text: 'B',
+                                                            style:
+                                                                context
+                                                                    .textFontWeight600,
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    '\n${overalData?.hepatitisB ?? '0'}',
+                                                                style: context
+                                                                    .textFontWeight600
+                                                                    .onFontSize(
+                                                                      resources
+                                                                          .fontSize
+                                                                          .dp20,
+                                                                    )
+                                                                    .onColor(
+                                                                      resources
+                                                                          .color
+                                                                          .viewBgColor,
+                                                                    ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
                                         SizedBox(width: resources.dimen.dp20),
                                         Expanded(
-                                          child: Container(
-                                            height: double.infinity,
-                                            padding: EdgeInsets.all(
-                                              resources.dimen.dp10,
-                                            ),
-                                            decoration:
-                                                BackgroundBoxDecoration(
-                                                  boxColor:
-                                                      resources
-                                                          .color
-                                                          .colorWhite,
-                                                  radious: resources.dimen.dp10,
-                                                ).roundedCornerBox,
-                                            child: Text.rich(
-                                              textAlign: TextAlign.center,
-                                              TextSpan(
-                                                text:
-                                                    '${resources.string.huvReactive}\n',
-                                                style:
-                                                    context.textFontWeight600,
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        overalData
-                                                            ?.hivReactive ??
-                                                        '',
-                                                    style: context
-                                                        .textFontWeight600
-                                                        .onFontSize(
-                                                          resources
-                                                              .fontSize
-                                                              .dp20,
-                                                        )
-                                                        .onColor(
-                                                          resources
-                                                              .color
-                                                              .viewBgColor,
-                                                        ),
-                                                  ),
-                                                ],
+                                          child: InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                6,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: double.infinity,
+                                              padding: EdgeInsets.all(
+                                                resources.dimen.dp10,
+                                              ),
+                                              decoration:
+                                                  BackgroundBoxDecoration(
+                                                    boxColor:
+                                                        resources
+                                                            .color
+                                                            .colorWhite,
+                                                    radious:
+                                                        resources.dimen.dp10,
+                                                  ).roundedCornerBox,
+                                              child: Text.rich(
+                                                textAlign: TextAlign.center,
+                                                TextSpan(
+                                                  text:
+                                                      '${resources.string.huvReactive}\n',
+                                                  style:
+                                                      context.textFontWeight600,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          overalData
+                                                              ?.hivReactive ??
+                                                          '',
+                                                      style: context
+                                                          .textFontWeight600
+                                                          .onFontSize(
+                                                            resources
+                                                                .fontSize
+                                                                .dp20,
+                                                          )
+                                                          .onColor(
+                                                            resources
+                                                                .color
+                                                                .viewBgColor,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -524,88 +606,110 @@ class UserDashboard extends BaseScreenWidget {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: Container(
-                                            height: double.infinity,
-                                            padding: EdgeInsets.all(
-                                              resources.dimen.dp10,
-                                            ),
-                                            decoration:
-                                                BackgroundBoxDecoration(
-                                                  boxColor:
-                                                      resources
-                                                          .color
-                                                          .colorWhite,
-                                                  radious: resources.dimen.dp10,
-                                                ).roundedCornerBox,
-                                            child: Text.rich(
-                                              textAlign: TextAlign.center,
-                                              TextSpan(
-                                                text: 'Syphilis\n',
-                                                style:
-                                                    context.textFontWeight600,
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        overalData?.syphilis ??
-                                                        '',
-                                                    style: context
-                                                        .textFontWeight600
-                                                        .onFontSize(
-                                                          resources
-                                                              .fontSize
-                                                              .dp20,
-                                                        )
-                                                        .onColor(
-                                                          resources
-                                                              .color
-                                                              .viewBgColor,
-                                                        ),
-                                                  ),
-                                                ],
+                                          child: InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                7,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: double.infinity,
+                                              padding: EdgeInsets.all(
+                                                resources.dimen.dp10,
+                                              ),
+                                              decoration:
+                                                  BackgroundBoxDecoration(
+                                                    boxColor:
+                                                        resources
+                                                            .color
+                                                            .colorWhite,
+                                                    radious:
+                                                        resources.dimen.dp10,
+                                                  ).roundedCornerBox,
+                                              child: Text.rich(
+                                                textAlign: TextAlign.center,
+                                                TextSpan(
+                                                  text: 'Syphilis\n',
+                                                  style:
+                                                      context.textFontWeight600,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          overalData
+                                                              ?.syphilis ??
+                                                          '',
+                                                      style: context
+                                                          .textFontWeight600
+                                                          .onFontSize(
+                                                            resources
+                                                                .fontSize
+                                                                .dp20,
+                                                          )
+                                                          .onColor(
+                                                            resources
+                                                                .color
+                                                                .viewBgColor,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                         SizedBox(width: resources.dimen.dp20),
                                         Expanded(
-                                          child: Container(
-                                            height: double.infinity,
-                                            padding: EdgeInsets.all(
-                                              resources.dimen.dp10,
-                                            ),
-                                            decoration:
-                                                BackgroundBoxDecoration(
-                                                  boxColor:
-                                                      resources
-                                                          .color
-                                                          .colorWhite,
-                                                  radious: resources.dimen.dp10,
-                                                ).roundedCornerBox,
-                                            child: Text.rich(
-                                              textAlign: TextAlign.center,
-                                              TextSpan(
-                                                text: 'STI Cases\n',
-                                                style:
-                                                    context.textFontWeight600,
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        overalData?.stiCases ??
-                                                        '',
-                                                    style: context
-                                                        .textFontWeight600
-                                                        .onFontSize(
-                                                          resources
-                                                              .fontSize
-                                                              .dp20,
-                                                        )
-                                                        .onColor(
-                                                          resources
-                                                              .color
-                                                              .viewBgColor,
-                                                        ),
-                                                  ),
-                                                ],
+                                          child: InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                8,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: double.infinity,
+                                              padding: EdgeInsets.all(
+                                                resources.dimen.dp10,
+                                              ),
+                                              decoration:
+                                                  BackgroundBoxDecoration(
+                                                    boxColor:
+                                                        resources
+                                                            .color
+                                                            .colorWhite,
+                                                    radious:
+                                                        resources.dimen.dp10,
+                                                  ).roundedCornerBox,
+                                              child: Text.rich(
+                                                textAlign: TextAlign.center,
+                                                TextSpan(
+                                                  text: 'STI Cases\n',
+                                                  style:
+                                                      context.textFontWeight600,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          overalData
+                                                              ?.stiCases ??
+                                                          '',
+                                                      style: context
+                                                          .textFontWeight600
+                                                          .onFontSize(
+                                                            resources
+                                                                .fontSize
+                                                                .dp20,
+                                                          )
+                                                          .onColor(
+                                                            resources
+                                                                .color
+                                                                .viewBgColor,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),

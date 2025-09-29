@@ -362,6 +362,8 @@ extension FieldEntityExtension on FormEntity {
                   uploadResponseEntity?.documentData = uploadResponseEntity
                       .documentData
                       ?.replaceAll('data:image/png;base64,', '');
+                  fieldValue = uploadResponseEntity;
+                  inputFieldData = uploadResponseEntity;
                   onDatachnage?.call(uploadResponseEntity);
                 } else {
                   onDatachnage?.call(null);

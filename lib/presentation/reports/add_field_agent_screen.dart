@@ -52,18 +52,18 @@ class AddFieldAgentScreen extends BaseScreenWidget {
               )
               .firstOrNull?['id'];
       formFields.addAll([
-        FormEntity()
-          ..name = 'mandal'
-          ..labelEn = 'Mandal'
-          ..labelTe = 'Mandal'
-          ..type = 'collection'
-          ..url = mandalListApiUrl
-          ..urlInputData = {'dist_id': fieldsData['dist_id']}
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..placeholderEn = 'Select Mandal'
-          ..onDatachnage = (value) {
-            fieldsData['mandal'] = value.id;
-          },
+        // FormEntity()
+        //   ..name = 'mandal'
+        //   ..labelEn = 'Mandal'
+        //   ..labelTe = 'Mandal'
+        //   ..type = 'collection'
+        //   ..url = mandalListApiUrl
+        //   ..urlInputData = {'dist_id': fieldsData['dist_id']}
+        //   ..validation = (FormValidationEntity()..isRequired = true)
+        //   ..placeholderEn = 'Select Mandal'
+        //   ..onDatachnage = (value) {
+        //     fieldsData['mandal'] = value.id;
+        //   },
         FormEntity()
           ..name = 'name'
           ..labelEn = 'Name'
@@ -222,7 +222,7 @@ class AddFieldAgentScreen extends BaseScreenWidget {
                                       if (_formKey.currentState?.validate() ==
                                           true) {
                                         _userBloc.addNewAgent({
-                                          'mandal': fieldsData['mandal'],
+                                          //'mandal': fieldsData['mandal'],
                                           'name': fieldsData['name'],
                                           'mobile':
                                               fieldsData['contact_number'],

@@ -35,6 +35,18 @@ class ScreeningDetailsEntity extends BaseEntity {
     return toJson();
   }
 
+  bool get didConset => consent == 1;
+  bool get isHypertension =>
+      ((int.tryParse(ncd?.hypertension?.systolic ?? '0') ?? 0) >= 160 ||
+          (int.tryParse(ncd?.hypertension?.diastolic ?? '0') ?? 0) >= 100);
+  bool get isDiabitic =>
+      ((int.tryParse(ncd?.diabetes?.bloodsugar ?? '0') ?? 0) > 200);
+  bool get isSyphilis => sti?.syphilis?.result == "Reactive";
+  bool get isHep =>
+      sti?.hepB?.result == "Reactive" || sti?.hepC?.result == "Reactive";
+  bool get isHiv => hiv?.offered == '1';
+  bool get isSTICase => (syndromiccases ?? '').isNotEmpty;
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     //data['action'] = action;

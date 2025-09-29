@@ -186,21 +186,21 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
             fieldsData['date_of_camp'] = value;
             _onDataChanged(false);
           },
-        // FormEntity()
-        //   ..name = 'image_camp'
-        //   ..labelEn = 'Photo Of Camp'
-        //   ..labelTe = 'Photo Of Camp'
-        //   ..type = 'image'
-        //   ..placeholderEn = 'Photo Of Camp'
-        //   ..fieldValue = fieldsData['image_camp']
-        //   ..validation = (FormValidationEntity()..isRequired = true)
-        //   ..messages =
-        //       (FormMessageEntity()..requiredEn = 'Please take Photo Of Camp')
-        //   ..suffixIcon = DrawableAssets.icUpload
-        //   ..onDatachnage = (value) {
-        //     fieldsData['image_camp'] = value;
-        //     _onDataChanged(false);
-        //   },
+        FormEntity()
+          ..name = 'image_camp'
+          ..labelEn = 'Photo Of Camp'
+          ..labelTe = 'Photo Of Camp'
+          ..type = 'image'
+          ..placeholderEn = 'Photo Of Camp'
+          ..fieldValue = fieldsData['image_camp']
+          ..validation = (FormValidationEntity()..isRequired = true)
+          ..messages =
+              (FormMessageEntity()..requiredEn = 'Please take Photo Of Camp')
+          ..suffixIcon = DrawableAssets.icUpload
+          ..onDatachnage = (value) {
+            fieldsData['image_camp'] = value;
+            _onDataChanged(false);
+          },
         FormEntity()
           ..name = 'district'
           ..labelEn = 'District'
@@ -692,8 +692,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           },
         FormEntity()
           ..name = 'aadhar'
-          ..labelEn = 'Aadhar No(optional)'
-          ..labelTe = 'Aadhar No(optional)'
+          ..labelEn = 'Aadhar No(optional) *'
+          ..labelTe = 'Aadhar No(optional) *'
           ..type = 'number'
           ..validation =
               (FormValidationEntity()
@@ -712,8 +712,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           },
         FormEntity()
           ..name = 'contact_number'
-          ..labelEn = 'Contact Number'
-          ..labelTe = 'Contact Number'
+          ..labelEn = 'Contact Number *'
+          ..labelTe = 'Contact Number *'
           ..type = 'number'
           ..messages =
               (FormMessageEntity()
@@ -805,7 +805,31 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Mandal'
           ..onDatachnage = (value) {
+            final child =
+                step2formFields
+                    .where((item) => item.name == 'clientvillage')
+                    .firstOrNull;
+            if (child != null) {
+              child.inputFieldData?.remove('items');
+              child.url = villageListApiUrl;
+              child.urlInputData = {'mandal_id': value.id};
+              child.inputFieldData = null;
+              child.fieldValue = null;
+            }
             fieldsData['client_mandal'] = value.id;
+            _onDataChanged(true);
+          },
+        FormEntity()
+          ..name = 'clientvillage'
+          ..labelEn = 'Village'
+          ..labelTe = 'Village'
+          ..type = 'collection'
+          ..canSearch = true
+          ..requestModel = ListModel.fromvillageJson
+          ..validation = (FormValidationEntity()..isRequired = true)
+          ..placeholderEn = 'Select Village'
+          ..onDatachnage = (value) {
+            fieldsData['clientvillage'] = value.id;
             _onDataChanged(false);
           },
         FormEntity()
@@ -1908,6 +1932,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                           fieldsData['client_district'],
                                       "client_mandal":
                                           fieldsData['client_mandal'],
+                                      "clientvillage":
+                                          fieldsData['clientvillage'],
                                       "occupation": fieldsData['occupation'],
                                       "consent": fieldsData['consent'],
                                       "medHistory": {
