@@ -71,6 +71,7 @@ class UploadAttachmentWidget extends StatelessWidget {
           selectedFileData?.documentData =
               'data:image/png;base64,${value['fileNamebase64data']}';
           selectedFileData?.documentName = value['fileName'];
+          selectedFileData?.bytes = value['fileBytes'];
           onSelected?.call(selectedFileData);
           textController.text = value['fileName'];
         }

@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:typed_data';
+
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 
 class UploadResponseEntity extends BaseEntity {
@@ -8,6 +10,7 @@ class UploadResponseEntity extends BaseEntity {
   int? did;
   String? documentName;
   String? documentData;
+  Uint8List? bytes;
   String? documentType;
 
   @override

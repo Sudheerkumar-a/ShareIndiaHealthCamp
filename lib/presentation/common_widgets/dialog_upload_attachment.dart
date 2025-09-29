@@ -73,6 +73,7 @@ class DialogUploadAttachmentWidget extends StatelessWidget {
             fileName.lastIndexOf('.') == -1 ? 0 : fileName.lastIndexOf('.'),
           ),
           'fileNamebase64data': base64.encode(bytes),
+          'fileBytes': bytes,
         };
         if (context.mounted) {
           Navigator.pop(context, data);

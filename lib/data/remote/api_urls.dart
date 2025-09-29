@@ -13,3 +13,4 @@ const String screenEditApiUrl = 'campaign/screen_edit.php';
 const String screenDeleteApiUrl = 'campaign/screen_delete.php';
 const String agentListApiUrl = 'campaign/list_field_agents.php';
 const String deleteAgentApiUrl = 'campaign/delete_agent.php';
+const String campSubmitApiUrl = 'campaign/camp_insert.php';

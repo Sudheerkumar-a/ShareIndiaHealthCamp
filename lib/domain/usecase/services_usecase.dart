@@ -140,6 +140,26 @@ class ServicesUseCase extends BaseUseCase {
     );
   }
 
+  Future<Either<Failure, ApiEntity<SingleDataEntity>>> submitMultipartData({
+    required String apiUrl,
+    required Map<String, dynamic> requestParams,
+  }) async {
+    var apiResponse = await apisRepository.postWithMultipartData<SingleDataModel>(
+      apiUrl: apiUrl,
+      requestParams: requestParams,
+      responseModel: SingleDataModel.fromCreateRequest,
+    );
+    return apiResponse.fold(
+      (l) {
+        return Left(l);
+      },
+      (r) {
+        var apiResponseEntity = r.toEntity<SingleDataEntity>();
+        return Right(apiResponseEntity);
+      },
+    );
+  }
+
   Future<Either<Failure, ApiEntity<SingleDataEntity>>> deleteAgent({
     required Map<String, dynamic> requestParams,
   }) async {

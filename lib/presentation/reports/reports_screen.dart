@@ -17,6 +17,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/action_button
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
+import 'package:shareindia_health_camp/presentation/reports/add_camp_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/agent_list_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/view_screening_details.dart';
@@ -186,7 +187,7 @@ class ReportsScreen extends BaseScreenWidget {
             SizedBox(width: resources.dimen.dp10),
             InkWell(
               onTap: () async {
-                OutreachCampFormScreen.start(context).then((doRefresh){
+                AddCampFormScreen.start(context).then((doRefresh){
                   if(doRefresh&&context.mounted){
                     _updateReport(context);
                   }

@@ -137,6 +137,23 @@ class ServicesBloc extends Cubit<ServicesState> {
     return responseState;
   }
 
+  Future<ServicesState> submitMultipartData({
+    required String apiUrl,
+    required Map<String, dynamic> requestParams,
+  }) async {
+    final result = await servicesUseCase.submitMultipartData(
+      apiUrl: apiUrl,
+      requestParams: requestParams,
+    );
+    final responseState = result.fold(
+      (l) => ServicesStateApiError(message: _getErrorMessage(l)),
+      (r) {
+        return ServicesStateSuccess(responseEntity: r);
+      },
+    );
+    return responseState;
+  }
+
   Future<ServicesState> getAgentsList({
     required Map<String, dynamic> requestParams,
     emitResponse = false,
