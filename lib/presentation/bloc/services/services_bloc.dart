@@ -198,6 +198,28 @@ class ServicesBloc extends Cubit<ServicesState> {
     return responseState;
   }
 
+  Future<ServicesState> getCampList({
+    required Map<String, dynamic> requestParams,
+    emitResponse = false,
+  }) async {
+    if (emitResponse) {
+      emit(ServicesStateLoading());
+    }
+    final result = await servicesUseCase.getCampList(
+      requestParams: requestParams,
+    );
+    final responseState = result.fold(
+      (l) => ServicesStateApiError(message: _getErrorMessage(l)),
+      (r) {
+        return ServicesStateSuccess(responseEntity: r);
+      },
+    );
+    if (emitResponse) {
+      emit(responseState);
+    }
+    return responseState;
+  }
+
   String _getErrorMessage(Failure failure) {
     return failure.errorMessage;
   }

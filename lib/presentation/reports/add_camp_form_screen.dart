@@ -1,8 +1,8 @@
-
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
@@ -20,13 +20,13 @@ import 'package:shareindia_health_camp/presentation/common_widgets/action_button
 import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/discard_changes_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/step_meter_widget.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
+import 'package:shareindia_health_camp/presentation/utils/location.dart';
 import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
+import 'package:http_parser/http_parser.dart';
 
 class AddCampFormScreen extends StatefulWidget {
-  static Future<dynamic> start(
-    BuildContext context) async {
+  static Future<dynamic> start(BuildContext context) async {
     return await Navigator.of(context, rootNavigator: true).push(
       PageTransition(
         type: PageTransitionType.rightToLeft,
@@ -55,6 +55,15 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
   final step1formFields = List<FormEntity>.empty(growable: true);
 
   final stepCount = 1;
+  Position? position;
+  _getLocationDetails() async {
+    var isLocationOn = await Location.checkGps();
+    if (isLocationOn) {
+      Location.getLocation().then((value) {
+        position = value;
+      });
+    }
+  }
 
   _onDataChanged(bool doRefresh) {
     Future.delayed(Duration(milliseconds: 500), () {
@@ -254,43 +263,6 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
             fieldsData['village'] = value.id;
             _onDataChanged(false);
           },
-        // FormEntity()
-        //   ..name = 'village'
-        //   ..labelEn = 'Village'
-        //   ..labelTe = 'Village'
-        //   ..type = 'text'
-        //   // ..inputFieldData = {
-        //   //   'items':
-        //   //       [
-        //   //             {'id': 1, 'name': 'Village1'},
-        //   //             {'id': 2, 'name': 'Village2'},
-        //   //             {'id': 3, 'name': 'Village3'},
-        //   //             {'id': 4, 'name': 'Village4'},
-        //   //           ]
-        //   //           .map(
-        //   //             (item) =>
-        //   //                 NameIDModel.fromDistrictsJson(
-        //   //                   item as Map<String, dynamic>,
-        //   //                 ).toEntity(),
-        //   //           )
-        //   //           .toList(),
-        //   // }
-        //   ..fieldValue = fieldsData['village']
-        //   ..validation =
-        //       (FormValidationEntity()
-        //         ..isRequired = true
-        //         ..regex = nameRegExp)
-        //   ..messages =
-        //       (FormMessageEntity()
-        //         ..requiredEn = 'Please Enter Village'
-        //         ..requiredTe = 'Please Enter Village'
-        //         ..regexEn = 'Please Enter Valid Village'
-        //         ..regexTe = 'Please Enter Valid Village')
-        //   ..placeholderEn = 'Enter Village'
-        //   ..onDatachnage = (value) {
-        //     fieldsData['village'] = value;
-        //     _onDataChanged(false);
-        //   },
         FormEntity()
           ..name = 'camp_location'
           ..label = resources.string.locationoftheCamp
@@ -394,39 +366,26 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
           },
       ]);
     }
-    return [
-      step1formFields,
-    ];
+    return [step1formFields];
+  }
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      _getLocationDetails();
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    List<String> stepButtonTexts = [
-      resources.string.submit,
-    ];
+    List<String> stepButtonTexts = [resources.string.submit];
     final formFields = _getFormFields(context);
-
     final currentStepFormFields = formFields[_stepNotifier.value - 1];
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
-        // if (didPop) {
-        //   Dialogs.showDialogWithClose(
-        //     context,
-        //     DiscardChangesDialog(
-        //       data: {
-        //         'title': 'Discard Changes',
-        //         'description': 'Do you want to discard this details',
-        //         'action': 'Proceed',
-        //       },
-        //       callback: () {
-        //         Navigator.pop(context);
-        //       },
-        //     ),
-        //   );
-        // }
         if (didPop) return;
-
         showDialog<bool>(
           context: context,
           builder:
@@ -453,18 +412,6 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                 MSearchUserAppBarWidget(
                   title: 'Integrated Health Services (IHS) - APSACS',
                   showBack: true,
-                ),
-                ValueListenableBuilder(
-                  valueListenable: _stepNotifier,
-                  builder: (context, step, child) {
-                    Future.delayed(Duration.zero, () {
-                      _doDatavalidation.value = !_doDatavalidation.value;
-                    });
-                    return StepMetterWidget(
-                      stepCount: stepCount,
-                      currentStep: step,
-                    );
-                  },
                 ),
                 Expanded(
                   child: Form(
@@ -515,20 +462,20 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                          InkWell(
-                            onTap: () {
-                             Navigator.pop(context);
-                            },
-                            child: ActionButtonWidget(
-                              text: 'Cancel',
-                              width: 110,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: context.resources.dimen.dp20,
-                                vertical: context.resources.dimen.dp7,
-                              ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: ActionButtonWidget(
+                            text: 'Cancel',
+                            width: 110,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: context.resources.dimen.dp20,
+                              vertical: context.resources.dimen.dp7,
                             ),
                           ),
-                          SizedBox(width: resources.dimen.dp10),
+                        ),
+                        SizedBox(width: resources.dimen.dp10),
                         InkWell(
                           onTap: () async {
                             if (!isDataValid ||
@@ -566,23 +513,27 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                                           fieldsData['camp_local_poc_number'],
                                       "local_poc_name":
                                           fieldsData['camp_local_poc_name'],
-                                      "latitude":
-                                          12.72,
-                                      "longitude":
-                                          72.23,
+                                      "latitude": position?.latitude,
+                                      "longitude": position?.longitude,
                                     };
-                                    if(fieldsData['image_camp'] is UploadResponseEntity)
-                                    {
-                                     requestParams['photo_of_camp'] = MultipartFile.fromBytes(
-                                        fieldsData['image_camp'].bytes,
-                                        filename: fieldsData['image_camp'].documentName);
+                                    if (fieldsData['image_camp']
+                                        is UploadResponseEntity) {
+                                      requestParams['photo_of_camp'] =
+                                          MultipartFile.fromBytes(
+                                            fieldsData['image_camp'].bytes,
+                                            filename:
+                                                fieldsData['image_camp']
+                                                    .documentName,
+                                            contentType:
+                                                fieldsData['image_camp']
+                                                    .mediaType,
+                                          );
                                     }
                                     //jsonEncode(requestParams);
                                     Dialogs.loader(context);
                                     final response = await sl<ServicesBloc>()
                                         .submitMultipartData(
-                                          apiUrl:
-                                              campSubmitApiUrl,
+                                          apiUrl: campSubmitApiUrl,
                                           requestParams: requestParams,
                                         );
 

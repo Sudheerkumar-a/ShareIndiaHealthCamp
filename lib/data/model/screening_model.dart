@@ -3,6 +3,52 @@
 import 'package:shareindia_health_camp/data/model/base_model.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 
+class CampModel extends BaseModel {
+  int? id;
+  String? dateOfCamp;
+  String? photoOfCamp;
+  String? mandal;
+  String? district;
+  String? village;
+  String? campLocation;
+  String? campVillage;
+  String? localPocName;
+  String? localPocNumber;
+  String? latitude;
+  String? longitude;
+  CampModel.fromJson(Map<String, dynamic> json) {
+    id = int.tryParse(json['id']);
+    dateOfCamp = json['date_of_camp'];
+    photoOfCamp = json['photo_of_camp'];
+    mandal = json['mandal'];
+    district = json['district'];
+    village = json['village'];
+    campLocation = json['camp_location'];
+    campVillage = json['camp_village'];
+    localPocName = json['local_poc_name'];
+    localPocNumber = json['local_poc_number'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+  }
+
+  @override
+  CampEntity toEntity() {
+    return CampEntity()
+      ..id = id
+      ..dateOfCamp = dateOfCamp
+      ..photoOfCamp = photoOfCamp
+      ..mandal = mandal
+      ..district = district
+      ..village = village
+      ..campLocation = campLocation
+      ..campVillage = campVillage
+      ..localPocName = localPocName
+      ..localPocNumber = localPocNumber
+      ..latitude = latitude
+      ..longitude = longitude;
+  }
+}
+
 class ScreeningDetailsModel extends BaseModel {
   int? id;
   String? action;

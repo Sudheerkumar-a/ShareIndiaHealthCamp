@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
@@ -24,18 +23,23 @@ import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
 class OutreachCampFormScreen extends StatefulWidget {
   static Future<dynamic> start(
     BuildContext context, {
+    int? campId,
     ScreeningDetailsEntity? screeningDetails,
   }) async {
     return await Navigator.of(context, rootNavigator: true).push(
       PageTransition(
         type: PageTransitionType.rightToLeft,
-        child: OutreachCampFormScreen(screeningDetails: screeningDetails),
+        child: OutreachCampFormScreen(
+          campId: campId,
+          screeningDetails: screeningDetails,
+        ),
       ),
     );
   }
 
+  final int? campId;
   final ScreeningDetailsEntity? screeningDetails;
-  const OutreachCampFormScreen({this.screeningDetails, super.key});
+  const OutreachCampFormScreen({this.campId, this.screeningDetails, super.key});
 
   @override
   State<OutreachCampFormScreen> createState() => _OutreachCampFormScreenState();
@@ -70,7 +74,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
 
   final indexTestingFormFields = List<FormEntity>.empty(growable: true);
 
-  final stepCount = 7;
+  final stepCount = 6;
 
   _onDataChanged(bool doRefresh) {
     Future.delayed(Duration(milliseconds: 500), () {
@@ -1705,7 +1709,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
       ]);
     }
     return [
-      step1formFields,
+      //step1formFields,
       //referralFormFields,
       step2formFields,
       consentFormFields,
@@ -1722,7 +1726,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
     final resources = context.resources;
     fieldsData.addAll(widget.screeningDetails?.toEditJson() ?? {});
     List<String> stepButtonTexts = [
-      'Next',
+      //'Next',
       //'Next',
       'Next',
       'Next',
@@ -1895,6 +1899,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                   callback: () async {
                                     final requestParams = {
                                       "action": "insert",
+                                      "camp_id": widget.campId,
                                       "date_of_camp":
                                           fieldsData['date_of_camp'],
                                       "mandal": fieldsData['mandal'],

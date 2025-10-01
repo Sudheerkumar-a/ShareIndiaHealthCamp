@@ -2,6 +2,7 @@
 
 import 'dart:typed_data';
 
+import 'package:http_parser/http_parser.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 
 class UploadResponseEntity extends BaseEntity {
@@ -11,6 +12,7 @@ class UploadResponseEntity extends BaseEntity {
   String? documentName;
   String? documentData;
   Uint8List? bytes;
+  MediaType? mediaType;
   String? documentType;
 
   @override

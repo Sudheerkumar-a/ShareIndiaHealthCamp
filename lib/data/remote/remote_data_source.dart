@@ -153,7 +153,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     try {
       FormData formData = FormData.fromMap(requestParams);
       var response = await dio2.post(apiUrl, data: formData);
-      return response.data;
+      return (response.data is String)
+          ? jsonDecode(response.data)
+          : response.data;
     } on DioException catch (e) {
       printLog(e.toString());
       rethrow;

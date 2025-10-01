@@ -13,8 +13,18 @@ class DioLoggingInterceptor extends InterceptorsWrapper {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (userToken.isNotEmpty) {
       options.headers.addAll({
+        HttpHeaders.contentTypeHeader:
+            options.method == 'GET'
+                ? 'application/json'
+                : 'application/json, application/x-www-form-urlencoded, multipart/form-data, text/plain,application/octet-stream',
         HttpHeaders.authorizationHeader: 'Bearer $userToken',
         HttpHeaders.acceptHeader: "*/*",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        'X-Requested-With': 'XMLHttpRequest',
+        "Access-Control-Allow-Headers":
+            "X-Requested-With, Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       });
     }
 

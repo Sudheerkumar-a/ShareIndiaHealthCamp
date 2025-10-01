@@ -19,6 +19,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widg
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/presentation/reports/add_camp_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/agent_list_screen.dart';
+import 'package:shareindia_health_camp/presentation/reports/camp_list_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/view_screening_details.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
@@ -187,8 +188,8 @@ class ReportsScreen extends BaseScreenWidget {
             SizedBox(width: resources.dimen.dp10),
             InkWell(
               onTap: () async {
-                AddCampFormScreen.start(context).then((doRefresh){
-                  if(doRefresh&&context.mounted){
+                CampListScreen.start(context).then((doRefresh) {
+                  if (doRefresh && context.mounted) {
                     _updateReport(context);
                   }
                 });
@@ -422,31 +423,36 @@ class ReportsScreen extends BaseScreenWidget {
       startDate = dateFormat.format(startTime);
       endDate = dateFormat.format(endTime);
     }
-    Map<String, dynamic> requestParams = isAdmin==0? {
-      'limit': 10,
-      'page': index,
-      'district': districtId,
-      'mandal': null,
-      'state': 'Andhra Pradesh',
-      'date_from': startDate,
-      'date_to': endDate,
-    }:isAdmin==2?{
-      'limit': 10,
-      'page': index,
-      'district': districtId,
-      'mandal': mandalId,
-      'state': 'Andhra Pradesh',
-      'date_from': startDate,
-      'date_to': endDate,
-    }:{
-      'limit': 10,
-      'page': index,
-      'district': filteredData?['dist_id'],
-      'mandal': filteredData?['mandal_id'],
-      'state': 'Andhra Pradesh',
-      'date_from': startDate,
-      'date_to': endDate,
-    };
+    Map<String, dynamic> requestParams =
+        isAdmin == 0
+            ? {
+              'limit': 10,
+              'page': index,
+              'district': districtId,
+              'mandal': null,
+              'state': 'Andhra Pradesh',
+              'date_from': startDate,
+              'date_to': endDate,
+            }
+            : isAdmin == 2
+            ? {
+              'limit': 10,
+              'page': index,
+              'district': districtId,
+              'mandal': mandalId,
+              'state': 'Andhra Pradesh',
+              'date_from': startDate,
+              'date_to': endDate,
+            }
+            : {
+              'limit': 10,
+              'page': index,
+              'district': filteredData?['dist_id'],
+              'mandal': filteredData?['mandal_id'],
+              'state': 'Andhra Pradesh',
+              'date_from': startDate,
+              'date_to': endDate,
+            };
     return requestParams;
   }
 
@@ -458,9 +464,8 @@ class ReportsScreen extends BaseScreenWidget {
         _updateReport(context);
       }
     });
-    
-    isAdmin =
-                  UserCredentialsEntity.details(context).user?.isAdmin??1;
+
+    isAdmin = UserCredentialsEntity.details(context).user?.isAdmin ?? 1;
     districtId = UserCredentialsEntity.details(context).user?.districtId;
     mandalId = UserCredentialsEntity.details(context).user?.mandalId;
     return Padding(

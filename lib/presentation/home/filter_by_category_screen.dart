@@ -13,6 +13,7 @@ import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/presentation/reports/view_screening_details.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
@@ -235,6 +236,10 @@ class FilterByCategoryScreen extends BaseScreenWidget {
     return SafeArea(
       bottom: true,
       child: Scaffold(
+        appBar: MSearchUserAppBarWidget(
+          title: 'Integrated Health Services (IHS)',
+          showBack: true,
+        ),
         body: Padding(
           padding: EdgeInsets.all(resources.dimen.dp20),
           child: SingleChildScrollView(

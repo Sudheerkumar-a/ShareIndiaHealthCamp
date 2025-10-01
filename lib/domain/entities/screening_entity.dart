@@ -2,6 +2,38 @@
 
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 
+class CampEntity extends BaseEntity {
+  int? id;
+  String? dateOfCamp;
+  String? photoOfCamp;
+  String? mandal;
+  String? district;
+  String? village;
+  String? campLocation;
+  String? campVillage;
+  String? localPocName;
+  String? localPocNumber;
+  String? latitude;
+  String? longitude;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    //data['id'] = id;
+    data['date_of_camp'] = dateOfCamp;
+    //data['photo_of_camp'] = photoOfCamp;
+    data['district'] = district;
+    data['mandal'] = mandal;
+    data['village'] = village;
+    //data['camp_location'] = campLocation;
+    //data['camp_village'] = campVillage;
+    //data['local_poc_name'] = localPocName;
+    //data['local_poc_number'] = localPocNumber;
+    // data['latitude'] = latitude;
+    //data['longitude'] = longitude;
+    return data;
+  }
+}
+
 class ScreeningDetailsEntity extends BaseEntity {
   int? id;
   String? action;

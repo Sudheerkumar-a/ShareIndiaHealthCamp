@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:shareindia_health_camp/data/model/base_model.dart';
+import 'package:shareindia_health_camp/data/model/screening_model.dart';
 import 'package:shareindia_health_camp/data/model/services_model.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
@@ -60,6 +61,15 @@ class ListModel extends BaseModel {
     }
   }
 
+  ListModel.fromCamps(Map<String, dynamic> json) {
+    final response = json['data']?['data'];
+    if (response != null) {
+      response.forEach((v) {
+        items.add(CampModel.fromJson(v).toEntity());
+      });
+    }
+  }
+
   @override
   ListEntity toEntity() {
     return ListEntity()..items = items;
@@ -86,8 +96,8 @@ class NameIDModel extends BaseModel {
 
   factory NameIDModel.fromMandalJson(Map<String, dynamic> json) {
     var nameIDModel = NameIDModel();
-    nameIDModel.id = int.tryParse(json['mandal_id']??json['vilage_id']);
-    nameIDModel.name = json['mandal_name']??json['vilagename'];
+    nameIDModel.id = int.tryParse(json['mandal_id'] ?? json['vilage_id']);
+    nameIDModel.name = json['mandal_name'] ?? json['vilagename'];
     return nameIDModel;
   }
 

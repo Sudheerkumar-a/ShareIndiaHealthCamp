@@ -99,6 +99,25 @@ class ServicesUseCase extends BaseUseCase {
     );
   }
 
+  Future<Either<Failure, ApiEntity<ListEntity>>> getCampList({
+    required Map<String, dynamic> requestParams,
+  }) async {
+    var apiResponse = await apisRepository.post<ListModel>(
+      apiUrl: campListApiUrl,
+      requestParams: requestParams,
+      responseModel: ListModel.fromCamps,
+    );
+    return apiResponse.fold(
+      (l) {
+        return Left(l);
+      },
+      (r) {
+        var apiResponseEntity = r.toEntity<ListEntity>();
+        return Right(apiResponseEntity);
+      },
+    );
+  }
+
   Future<Either<Failure, ApiEntity<ListEntity>>> getFieldData({
     required String apiUrl,
     required Map<String, dynamic> requestParams,
@@ -144,11 +163,12 @@ class ServicesUseCase extends BaseUseCase {
     required String apiUrl,
     required Map<String, dynamic> requestParams,
   }) async {
-    var apiResponse = await apisRepository.postWithMultipartData<SingleDataModel>(
-      apiUrl: apiUrl,
-      requestParams: requestParams,
-      responseModel: SingleDataModel.fromCreateRequest,
-    );
+    var apiResponse = await apisRepository
+        .postWithMultipartData<SingleDataModel>(
+          apiUrl: apiUrl,
+          requestParams: requestParams,
+          responseModel: SingleDataModel.fromCreateRequest,
+        );
     return apiResponse.fold(
       (l) {
         return Left(l);

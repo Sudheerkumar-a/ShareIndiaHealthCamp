@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
@@ -30,30 +32,31 @@ class DialogUploadAttachmentWidget extends StatelessWidget {
     String filePath = '';
     Uint8List? fileBytes;
     if (selectedOption == UploadOptions.file) {
-    FilePickerResult? result;
-    if (allowedExtensions.isNotEmpty) {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: allowedExtensions,
-      );
-    } else {
-      result = await FilePicker.platform.pickFiles();
-    }
-    if (result != null) {
-      fileName = result.files.first.name;
-      if (!kIsWeb) {
-        filePath = result.files.first.path ?? '';
+      FilePickerResult? result;
+      if (allowedExtensions.isNotEmpty) {
+        result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: allowedExtensions,
+        );
       } else {
-        fileBytes = result.files.first.bytes;
+        result = await FilePicker.platform.pickFiles();
       }
-    }
+      if (result != null) {
+        fileName = result.files.first.name;
+        if (!kIsWeb) {
+          filePath = result.files.first.path ?? '';
+        } else {
+          fileBytes = result.files.first.bytes;
+        }
+      }
     } else {
       try {
         final ImagePicker picker = ImagePicker();
         final XFile? pickedFile = await picker.pickImage(
-          source: selectedOption == UploadOptions.takephoto
-              ? ImageSource.camera
-              : ImageSource.gallery,
+          source:
+              selectedOption == UploadOptions.takephoto
+                  ? ImageSource.camera
+                  : ImageSource.gallery,
           maxWidth: 1024,
           maxHeight: 1024,
         );
@@ -66,13 +69,19 @@ class DialogUploadAttachmentWidget extends StatelessWidget {
     if (filePath.isNotEmpty) {
       File file = File(filePath);
       if (file.lengthSync() <= maxSize * maxUploadFilesize) {
+        final mimeType = lookupMimeType(file.path); // e.g., "image/jpeg"
+        final mimeSplit = mimeType?.split('/');
+
         final bytes = file.readAsBytesSync();
         final data = {
           'fileName': fileName,
           'fileType': fileName.substring(
             fileName.lastIndexOf('.') == -1 ? 0 : fileName.lastIndexOf('.'),
           ),
-          'fileNamebase64data': base64.encode(bytes),
+          'contentType': MediaType(
+            mimeSplit?[0] ?? 'image',
+            mimeSplit?[1] ?? 'jpeg',
+          ),
           'fileBytes': bytes,
         };
         if (context.mounted) {
