@@ -159,6 +159,7 @@ class ViewScreeningDetails extends BaseScreenWidget {
                     onTap: () async {
                       OutreachCampFormScreen.start(
                         context,
+                        campId: screeningDetails.campId ?? 0,
                         screeningDetails: screeningDetails,
                       );
                     },

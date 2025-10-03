@@ -36,6 +36,7 @@ class CampEntity extends BaseEntity {
 
 class ScreeningDetailsEntity extends BaseEntity {
   int? id;
+  int? campId;
   String? action;
   String? dateOfCamp;
   String? mandal;
@@ -156,7 +157,7 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['age'] = age;
     data['sex'] = sex;
     data['maritalstatus'] = '';
-    data['pregnancystatus'] = pregnancystatus;
+    data['pregnancystatus'] = int.tryParse('${pregnancystatus ?? 0}');
     data['date_of_LMP'] = dateOfLMP;
     data['contact_number'] = contactNumber;
     data['aadher_number'] = aadherNumber;

@@ -51,6 +51,7 @@ class CampModel extends BaseModel {
 
 class ScreeningDetailsModel extends BaseModel {
   int? id;
+  int? campId;
   String? action;
   String? dateOfCamp;
   String? mandal;
@@ -80,6 +81,7 @@ class ScreeningDetailsModel extends BaseModel {
 
   ScreeningDetailsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    campId = json['camp_id'];
     action = json['action'];
     dateOfCamp = json['date_of_camp'];
     mandal = json['mandal'];
@@ -121,6 +123,7 @@ class ScreeningDetailsModel extends BaseModel {
   ScreeningDetailsEntity toEntity() {
     return ScreeningDetailsEntity()
       ..id = id
+      ..campId = campId
       ..action = action
       ..dateOfCamp = dateOfCamp
       ..mandal = mandal

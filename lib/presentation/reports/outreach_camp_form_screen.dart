@@ -88,490 +88,490 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
 
   List<List<FormEntity>> _getFormFields(BuildContext context) {
     final resources = context.resources;
-    if (step1formFields.isEmpty) {
-      final campLocations =
-          [
-                {'id': '1', 'name': 'VHC'},
-                {'id': '2', 'name': 'Sub centre'},
-                {'id': '3', 'name': 'Anganwadi'},
-                {'id': '4', 'name': 'PHC'},
-                {'id': '5', 'name': 'UPHC'},
-                {'id': '6', 'name': 'CHC'},
-                {'id': '7', 'name': 'Other (specify)'},
-              ]
-              .map(
-                (item) =>
-                    NameIDModel.fromDistrictsJson(
-                      item as Map<String, dynamic>,
-                    ).toEntity(),
-              )
-              .toList();
-      final selectedCamp =
-          campLocations
-              .where(
-                (e) =>
-                    (e.name?.toLowerCase() ==
-                        (fieldsData['camp_location'] ?? '')) ||
-                    (e.id ==
-                        (int.tryParse(fieldsData['camp_location'] ?? '0'))),
-              )
-              .firstOrNull;
-      final selectedDistrict =
-          NameIDModel.fromDistrictsJson(
-            districts
-                .where(
-                  (e) =>
-                      e['name']?.toLowerCase() ==
-                          UserCredentialsEntity.details(
-                            context,
-                          ).user?.district?.toLowerCase() ||
-                      e['id']?.toLowerCase() ==
-                          UserCredentialsEntity.details(
-                            context,
-                          ).user?.district?.toLowerCase(),
-                )
-                .first,
-          ).toEntity();
-      fieldsData['district'] = selectedDistrict.id;
-      sl<ServicesBloc>()
-          .getFieldInputData(
-            apiUrl: mandalListApiUrl,
-            requestParams: {'dist_id': selectedDistrict.id},
-            requestModel: ListModel.fromMandalJson,
-          )
-          .then((response) {
-            if (response is ServicesStateSuccess) {
-              final items =
-                  ((response).responseEntity.entity as ListEntity).items
-                      .map((item) => item as NameIDEntity)
-                      .toList();
-              final mandal =
-                  items
-                      .where(
-                        (e) =>
-                            (e.name?.toLowerCase() ==
-                                (fieldsData['mandal'] ?? '')) ||
-                            (e.id ==
-                                (int.tryParse(fieldsData['mandal'] ?? '0'))),
-                      )
-                      .firstOrNull;
-              final child =
-                  step1formFields
-                      .where((item) => item.name == 'mandal')
-                      .firstOrNull;
-              child?.inputFieldData = {'items': items};
-              child?.fieldValue = mandal;
-              fieldsData['mandal'] = mandal?.id;
-              _onDataChanged(true);
-            }
-          });
-      fieldsData['date_of_camp'] =
-          fieldsData['date_of_camp'] ??
-          getDateByformat('dd/MM/yyyy', DateTime.now());
-      step1formFields.addAll([
-        FormEntity()
-          ..name = 'integratedoutreachcampform'
-          ..labelEn = 'Camp Details'
-          ..labelTe = 'Camp Details'
-          ..type = 'labelheader',
-        FormEntity()
-          ..name = 'date_of_camp'
-          ..labelEn = 'Date Of Camp'
-          ..labelTe = 'Date Of Camp'
-          ..type = 'date'
-          ..placeholderEn = 'dd/MM/yyyy'
-          ..fieldValue = fieldsData['date_of_camp']
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..messages =
-              (FormMessageEntity()..requiredEn = 'Please Enter DateOfCamp')
-          ..suffixIcon = DrawableAssets.icCalendar
-          ..onDatachnage = (value) {
-            fieldsData['date_of_camp'] = value;
-            _onDataChanged(false);
-          },
-        FormEntity()
-          ..name = 'image_camp'
-          ..labelEn = 'Photo Of Camp'
-          ..labelTe = 'Photo Of Camp'
-          ..type = 'image'
-          ..placeholderEn = 'Photo Of Camp'
-          ..fieldValue = fieldsData['image_camp']
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..messages =
-              (FormMessageEntity()..requiredEn = 'Please take Photo Of Camp')
-          ..suffixIcon = DrawableAssets.icUpload
-          ..onDatachnage = (value) {
-            fieldsData['image_camp'] = value;
-            _onDataChanged(false);
-          },
-        FormEntity()
-          ..name = 'district'
-          ..labelEn = 'District'
-          ..labelTe = 'District'
-          ..type = 'collection'
-          ..isEnabled = false
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..placeholderEn = 'Select District'
-          ..fieldValue = selectedDistrict
-          ..inputFieldData = {
-            'items':
-                districts
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-          }
-          ..onDatachnage = (value) {
-            final child =
-                step1formFields
-                    .where((item) => item.name == 'mandal')
-                    .firstOrNull;
-            if (child != null) {
-              child.url = mandalListApiUrl;
-              child.urlInputData = {'dist_id': value.id};
-              child.inputFieldData = null;
-              child.fieldValue = null;
-            }
-            fieldsData['district'] = value.id;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'mandal'
-          ..labelEn = 'Mandal'
-          ..labelTe = 'Mandal'
-          ..type = 'collection'
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..placeholderEn = 'Select Mandal'
-          ..canSearch = true
-          ..onDatachnage = (value) {
-            final child =
-                step1formFields
-                    .where((item) => item.name == 'village')
-                    .firstOrNull;
-            if (child != null) {
-              child.inputFieldData?.remove('items');
-              child.url = villageListApiUrl;
-              child.urlInputData = {'mandal_id': value.id};
-              child.inputFieldData = null;
-              child.fieldValue = null;
-            }
-            fieldsData['mandal'] = value.id;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'village'
-          ..labelEn = 'Village'
-          ..labelTe = 'Village'
-          ..type = 'collection'
-          ..canSearch = true
-          ..requestModel = ListModel.fromvillageJson
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..placeholderEn = 'Select Village'
-          ..onDatachnage = (value) {
-            fieldsData['village'] = value.id;
-            _onDataChanged(false);
-          },
-        // FormEntity()
-        //   ..name = 'village'
-        //   ..labelEn = 'Village'
-        //   ..labelTe = 'Village'
-        //   ..type = 'text'
-        //   // ..inputFieldData = {
-        //   //   'items':
-        //   //       [
-        //   //             {'id': 1, 'name': 'Village1'},
-        //   //             {'id': 2, 'name': 'Village2'},
-        //   //             {'id': 3, 'name': 'Village3'},
-        //   //             {'id': 4, 'name': 'Village4'},
-        //   //           ]
-        //   //           .map(
-        //   //             (item) =>
-        //   //                 NameIDModel.fromDistrictsJson(
-        //   //                   item as Map<String, dynamic>,
-        //   //                 ).toEntity(),
-        //   //           )
-        //   //           .toList(),
-        //   // }
-        //   ..fieldValue = fieldsData['village']
-        //   ..validation =
-        //       (FormValidationEntity()
-        //         ..isRequired = true
-        //         ..regex = nameRegExp)
-        //   ..messages =
-        //       (FormMessageEntity()
-        //         ..requiredEn = 'Please Enter Village'
-        //         ..requiredTe = 'Please Enter Village'
-        //         ..regexEn = 'Please Enter Valid Village'
-        //         ..regexTe = 'Please Enter Valid Village')
-        //   ..placeholderEn = 'Enter Village'
-        //   ..onDatachnage = (value) {
-        //     fieldsData['village'] = value;
-        //     _onDataChanged(false);
-        //   },
-        FormEntity()
-          ..name = 'camp_location'
-          ..label = resources.string.locationoftheCamp
-          ..type = 'collection'
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Enter Camp Village / Location'
-                ..requiredTe = 'Please Enter Camp Village / Location'
-                ..regexEn = 'Please Enter Valid Camp Village / Location'
-                ..regexTe = 'Please Enter Valid Camp Village / Location')
-          ..placeholderEn = 'Camp Village / Location'
-          ..placeholderTe = 'Camp Village / Location'
-          ..fieldValue = selectedCamp
-          ..inputFieldData = {'items': campLocations, 'doSort': false}
-          ..onDatachnage = (value) {
-            final child =
-                step1formFields
-                    .where((item) => item.name == 'camp_location_other')
-                    .firstOrNull;
-            if (value.id == 7) {
-              if (child != null) {
-                child.isHidden = false;
-              }
-            } else {
-              if (child != null) {
-                child.isHidden = true;
-                child.fieldValue = null;
-              }
-            }
-            fieldsData['camp_location'] = value.name;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'camp_location_other'
-          ..type = 'text'
-          ..isHidden = true
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Enter Camp Village / Location'
-                ..requiredTe = 'Please Enter Camp Village / Location'
-                ..regexEn = 'Please Enter Valid Camp Village / Location'
-                ..regexTe = 'Please Enter Valid Camp Village / Location')
-          ..label = 'Camp Village / Location'
-          ..placeholderEn = 'Camp Village / Location'
-          ..placeholderTe = 'Camp Village / Location'
-          ..fieldValue = fieldsData['camp_location']
-          ..onDatachnage = (value) {
-            fieldsData['camp_location_other'] = value;
-            _onDataChanged(false);
-          },
-        FormEntity()
-          ..name = 'camp_local_poc_name'
-          ..type = 'text'
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Enter Local POC (ASHA/ANM) Name'
-                ..requiredTe = 'Please Enter Local POC (ASHA/ANM) Name'
-                ..regexEn = 'Please Enter Valid Local POC (ASHA/ANM) Name'
-                ..regexTe = 'Please Enter Valid Local POC (ASHA/ANM) Name')
-          ..label = 'Local POC (ASHA/ANM) Name'
-          ..placeholderEn = 'Local POC (ASHA/ANM) Name'
-          ..placeholderTe = 'Local POC (ASHA/ANM) Name'
-          ..fieldValue = fieldsData['camp_local_poc_name']
-          ..onDatachnage = (value) {
-            fieldsData['camp_local_poc_name'] = value;
-            _onDataChanged(false);
-          },
-        FormEntity()
-          ..name = 'camp_local_poc_number'
-          ..type = 'number'
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..maxLength = 10
-                ..regex = numberRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Enter Local POC (ASHA/ANM) Number'
-                ..requiredTe = 'Please Enter Local POC (ASHA/ANM) Number'
-                ..regexEn = 'Please Enter Valid Local POC (ASHA/ANM) Number'
-                ..regexTe = 'Please Enter Valid Local POC (ASHA/ANM) Number')
-          ..label = 'Local POC (ASHA/ANM) Number'
-          ..placeholderEn = 'Local POC (ASHA/ANM) Number'
-          ..placeholderTe = 'Local POC (ASHA/ANM) Number'
-          ..fieldValue = fieldsData['camp_local_poc_number']
-          ..onDatachnage = (value) {
-            fieldsData['camp_local_poc_number'] = value;
-            _onDataChanged(false);
-          },
-      ]);
-    }
-    if (referralFormFields.isEmpty) {
-      referralFormFields.addAll([
-        FormEntity()
-          ..name = 'referralFormHeader'
-          ..label = resources.string.referralDetails
-          ..type = 'labelheader',
-        FormEntity()
-          ..name = 'visit_type'
-          ..label = 'Visit Type'
-          ..type = 'radio'
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Enter Name'
-                ..requiredTe = 'Please Enter Name'
-                ..regexEn = 'Please Enter Valid Name'
-                ..regexTe = 'Please Enter Valid Name')
-          ..placeholderEn = 'Name'
-          ..placeholderTe = 'Name'
-          ..inputFieldData =
-              [
-                    {"id": "1", "name": "Walk in (Self referral)"},
-                    {"id": "2", "name": "Referred"},
-                  ]
-                  .map(
-                    (item) =>
-                        NameIDModel.fromDistrictsJson(
-                          item as Map<String, dynamic>,
-                        ).toEntity(),
-                  )
-                  .toList()
-          ..onDatachnage = (value) {
-            final childs = referralFormFields.where(
-              (item) => [
-                'refferedby',
-                'referred_person_name',
-                'referred_contact_number',
-              ].contains(item.name),
-            );
-            for (var child in childs) {
-              child.isHidden = value.id == 1;
-              child.fieldValue = null;
-            }
-            final radio =
-                referralFormFields
-                    .where((item) => item.name == 'visit_type')
-                    .firstOrNull;
-            radio?.fieldValue = value;
-            fieldsData['visit_type'] = value.name;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'refferedby'
-          ..label = 'Reffered By'
-          ..type = 'collection'
-          ..isHidden = true
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Select Reffered By'
-                ..requiredTe = 'Please Select Reffered By')
-          ..placeholder = 'Reffered By'
-          ..inputFieldData = {
-            'items':
-                [
-                      {"id": "1", "name": "Spouse"},
-                      {"id": "2", "name": "Partner"},
-                      {"id": "3", "name": "Friend"},
-                      {"id": "4", "name": "Neighbour"},
-                      {"id": "5", "name": "Healthcare Provider"},
-                      {"id": "6", "name": "NGO Worker"},
-                      {"id": "7", "name": "Other (please specify)"},
-                    ]
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
-          ..onDatachnage = (value) {
-            final child =
-                referralFormFields
-                    .where((item) => item.name == 'referredby_other')
-                    .firstOrNull;
-            if (value.id == 7) {
-              if (child != null) {
-                child.isHidden = false;
-              }
-            } else {
-              if (child != null) {
-                child.isHidden = true;
-                child.fieldValue = null;
-              }
-            }
-            fieldsData['refferedby'] = value.name;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'referredby_other'
-          ..type = 'text'
-          ..isHidden = true
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..regexEn = 'Please Enter Valid referred by'
-                ..regexTe = 'Please Enter Valid referred by')
-          ..placeholder = 'referred by'
-          ..onDatachnage = (value) {
-            fieldsData['refferedby'] = value;
-            _onDataChanged(false);
-          },
-        FormEntity()
-          ..name = 'referred_person_name'
-          ..label = 'Referred Person Name'
-          ..type = 'text'
-          ..isHidden = true
-          ..validation = (FormValidationEntity()..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..regexEn = 'Please Enter Valid Referred Person Name'
-                ..regexTe = 'Please Enter Valid Referred Person Name')
-          ..placeholder = 'Referred Person Name'
-          ..onDatachnage = (value) {
-            fieldsData['referred_person_name'] = value;
-            _onDataChanged(false);
-          },
-        FormEntity()
-          ..name = 'referred_contact_number'
-          ..label = 'Referred Contact Number'
-          ..type = 'number'
-          ..isHidden = true
-          ..messages =
-              (FormMessageEntity()
-                ..regexEn = 'Please Enter Valid Mobile Number'
-                ..regexTe = 'Please Enter Valid Mobile Number')
-          ..validation =
-              (FormValidationEntity()
-                ..maxLength = 10
-                ..regex = numberRegExp)
-          ..placeholder = 'Referred Contact Number'
-          ..onDatachnage = (value) {
-            fieldsData['referred_contact_number'] = value;
-            _onDataChanged(false);
-          },
-      ]);
-    }
+    // if (step1formFields.isEmpty) {
+    //   final campLocations =
+    //       [
+    //             {'id': '1', 'name': 'VHC'},
+    //             {'id': '2', 'name': 'Sub centre'},
+    //             {'id': '3', 'name': 'Anganwadi'},
+    //             {'id': '4', 'name': 'PHC'},
+    //             {'id': '5', 'name': 'UPHC'},
+    //             {'id': '6', 'name': 'CHC'},
+    //             {'id': '7', 'name': 'Other (specify)'},
+    //           ]
+    //           .map(
+    //             (item) =>
+    //                 NameIDModel.fromDistrictsJson(
+    //                   item as Map<String, dynamic>,
+    //                 ).toEntity(),
+    //           )
+    //           .toList();
+    //   final selectedCamp =
+    //       campLocations
+    //           .where(
+    //             (e) =>
+    //                 (e.name?.toLowerCase() ==
+    //                     (fieldsData['camp_location'] ?? '')) ||
+    //                 (e.id ==
+    //                     (int.tryParse(fieldsData['camp_location'] ?? '0'))),
+    //           )
+    //           .firstOrNull;
+    //   final selectedDistrict =
+    //       NameIDModel.fromDistrictsJson(
+    //         districts
+    //             .where(
+    //               (e) =>
+    //                   e['name']?.toLowerCase() ==
+    //                       UserCredentialsEntity.details(
+    //                         context,
+    //                       ).user?.district?.toLowerCase() ||
+    //                   e['id']?.toLowerCase() ==
+    //                       UserCredentialsEntity.details(
+    //                         context,
+    //                       ).user?.district?.toLowerCase(),
+    //             )
+    //             .first,
+    //       ).toEntity();
+    //   fieldsData['district'] = selectedDistrict.id;
+    //   sl<ServicesBloc>()
+    //       .getFieldInputData(
+    //         apiUrl: mandalListApiUrl,
+    //         requestParams: {'dist_id': selectedDistrict.id},
+    //         requestModel: ListModel.fromMandalJson,
+    //       )
+    //       .then((response) {
+    //         if (response is ServicesStateSuccess) {
+    //           final items =
+    //               ((response).responseEntity.entity as ListEntity).items
+    //                   .map((item) => item as NameIDEntity)
+    //                   .toList();
+    //           final mandal =
+    //               items
+    //                   .where(
+    //                     (e) =>
+    //                         (e.name?.toLowerCase() ==
+    //                             (fieldsData['mandal'] ?? '')) ||
+    //                         (e.id ==
+    //                             (int.tryParse(fieldsData['mandal'] ?? '0'))),
+    //                   )
+    //                   .firstOrNull;
+    //           final child =
+    //               step1formFields
+    //                   .where((item) => item.name == 'mandal')
+    //                   .firstOrNull;
+    //           child?.inputFieldData = {'items': items};
+    //           child?.fieldValue = mandal;
+    //           fieldsData['mandal'] = mandal?.id;
+    //           _onDataChanged(true);
+    //         }
+    //       });
+    //   fieldsData['date_of_camp'] =
+    //       fieldsData['date_of_camp'] ??
+    //       getDateByformat('dd/MM/yyyy', DateTime.now());
+    //   step1formFields.addAll([
+    //     FormEntity()
+    //       ..name = 'integratedoutreachcampform'
+    //       ..labelEn = 'Camp Details'
+    //       ..labelTe = 'Camp Details'
+    //       ..type = 'labelheader',
+    //     FormEntity()
+    //       ..name = 'date_of_camp'
+    //       ..labelEn = 'Date Of Camp'
+    //       ..labelTe = 'Date Of Camp'
+    //       ..type = 'date'
+    //       ..placeholderEn = 'dd/MM/yyyy'
+    //       ..fieldValue = fieldsData['date_of_camp']
+    //       ..validation = (FormValidationEntity()..isRequired = true)
+    //       ..messages =
+    //           (FormMessageEntity()..requiredEn = 'Please Enter DateOfCamp')
+    //       ..suffixIcon = DrawableAssets.icCalendar
+    //       ..onDatachnage = (value) {
+    //         fieldsData['date_of_camp'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //     FormEntity()
+    //       ..name = 'image_camp'
+    //       ..labelEn = 'Photo Of Camp'
+    //       ..labelTe = 'Photo Of Camp'
+    //       ..type = 'image'
+    //       ..placeholderEn = 'Photo Of Camp'
+    //       ..fieldValue = fieldsData['image_camp']
+    //       ..validation = (FormValidationEntity()..isRequired = true)
+    //       ..messages =
+    //           (FormMessageEntity()..requiredEn = 'Please take Photo Of Camp')
+    //       ..suffixIcon = DrawableAssets.icUpload
+    //       ..onDatachnage = (value) {
+    //         fieldsData['image_camp'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //     FormEntity()
+    //       ..name = 'district'
+    //       ..labelEn = 'District'
+    //       ..labelTe = 'District'
+    //       ..type = 'collection'
+    //       ..isEnabled = false
+    //       ..validation = (FormValidationEntity()..isRequired = true)
+    //       ..placeholderEn = 'Select District'
+    //       ..fieldValue = selectedDistrict
+    //       ..inputFieldData = {
+    //         'items':
+    //             districts
+    //                 .map(
+    //                   (item) =>
+    //                       NameIDModel.fromDistrictsJson(
+    //                         item as Map<String, dynamic>,
+    //                       ).toEntity(),
+    //                 )
+    //                 .toList(),
+    //       }
+    //       ..onDatachnage = (value) {
+    //         final child =
+    //             step1formFields
+    //                 .where((item) => item.name == 'mandal')
+    //                 .firstOrNull;
+    //         if (child != null) {
+    //           child.url = mandalListApiUrl;
+    //           child.urlInputData = {'dist_id': value.id};
+    //           child.inputFieldData = null;
+    //           child.fieldValue = null;
+    //         }
+    //         fieldsData['district'] = value.id;
+    //         _onDataChanged(true);
+    //       },
+    //     FormEntity()
+    //       ..name = 'mandal'
+    //       ..labelEn = 'Mandal'
+    //       ..labelTe = 'Mandal'
+    //       ..type = 'collection'
+    //       ..validation = (FormValidationEntity()..isRequired = true)
+    //       ..placeholderEn = 'Select Mandal'
+    //       ..canSearch = true
+    //       ..onDatachnage = (value) {
+    //         final child =
+    //             step1formFields
+    //                 .where((item) => item.name == 'village')
+    //                 .firstOrNull;
+    //         if (child != null) {
+    //           child.inputFieldData?.remove('items');
+    //           child.url = villageListApiUrl;
+    //           child.urlInputData = {'mandal_id': value.id};
+    //           child.inputFieldData = null;
+    //           child.fieldValue = null;
+    //         }
+    //         fieldsData['mandal'] = value.id;
+    //         _onDataChanged(true);
+    //       },
+    //     FormEntity()
+    //       ..name = 'village'
+    //       ..labelEn = 'Village'
+    //       ..labelTe = 'Village'
+    //       ..type = 'collection'
+    //       ..canSearch = true
+    //       ..requestModel = ListModel.fromvillageJson
+    //       ..validation = (FormValidationEntity()..isRequired = true)
+    //       ..placeholderEn = 'Select Village'
+    //       ..onDatachnage = (value) {
+    //         fieldsData['village'] = value.id;
+    //         _onDataChanged(false);
+    //       },
+    //     // FormEntity()
+    //     //   ..name = 'village'
+    //     //   ..labelEn = 'Village'
+    //     //   ..labelTe = 'Village'
+    //     //   ..type = 'text'
+    //     //   // ..inputFieldData = {
+    //     //   //   'items':
+    //     //   //       [
+    //     //   //             {'id': 1, 'name': 'Village1'},
+    //     //   //             {'id': 2, 'name': 'Village2'},
+    //     //   //             {'id': 3, 'name': 'Village3'},
+    //     //   //             {'id': 4, 'name': 'Village4'},
+    //     //   //           ]
+    //     //   //           .map(
+    //     //   //             (item) =>
+    //     //   //                 NameIDModel.fromDistrictsJson(
+    //     //   //                   item as Map<String, dynamic>,
+    //     //   //                 ).toEntity(),
+    //     //   //           )
+    //     //   //           .toList(),
+    //     //   // }
+    //     //   ..fieldValue = fieldsData['village']
+    //     //   ..validation =
+    //     //       (FormValidationEntity()
+    //     //         ..isRequired = true
+    //     //         ..regex = nameRegExp)
+    //     //   ..messages =
+    //     //       (FormMessageEntity()
+    //     //         ..requiredEn = 'Please Enter Village'
+    //     //         ..requiredTe = 'Please Enter Village'
+    //     //         ..regexEn = 'Please Enter Valid Village'
+    //     //         ..regexTe = 'Please Enter Valid Village')
+    //     //   ..placeholderEn = 'Enter Village'
+    //     //   ..onDatachnage = (value) {
+    //     //     fieldsData['village'] = value;
+    //     //     _onDataChanged(false);
+    //     //   },
+    //     FormEntity()
+    //       ..name = 'camp_location'
+    //       ..label = resources.string.locationoftheCamp
+    //       ..type = 'collection'
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..regex = nameRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..requiredEn = 'Please Enter Camp Village / Location'
+    //             ..requiredTe = 'Please Enter Camp Village / Location'
+    //             ..regexEn = 'Please Enter Valid Camp Village / Location'
+    //             ..regexTe = 'Please Enter Valid Camp Village / Location')
+    //       ..placeholderEn = 'Camp Village / Location'
+    //       ..placeholderTe = 'Camp Village / Location'
+    //       ..fieldValue = selectedCamp
+    //       ..inputFieldData = {'items': campLocations, 'doSort': false}
+    //       ..onDatachnage = (value) {
+    //         final child =
+    //             step1formFields
+    //                 .where((item) => item.name == 'camp_location_other')
+    //                 .firstOrNull;
+    //         if (value.id == 7) {
+    //           if (child != null) {
+    //             child.isHidden = false;
+    //           }
+    //         } else {
+    //           if (child != null) {
+    //             child.isHidden = true;
+    //             child.fieldValue = null;
+    //           }
+    //         }
+    //         fieldsData['camp_location'] = value.name;
+    //         _onDataChanged(true);
+    //       },
+    //     FormEntity()
+    //       ..name = 'camp_location_other'
+    //       ..type = 'text'
+    //       ..isHidden = true
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..regex = nameRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..requiredEn = 'Please Enter Camp Village / Location'
+    //             ..requiredTe = 'Please Enter Camp Village / Location'
+    //             ..regexEn = 'Please Enter Valid Camp Village / Location'
+    //             ..regexTe = 'Please Enter Valid Camp Village / Location')
+    //       ..label = 'Camp Village / Location'
+    //       ..placeholderEn = 'Camp Village / Location'
+    //       ..placeholderTe = 'Camp Village / Location'
+    //       ..fieldValue = fieldsData['camp_location']
+    //       ..onDatachnage = (value) {
+    //         fieldsData['camp_location_other'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //     FormEntity()
+    //       ..name = 'camp_local_poc_name'
+    //       ..type = 'text'
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..regex = nameRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..requiredEn = 'Please Enter Local POC (ASHA/ANM) Name'
+    //             ..requiredTe = 'Please Enter Local POC (ASHA/ANM) Name'
+    //             ..regexEn = 'Please Enter Valid Local POC (ASHA/ANM) Name'
+    //             ..regexTe = 'Please Enter Valid Local POC (ASHA/ANM) Name')
+    //       ..label = 'Local POC (ASHA/ANM) Name'
+    //       ..placeholderEn = 'Local POC (ASHA/ANM) Name'
+    //       ..placeholderTe = 'Local POC (ASHA/ANM) Name'
+    //       ..fieldValue = fieldsData['camp_local_poc_name']
+    //       ..onDatachnage = (value) {
+    //         fieldsData['camp_local_poc_name'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //     FormEntity()
+    //       ..name = 'camp_local_poc_number'
+    //       ..type = 'number'
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..maxLength = 10
+    //             ..regex = numberRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..requiredEn = 'Please Enter Local POC (ASHA/ANM) Number'
+    //             ..requiredTe = 'Please Enter Local POC (ASHA/ANM) Number'
+    //             ..regexEn = 'Please Enter Valid Local POC (ASHA/ANM) Number'
+    //             ..regexTe = 'Please Enter Valid Local POC (ASHA/ANM) Number')
+    //       ..label = 'Local POC (ASHA/ANM) Number'
+    //       ..placeholderEn = 'Local POC (ASHA/ANM) Number'
+    //       ..placeholderTe = 'Local POC (ASHA/ANM) Number'
+    //       ..fieldValue = fieldsData['camp_local_poc_number']
+    //       ..onDatachnage = (value) {
+    //         fieldsData['camp_local_poc_number'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //   ]);
+    // }
+    // if (referralFormFields.isEmpty) {
+    //   referralFormFields.addAll([
+    //     FormEntity()
+    //       ..name = 'referralFormHeader'
+    //       ..label = resources.string.referralDetails
+    //       ..type = 'labelheader',
+    //     FormEntity()
+    //       ..name = 'visit_type'
+    //       ..label = 'Visit Type'
+    //       ..type = 'radio'
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..regex = nameRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..requiredEn = 'Please Enter Name'
+    //             ..requiredTe = 'Please Enter Name'
+    //             ..regexEn = 'Please Enter Valid Name'
+    //             ..regexTe = 'Please Enter Valid Name')
+    //       ..placeholderEn = 'Name'
+    //       ..placeholderTe = 'Name'
+    //       ..inputFieldData =
+    //           [
+    //                 {"id": "1", "name": "Walk in (Self referral)"},
+    //                 {"id": "2", "name": "Referred"},
+    //               ]
+    //               .map(
+    //                 (item) =>
+    //                     NameIDModel.fromDistrictsJson(
+    //                       item as Map<String, dynamic>,
+    //                     ).toEntity(),
+    //               )
+    //               .toList()
+    //       ..onDatachnage = (value) {
+    //         final childs = referralFormFields.where(
+    //           (item) => [
+    //             'refferedby',
+    //             'referred_person_name',
+    //             'referred_contact_number',
+    //           ].contains(item.name),
+    //         );
+    //         for (var child in childs) {
+    //           child.isHidden = value.id == 1;
+    //           child.fieldValue = null;
+    //         }
+    //         final radio =
+    //             referralFormFields
+    //                 .where((item) => item.name == 'visit_type')
+    //                 .firstOrNull;
+    //         radio?.fieldValue = value;
+    //         fieldsData['visit_type'] = value.name;
+    //         _onDataChanged(true);
+    //       },
+    //     FormEntity()
+    //       ..name = 'refferedby'
+    //       ..label = 'Reffered By'
+    //       ..type = 'collection'
+    //       ..isHidden = true
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..regex = nameRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..requiredEn = 'Please Select Reffered By'
+    //             ..requiredTe = 'Please Select Reffered By')
+    //       ..placeholder = 'Reffered By'
+    //       ..inputFieldData = {
+    //         'items':
+    //             [
+    //                   {"id": "1", "name": "Spouse"},
+    //                   {"id": "2", "name": "Partner"},
+    //                   {"id": "3", "name": "Friend"},
+    //                   {"id": "4", "name": "Neighbour"},
+    //                   {"id": "5", "name": "Healthcare Provider"},
+    //                   {"id": "6", "name": "NGO Worker"},
+    //                   {"id": "7", "name": "Other (please specify)"},
+    //                 ]
+    //                 .map(
+    //                   (item) =>
+    //                       NameIDModel.fromDistrictsJson(
+    //                         item as Map<String, dynamic>,
+    //                       ).toEntity(),
+    //                 )
+    //                 .toList(),
+    //         'doSort': false,
+    //       }
+    //       ..onDatachnage = (value) {
+    //         final child =
+    //             referralFormFields
+    //                 .where((item) => item.name == 'referredby_other')
+    //                 .firstOrNull;
+    //         if (value.id == 7) {
+    //           if (child != null) {
+    //             child.isHidden = false;
+    //           }
+    //         } else {
+    //           if (child != null) {
+    //             child.isHidden = true;
+    //             child.fieldValue = null;
+    //           }
+    //         }
+    //         fieldsData['refferedby'] = value.name;
+    //         _onDataChanged(true);
+    //       },
+    //     FormEntity()
+    //       ..name = 'referredby_other'
+    //       ..type = 'text'
+    //       ..isHidden = true
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..regex = nameRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..regexEn = 'Please Enter Valid referred by'
+    //             ..regexTe = 'Please Enter Valid referred by')
+    //       ..placeholder = 'referred by'
+    //       ..onDatachnage = (value) {
+    //         fieldsData['refferedby'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //     FormEntity()
+    //       ..name = 'referred_person_name'
+    //       ..label = 'Referred Person Name'
+    //       ..type = 'text'
+    //       ..isHidden = true
+    //       ..validation = (FormValidationEntity()..regex = nameRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..regexEn = 'Please Enter Valid Referred Person Name'
+    //             ..regexTe = 'Please Enter Valid Referred Person Name')
+    //       ..placeholder = 'Referred Person Name'
+    //       ..onDatachnage = (value) {
+    //         fieldsData['referred_person_name'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //     FormEntity()
+    //       ..name = 'referred_contact_number'
+    //       ..label = 'Referred Contact Number'
+    //       ..type = 'number'
+    //       ..isHidden = true
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..regexEn = 'Please Enter Valid Mobile Number'
+    //             ..regexTe = 'Please Enter Valid Mobile Number')
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..maxLength = 10
+    //             ..regex = numberRegExp)
+    //       ..placeholder = 'Referred Contact Number'
+    //       ..onDatachnage = (value) {
+    //         fieldsData['referred_contact_number'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //   ]);
+    // }
     if (step2formFields.isEmpty) {
       final selectedDistrict =
           NameIDModel.fromDistrictsJson(
@@ -1300,7 +1300,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..name = 'alreadAtART'
           ..type = 'confirmcheck'
           ..label = 'Already on ART?'
-          ..isHidden = fieldsData['hiv']?['result'] ?? 'Negative' == 'Negative'
+          ..isHidden =
+              (fieldsData['hiv']?['result'] ?? 'Negative') == 'Negative'
           ..fieldValue = fieldsData['hiv']?['alreadAtART'] == 1
           ..onDatachnage = (value) {
             final child =
