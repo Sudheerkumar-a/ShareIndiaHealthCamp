@@ -1,31 +1,27 @@
 import 'dart:async';
 
-import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz.dart' show cast;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
-import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/discard_changes_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/presentation/reports/add_camp_form_screen.dart';
-import 'package:shareindia_health_camp/presentation/reports/add_field_agent_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/clients_by_camp_screen.dart';
-import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
+import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
 import '../../domain/entities/user_credentials_entity.dart';
 import '../../injection_container.dart';
 
 // ignore: must_be_immutable
-class CampListScreen extends BaseScreenWidget {
-  static start(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).push(
+class CampListScreen extends StatefulWidget {
+  static Future<dynamic> start(BuildContext context) {
+    return Navigator.of(context, rootNavigator: true).push(
       PageTransition(
         type: PageTransitionType.rightToLeft,
         child: CampListScreen(),
@@ -33,16 +29,29 @@ class CampListScreen extends BaseScreenWidget {
     );
   }
 
-  CampListScreen({super.key});
+  const CampListScreen({super.key});
+
+  @override
+  State<CampListScreen> createState() => _CampListScreenState();
+}
+
+class _CampListScreenState extends State<CampListScreen> {
   final ServicesBloc _servicesBloc = sl<ServicesBloc>();
+
   // final _masterDataBloc = sl<MasterDataBloc>();
   List<CampEntity> camps = [];
+
   int? index;
+
   int? totalPagecount;
+
   final ValueNotifier<bool> _onFilterChange = ValueNotifier(false);
+
   // final ValueNotifier<UserEntity?> _selectedEmployee = ValueNotifier(null);
   String? selectedStatus;
+
   Map<String, dynamic>? filteredData;
+
   final ValueNotifier<List<String>> filteredDates = ValueNotifier([]);
 
   List<Widget> _getFilterBar(BuildContext context) {
@@ -50,14 +59,24 @@ class CampListScreen extends BaseScreenWidget {
     return [
       Row(
         children: [
-          Expanded(child: Text('Camps', style: context.textFontWeight600)),
+          Expanded(child: SizedBox()),
 
           InkWell(
             onTap: () async {
-              AddCampFormScreen.start(context);
+              AddCampFormScreen.start(context).then((value) {
+                if (value is int && context.mounted) {
+                  OutreachCampFormScreen.start(context, campId: value).then((
+                    value,
+                  ) {
+                    if (value == true) {
+                      _updateData(context);
+                    }
+                  });
+                }
+              });
             },
             child: ActionButtonWidget(
-              text: 'Add New Camp',
+              text: 'Add camp details',
               radious: resources.dimen.dp15,
               textSize: resources.fontSize.dp12,
               padding: EdgeInsets.symmetric(
@@ -69,37 +88,47 @@ class CampListScreen extends BaseScreenWidget {
           ),
         ],
       ),
-      SizedBox(height: resources.dimen.dp20),
+      SizedBox(height: resources.dimen.dp15),
+      Text(
+        'Camps (*To check camp details or Add New Client, click on the respective Camp)',
+        style: context.textFontWeight600,
+      ),
     ];
   }
 
-  _updateTickets(BuildContext context) async {
-    Dialogs.loader(context);
-    final responseState = await _servicesBloc.getCampList(
+  _updateData(BuildContext context) async {
+    //Dialogs.loader(context);
+    _servicesBloc.getCampList(
       requestParams: {
         'district_id': UserCredentialsEntity.details(context).user?.districtId,
       },
+      emitResponse: true,
     );
-    if (context.mounted) {
-      Dialogs.dismiss(context);
-      if (responseState is ServicesStateSuccess) {
-        camps =
-            cast<ListEntity>(
-              responseState.responseEntity.entity,
-            ).items.cast<CampEntity>();
+    // if (context.mounted) {
+    //   Dialogs.dismiss(context);
+    //   if (responseState is ServicesStateSuccess) {
+    //     camps =
+    //         cast<ListEntity>(
+    //           responseState.responseEntity.entity,
+    //         ).items.cast<CampEntity>();
+    //   }
+    //   _onFilterChange.value = !_onFilterChange.value;
+    // }
+  }
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      if (context.mounted) {
+        _updateData(context);
       }
-      _onFilterChange.value = !_onFilterChange.value;
-    }
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    Future.delayed(Duration.zero, () {
-      if (context.mounted) {
-        _updateTickets(context);
-      }
-    });
     final ticketsHeaderData = ['Date Of Camp', 'District', 'Mandal', 'Village'];
     final ticketsTableColunwidths = {
       0: const FlexColumnWidth(4),
@@ -124,12 +153,25 @@ class CampListScreen extends BaseScreenWidget {
                   children: _getFilterBar(context),
                 ),
                 SizedBox(height: resources.dimen.dp20),
-                ValueListenableBuilder(
-                  valueListenable: _onFilterChange,
-                  builder: (context, value, child) {
-                    return ValueListenableBuilder(
-                      valueListenable: _onFilterChange,
-                      builder: (context, value, child) {
+                BlocProvider(
+                  create: (context) => _servicesBloc,
+                  child: BlocBuilder<ServicesBloc, ServicesState>(
+                    builder: (context, responseState) {
+                      if (responseState is ServicesStateSuccess) {
+                        camps =
+                            cast<ListEntity>(
+                              responseState.responseEntity.entity,
+                            ).items.cast<CampEntity>();
+                        if (camps.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'No Camps Available',
+                              style: context.textFontWeight600.onFontSize(
+                                resources.fontSize.dp14,
+                              ),
+                            ),
+                          );
+                        }
                         return ReportListWidget(
                           reportData: camps,
                           ticketsHeaderData: ticketsHeaderData,
@@ -138,7 +180,10 @@ class CampListScreen extends BaseScreenWidget {
                           totalPagecount: 1,
                           onRowSelected: (ticket) {},
                           onColumnClick: (p0, p1) async {
-                            ClientsByCampScreen.start(context, p1);
+                            ClientsByCampScreen.start(
+                              context,
+                              p1,
+                            ).then(_updateData(context));
                           },
                           onPageChange: (page) {
                             // index = page;
@@ -147,9 +192,25 @@ class CampListScreen extends BaseScreenWidget {
                             // }
                           },
                         );
-                      },
-                    );
-                  },
+                      } else if (responseState is ServicesStateApiError) {
+                        return Center(
+                          child: Text(
+                            responseState.message,
+                            style: context.textFontWeight600.onFontSize(
+                              resources.fontSize.dp14,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return SizedBox(
+                          height: resources.dimen.dp300,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ],
             ),

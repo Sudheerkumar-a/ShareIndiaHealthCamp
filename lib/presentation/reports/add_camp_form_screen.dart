@@ -20,6 +20,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/action_button
 import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/discard_changes_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
+import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/presentation/utils/location.dart';
 import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
@@ -122,38 +123,38 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                 .first,
           ).toEntity();
       fieldsData['district'] = selectedDistrict.id;
-      sl<ServicesBloc>()
-          .getFieldInputData(
-            apiUrl: mandalListApiUrl,
-            requestParams: {'dist_id': selectedDistrict.id},
-            requestModel: ListModel.fromMandalJson,
-          )
-          .then((response) {
-            if (response is ServicesStateSuccess) {
-              final items =
-                  ((response).responseEntity.entity as ListEntity).items
-                      .map((item) => item as NameIDEntity)
-                      .toList();
-              final mandal =
-                  items
-                      .where(
-                        (e) =>
-                            (e.name?.toLowerCase() ==
-                                (fieldsData['mandal'] ?? '')) ||
-                            (e.id ==
-                                (int.tryParse(fieldsData['mandal'] ?? '0'))),
-                      )
-                      .firstOrNull;
-              final child =
-                  step1formFields
-                      .where((item) => item.name == 'mandal')
-                      .firstOrNull;
-              child?.inputFieldData = {'items': items};
-              child?.fieldValue = mandal;
-              fieldsData['mandal'] = mandal?.id;
-              _onDataChanged(true);
-            }
-          });
+      // sl<ServicesBloc>()
+      //     .getFieldInputData(
+      //       apiUrl: mandalListApiUrl,
+      //       requestParams: {'dist_id': selectedDistrict.id},
+      //       requestModel: ListModel.fromMandalJson,
+      //     )
+      //     .then((response) {
+      //       if (response is ServicesStateSuccess) {
+      //         final items =
+      //             ((response).responseEntity.entity as ListEntity).items
+      //                 .map((item) => item as NameIDEntity)
+      //                 .toList();
+      //         final mandal =
+      //             items
+      //                 .where(
+      //                   (e) =>
+      //                       (e.name?.toLowerCase() ==
+      //                           (fieldsData['mandal'] ?? '')) ||
+      //                       (e.id ==
+      //                           (int.tryParse(fieldsData['mandal'] ?? '0'))),
+      //                 )
+      //                 .firstOrNull;
+      //         final child =
+      //             step1formFields
+      //                 .where((item) => item.name == 'mandal')
+      //                 .firstOrNull;
+      //         child?.inputFieldData = {'items': items};
+      //         child?.fieldValue = mandal;
+      //         fieldsData['mandal'] = mandal?.id;
+      //         _onDataChanged(true);
+      //       }
+      //     });
       fieldsData['date_of_camp'] =
           fieldsData['date_of_camp'] ??
           getDateByformat('dd/MM/yyyy', DateTime.now());
@@ -235,6 +236,8 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Mandal'
           ..canSearch = true
+          ..url = mandalListApiUrl
+          ..urlInputData = {'dist_id': selectedDistrict.id}
           ..onDatachnage = (value) {
             final child =
                 step1formFields
@@ -395,7 +398,10 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                   'description': 'Do you want to discard this details',
                   'action': 'Proceed',
                 },
-                callback: () {
+                callback: (action) async {
+                  if (action == 2) {
+                    return;
+                  }
                   Navigator.pop(context);
                 },
               ),
@@ -498,7 +504,10 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                                         'Do you want to submit this details',
                                     'action': 'Proceed',
                                   },
-                                  callback: () async {
+                                  callback: (action) async {
+                                    if (action == 2) {
+                                      return;
+                                    }
                                     final requestParams = {
                                       "date_of_camp":
                                           fieldsData['date_of_camp'],
@@ -542,15 +551,31 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                                     }
                                     Dialogs.dismiss(context);
                                     if (response is ServicesStateSuccess) {
-                                      Dialogs.showInfoDialog(
+                                      Dialogs.showContentHeightBottomSheetDialog(
                                         context,
-                                        PopupType.success,
-                                        'Successfully Submitted',
-                                      ).then((value) {
-                                        if (context.mounted) {
-                                          Navigator.pop(context, true);
-                                        }
-                                      });
+                                        DiscardChangesDialog(
+                                          data: {
+                                            'title': 'Alert',
+                                            'description':
+                                                'Successfully Created Camp, Do you want ADD New Client',
+                                            'action': 'Proceed',
+                                          },
+                                          callback: (action) async {
+                                            if (context.mounted) {
+                                              Navigator.pop(
+                                                context,
+                                                action == 1
+                                                    ? (response
+                                                                .responseEntity
+                                                                .entity
+                                                            as SingleDataEntity)
+                                                        .value
+                                                    : null,
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      );
                                     } else if (response
                                         is ServicesStateApiError) {
                                       Dialogs.showInfoDialog(

@@ -66,7 +66,7 @@ extension FieldEntityExtension on FormEntity {
               if (inputFieldData == null) {
                 inputFieldData = {'items': snapshot.data};
               } else {
-                inputFieldData['items'] ??= snapshot.data;
+                inputFieldData['items'] = snapshot.data;
               }
             }
             return Visibility(

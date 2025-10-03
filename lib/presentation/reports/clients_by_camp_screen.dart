@@ -28,8 +28,8 @@ import '../../injection_container.dart';
 // ignore: must_be_immutable
 class ClientsByCampScreen extends BaseScreenWidget {
   CampEntity campEntity;
-  static start(BuildContext context, CampEntity campEntity) {
-    Navigator.of(context, rootNavigator: true).push(
+  static Future<dynamic> start(BuildContext context, CampEntity campEntity) {
+    return Navigator.of(context, rootNavigator: true).push(
       PageTransition(
         type: PageTransitionType.rightToLeft,
         child: ClientsByCampScreen(campEntity: campEntity),

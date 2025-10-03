@@ -110,7 +110,10 @@ class ViewScreeningDetails extends BaseScreenWidget {
                             'description': 'Do you want to delete this details',
                             'action': 'Proceed',
                           },
-                          callback: () async {
+                          callback: (action) async {
+                            if (action == 2) {
+                              return;
+                            }
                             Dialogs.loader(context);
                             final response = await sl<ServicesBloc>()
                                 .submitData(

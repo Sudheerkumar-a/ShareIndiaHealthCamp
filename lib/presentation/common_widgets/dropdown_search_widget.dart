@@ -8,7 +8,7 @@ import 'package:shareindia_health_camp/res/drawables/drawable_assets.dart';
 
 const double defaultHeight = 27;
 
-class DropdownSearchWidget<T extends Object> extends StatelessWidget {
+class DropdownSearchWidget<T extends Object> extends StatefulWidget {
   final double height;
   final bool isEnabled;
   final String labelText;
@@ -18,11 +18,12 @@ class DropdownSearchWidget<T extends Object> extends StatelessWidget {
   final String? suffixIconPath;
   final String fontFamily;
   final List<T> list;
-  T? selectedValue;
-  Function(T?)? callback;
+  final T? selectedValue;
+  final Function(T?)? callback;
   final Color? fillColor;
   final bool isMandetory;
-  DropdownSearchWidget({
+
+  const DropdownSearchWidget({
     required this.list,
     this.height = defaultHeight,
     this.isEnabled = true,
@@ -40,16 +41,59 @@ class DropdownSearchWidget<T extends Object> extends StatelessWidget {
   });
 
   @override
+  State<DropdownSearchWidget<T>> createState() =>
+      _DropdownSearchWidgetState<T>();
+}
+
+class _DropdownSearchWidgetState<T extends Object>
+    extends State<DropdownSearchWidget<T>> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.textController ?? TextEditingController();
+
+    // initialize selected value if provided
+    if (widget.selectedValue != null) {
+      _controller.text = widget.selectedValue.toString();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant DropdownSearchWidget<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Update text if selectedValue changed
+    if (widget.list != oldWidget.list) {
+      //print('${widget.labelText}  ${widget.list.toString()}');
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.textController == null) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final resources = context.resources;
     return LayoutBuilder(
       builder: (context, constraints) {
         return Autocomplete<T>(
+          key: ValueKey(widget.list.hashCode), // force refresh if list changes
+          initialValue: TextEditingValue(
+            text: widget.selectedValue?.toString() ?? '',
+          ),
           optionsBuilder: (TextEditingValue textEditingValue) {
-            if (textEditingValue.text == '') {
-              return list;
+            if (textEditingValue.text.isEmpty) {
+              return widget.list;
             }
-            return list.where((T option) {
+            return widget.list.where((T option) {
               return option.toString().toLowerCase().contains(
                 textEditingValue.text.toLowerCase(),
               );
@@ -61,19 +105,21 @@ class DropdownSearchWidget<T extends Object> extends StatelessWidget {
             focusNode,
             onFieldSubmitted,
           ) {
-            textEditingController.text = selectedValue?.toString() ?? '';
+            // Sync with external controller
+            textEditingController.value = _controller.value;
+
             return RightIconTextWidget(
-              isEnabled: true,
+              isEnabled: widget.isEnabled,
               height: resources.dimen.dp27,
-              labelText: labelText,
-              hintText: hintText,
-              errorMessage: errorMessage,
+              labelText: widget.labelText,
+              hintText: widget.hintText,
+              errorMessage: widget.errorMessage,
               textController: textEditingController,
               suffixIconPath: DrawableAssets.icChevronDown,
               focusNode: focusNode,
-              fillColor: resources.color.colorWhite,
+              fillColor: widget.fillColor ?? resources.color.colorWhite,
               borderSide: BorderSide(
-                color: context.resources.color.sideBarItemUnselected,
+                color: resources.color.sideBarItemUnselected,
                 width: 1,
               ),
               borderRadius: 10,
@@ -90,11 +136,10 @@ class DropdownSearchWidget<T extends Object> extends StatelessWidget {
                   ),
                   child: SizedBox(
                     height: 52.0 * options.length,
-                    width: constraints.biggest.width,
+                    width: constraints.maxWidth,
                     child: ListView.builder(
                       padding: EdgeInsets.zero,
                       itemCount: options.length,
-                      shrinkWrap: false,
                       itemBuilder: (BuildContext context, int index) {
                         final T option = options.elementAt(index);
                         return InkWell(
@@ -113,7 +158,8 @@ class DropdownSearchWidget<T extends Object> extends StatelessWidget {
                 ),
               ),
           onSelected: (T selection) {
-            callback!(selection);
+            _controller.text = selection.toString();
+            widget.callback?.call(selection);
           },
         );
       },

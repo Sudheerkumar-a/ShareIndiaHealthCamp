@@ -573,6 +573,23 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
       ]);
     }
     if (step2formFields.isEmpty) {
+      final selectedDistrict =
+          NameIDModel.fromDistrictsJson(
+            districts
+                .where(
+                  (e) =>
+                      e['name']?.toLowerCase() ==
+                          UserCredentialsEntity.details(
+                            context,
+                          ).user?.district?.toLowerCase() ||
+                      e['id']?.toLowerCase() ==
+                          UserCredentialsEntity.details(
+                            context,
+                          ).user?.district?.toLowerCase(),
+                )
+                .first,
+          ).toEntity();
+      fieldsData['client_district'] = selectedDistrict.id;
       final selectedOccupation =
           occupation
               .where(
@@ -774,6 +791,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..type = 'collection'
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select District'
+          ..fieldValue = selectedDistrict
           ..inputFieldData = {
             'items':
                 districts
@@ -796,6 +814,9 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
               child.inputFieldData = null;
               child.fieldValue = null;
             }
+            print(
+              '${step2formFields[10].getLabel} ${step2formFields[10].inputFieldData}',
+            );
             fieldsData['client_district'] = value.id;
             _onDataChanged(true);
           },
@@ -807,6 +828,9 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..canSearch = true
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Mandal'
+          ..url = mandalListApiUrl
+          ..urlInputData = {'dist_id': selectedDistrict.id}
+          ..inputFieldData = null
           ..onDatachnage = (value) {
             final child =
                 step2formFields
@@ -1769,7 +1793,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                   'description': 'Do you want to discard this details',
                   'action': 'Proceed',
                 },
-                callback: () {
+                callback: (action) {
+                  if (action == 2) {
+                    return;
+                  }
                   Navigator.pop(context);
                 },
               ),
@@ -1841,7 +1868,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                       }
                     }
                     var isLastStep = _stepNotifier.value == stepCount;
-                    if (_stepNotifier.value == 3) {
+                    if (_stepNotifier.value == 2) {
                       final field =
                           consentFormFields
                               .where((item) => item.name == 'consent')
@@ -1896,7 +1923,10 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                         'Do you want to submit this details',
                                     'action': 'Proceed',
                                   },
-                                  callback: () async {
+                                  callback: (action) async {
+                                    if (action == 2) {
+                                      return;
+                                    }
                                     final requestParams = {
                                       "action": "insert",
                                       "camp_id": widget.campId,

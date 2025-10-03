@@ -141,7 +141,10 @@ class AgentListScreen extends BaseScreenWidget {
                                     'description': 'Do you want delete Agent',
                                     'action': 'Proceed',
                                   },
-                                  callback: () async {
+                                  callback: (action) async {
+                                    if (action == 2) {
+                                      return;
+                                    }
                                     Dialogs.loader(context);
                                     final response = await _servicesBloc
                                         .deleteAgent(
