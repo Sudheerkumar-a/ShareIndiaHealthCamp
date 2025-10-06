@@ -264,7 +264,7 @@ class UserDashboard extends BaseScreenWidget {
                                                 ),
                                                 style: context.textFontWeight400
                                                     .onFontSize(
-                                                      resources.fontSize.dp10,
+                                                      resources.fontSize.dp12,
                                                     ),
                                               ),
                                             ),
@@ -348,7 +348,7 @@ class UserDashboard extends BaseScreenWidget {
                                                 ),
                                                 style: context.textFontWeight400
                                                     .onFontSize(
-                                                      resources.fontSize.dp10,
+                                                      resources.fontSize.dp12,
                                                     ),
                                               ),
                                             ),
@@ -456,22 +456,20 @@ class UserDashboard extends BaseScreenWidget {
                                                 isAdmin,
                                               );
                                             },
-                                            child: Text.rich(
+                                            child: Text(
                                               textAlign: TextAlign.center,
-                                              TextSpan(
-                                                text:
                                                     overalData?.totalCamps ??
-                                                    '10',
+                                                    '',
                                                 style: context.textFontWeight600
                                                     .onFontSize(22)
                                                     .onColor(
                                                       resources
                                                           .color
                                                           .viewBgColor,
-                                                    ),
                                               ),
                                             ),
                                           ),
+                                          SizedBox(width: resources.dimen.dp5),
                                         ],
                                       ),
                                     ),
