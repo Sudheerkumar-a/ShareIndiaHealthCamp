@@ -183,7 +183,11 @@ class _CampListScreenState extends State<CampListScreen> {
                             ClientsByCampScreen.start(
                               context,
                               p1,
-                            ).then(_updateData(context));
+                            ).then((p0){
+                              if(context.mounted) {
+                                _updateData(context);
+                              }
+                            });
                           },
                           onPageChange: (page) {
                             // index = page;

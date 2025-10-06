@@ -1,3 +1,4 @@
+import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 const String contactNumber = "067641000";
@@ -177,3 +178,33 @@ const syndromicCases = [
   {"id": '12', "name": "Anorectal Discharge Syndrome"},
   {"id": '13', "name": "No symptoms"},
 ];
+const treatmentprovided = [
+  {"id": '1', "name": "Kit-1"},
+  {"id": '2', "name": "Kit-2"},
+  {"id": '3', "name": "Kit-3"},
+  {"id": '4', "name": "Kit-4"},
+  {"id": '5', "name": "Kit-5"},
+  {"id": '6', "name": "Kit-6"},
+  {"id": '7', "name": "Kit-7"},
+  {"id": '8', "name": "Kit-8"},
+];
+final ictc = [
+                      {'id': '1', 'name': 'Anakapalli'},
+                      {'id': '2', 'name': 'Chittoor'},
+                      {'id': '3', 'name': 'Visakhapatnam'},
+                      {'id': '4', 'name': 'Anantapur'},
+                      {'id': '5', 'name': 'Eluru'},
+                      {'id': '6', 'name': 'SPSR Nellore'},
+                      {'id': '7', 'name': 'NTR'},
+                      {'id': '8', 'name': 'Kakinada'},
+                      {'id': '9', 'name': 'Guntur'},
+                      {'id': '10', 'name': 'Vizianagaram'},
+                      {'id': '11', 'name': 'Srikakulam'},
+                    ]
+                    .map(
+                      (item) =>
+                          NameIDModel.fromDistrictsJson(
+                            item as Map<String, dynamic>,
+                          ).toEntity(),
+                    )
+                    .toList();

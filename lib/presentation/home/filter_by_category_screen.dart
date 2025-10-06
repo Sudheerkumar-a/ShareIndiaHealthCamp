@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
+import 'package:shareindia_health_camp/core/extensions/string_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
@@ -111,7 +112,7 @@ class FilterByCategoryScreen extends BaseScreenWidget {
                 ExportDataEntity()
                   ..title = 'IHS_Clients_Report'
                   ..date = getDateByformat('dd-MM-yyyy', DateTime.now())
-                  ..columns = ScreeningDetailsEntity().toJson().keys.toList()
+                  ..columns = ScreeningDetailsEntity().toJson().keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList()
                   ..rows = reportData?.reportList ?? [],
               );
               if (context.mounted) {
@@ -258,7 +259,7 @@ class FilterByCategoryScreen extends BaseScreenWidget {
                       valueListenable: _onFilterChange,
                       builder: (context, value, child) {
                         final ticketsHeaderData =
-                            ScreeningDetailsEntity().toJson().keys.toList();
+                            ScreeningDetailsEntity().toFilterJson(category).keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList();
                         final ticketsTableColunwidths =
                             <int, FlexColumnWidth>{};
                         ticketsHeaderData.asMap().forEach((index, value) {
@@ -271,6 +272,7 @@ class FilterByCategoryScreen extends BaseScreenWidget {
                           ticketsTableColunwidths: ticketsTableColunwidths,
                           page: reportData?.page ?? 0,
                           totalPagecount: reportData?.pages ?? 0,
+                          getRowData: (rowEntity)=>rowEntity.toFilterJson(category),
                           onColumnClick: (key, ticket) {
                             ViewScreeningDetails.start(
                               context,

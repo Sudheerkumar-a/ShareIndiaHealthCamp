@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
+import 'package:shareindia_health_camp/core/extensions/string_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
@@ -161,12 +162,6 @@ class ReportsScreen extends BaseScreenWidget {
               style: context.textFontWeight600,
             ),
           ),
-        ],
-      ),
-      if (UserCredentialsEntity.details(context).user?.isAdmin != 1) ...[
-        SizedBox(height: resources.dimen.dp20),
-        Row(
-          children: [
             if (UserCredentialsEntity.details(context).user?.isAdmin == 0) ...[
               InkWell(
                 onTap: () async {
@@ -184,12 +179,13 @@ class ReportsScreen extends BaseScreenWidget {
                 ),
               ),
             ],
-            Spacer(),
+            
+      if (UserCredentialsEntity.details(context).user?.isAdmin != 1&&UserCredentialsEntity.details(context).user?.isAdmin != 0) ...[
             SizedBox(width: resources.dimen.dp10),
             InkWell(
               onTap: () async {
                 CampListScreen.start(context).then((doRefresh) {
-                  if (doRefresh && context.mounted) {
+                  if ((doRefresh??false) && context.mounted) {
                     _updateReport(context);
                   }
                 });
@@ -205,9 +201,9 @@ class ReportsScreen extends BaseScreenWidget {
                 color: resources.color.viewBgColorLight,
               ),
             ),
-          ],
-        ),
       ],
+        ],
+      ),
       if (UserCredentialsEntity.details(context).user?.isAdmin == 1) ...[
         SizedBox(width: resources.dimen.dp20, height: resources.dimen.dp20),
         _getFilters(context),
@@ -215,8 +211,7 @@ class ReportsScreen extends BaseScreenWidget {
       SizedBox(height: resources.dimen.dp20),
       Row(
         children: [
-          Visibility(
-            visible: true,
+          Expanded(
             child: ValueListenableBuilder(
               valueListenable: filteredDates,
               builder: (context, value, child) {
@@ -234,113 +229,117 @@ class ReportsScreen extends BaseScreenWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(width: resources.dimen.dp10),
-                      InkWell(
-                        onTap: () {
-                          showDatePicker(
-                            context: context,
-                            firstDate: DateTime.now().add(
-                              const Duration(days: -365),
-                            ),
-                            lastDate: DateTime.now(),
-                          ).then((dateTime) {
-                            if (dateTime != null) {
-                              filteredDates.value = List<String>.empty(
-                                growable: true,
-                              )..add(getDateByformat('yyyy/MM/dd', dateTime));
-                            }
-                          });
-                        },
-                        child: Text.rich(
-                          TextSpan(
-                            text:
-                                value.isNotEmpty
-                                    ? value[0]
-                                    : resources.string.startDate,
-                            children: [
-                              WidgetSpan(
-                                child: Padding(
-                                  padding:
-                                      isSelectedLocalEn
-                                          ? const EdgeInsets.only(left: 5.0)
-                                          : const EdgeInsets.only(right: 5.0),
-                                  child: const Icon(
-                                    Icons.calendar_month_sharp,
-                                    size: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          style: context.textFontWeight400.onFontSize(
-                            resources.fontSize.dp10,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: resources.dimen.dp10),
-                      InkWell(
-                        onTap: () {
-                          if (value.isNotEmpty) {
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
                             showDatePicker(
                               context: context,
-                              initialDate: getDateTimeByString(
-                                'yyyy/MM/dd',
-                                value[0],
-                              ),
-                              firstDate: getDateTimeByString(
-                                'yyyy/MM/dd',
-                                value[0],
+                              firstDate: DateTime.now().add(
+                                const Duration(days: -365),
                               ),
                               lastDate: DateTime.now(),
                             ).then((dateTime) {
                               if (dateTime != null) {
-                                filteredDates.value =
-                                    List<String>.empty(growable: true)
-                                      ..add(value[0])
-                                      ..add(
-                                        getDateByformat(
-                                          'yyyy/MM/dd',
-                                          dateTime.add(
-                                            const Duration(hours: 24),
-                                          ),
-                                        ),
-                                      );
-                                if (context.mounted) {
-                                  _updateReport(context);
-                                }
+                                filteredDates.value = List<String>.empty(
+                                  growable: true,
+                                )..add(getDateByformat('yyyy/MM/dd', dateTime));
                               }
                             });
-                          } else {
-                            Dialogs.showInfoDialog(
-                              context,
-                              PopupType.fail,
-                              resources.string.pleaseSelect +
-                                  resources.string.startDate,
-                            );
-                          }
-                        },
-                        child: Text.rich(
-                          TextSpan(
-                            text:
-                                value.length > 1
-                                    ? value[1]
-                                    : resources.string.endDate,
-                            children: [
-                              WidgetSpan(
-                                child: Padding(
-                                  padding:
-                                      isSelectedLocalEn
-                                          ? const EdgeInsets.only(left: 5.0)
-                                          : const EdgeInsets.only(right: 5.0),
-                                  child: const Icon(
-                                    Icons.calendar_month_sharp,
-                                    size: 16,
+                          },
+                          child: Text.rich(
+                            TextSpan(
+                              text:
+                                  value.isNotEmpty
+                                      ? value[0]
+                                      : resources.string.startDate,
+                              children: [
+                                WidgetSpan(
+                                  child: Padding(
+                                    padding:
+                                        isSelectedLocalEn
+                                            ? const EdgeInsets.only(left: 5.0)
+                                            : const EdgeInsets.only(right: 5.0),
+                                    child: const Icon(
+                                      Icons.calendar_month_sharp,
+                                      size: 16,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                            style: context.textFontWeight400.onFontSize(
+                              resources.fontSize.dp10,
+                            ),
                           ),
-                          style: context.textFontWeight400.onFontSize(
-                            resources.fontSize.dp10,
+                        ),
+                      ),
+                      SizedBox(width: resources.dimen.dp10),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            if (value.isNotEmpty) {
+                              showDatePicker(
+                                context: context,
+                                initialDate: getDateTimeByString(
+                                  'yyyy/MM/dd',
+                                  value[0],
+                                ),
+                                firstDate: getDateTimeByString(
+                                  'yyyy/MM/dd',
+                                  value[0],
+                                ),
+                                lastDate: DateTime.now(),
+                              ).then((dateTime) {
+                                if (dateTime != null) {
+                                  filteredDates.value =
+                                      List<String>.empty(growable: true)
+                                        ..add(value[0])
+                                        ..add(
+                                          getDateByformat(
+                                            'yyyy/MM/dd',
+                                            dateTime.add(
+                                              const Duration(hours: 24),
+                                            ),
+                                          ),
+                                        );
+                                  if (context.mounted) {
+                                    _updateReport(context);
+                                  }
+                                }
+                              });
+                            } else {
+                              Dialogs.showInfoDialog(
+                                context,
+                                PopupType.fail,
+                                resources.string.pleaseSelect +
+                                    resources.string.startDate,
+                              );
+                            }
+                          },
+                          child: Text.rich(
+                            TextSpan(
+                              text:
+                                  value.length > 1
+                                      ? value[1]
+                                      : resources.string.endDate,
+                              children: [
+                                WidgetSpan(
+                                  child: Padding(
+                                    padding:
+                                        isSelectedLocalEn
+                                            ? const EdgeInsets.only(left: 5.0)
+                                            : const EdgeInsets.only(right: 5.0),
+                                    child: const Icon(
+                                      Icons.calendar_month_sharp,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            style: context.textFontWeight400.onFontSize(
+                              resources.fontSize.dp10,
+                            ),
                           ),
                         ),
                       ),
@@ -372,7 +371,7 @@ class ReportsScreen extends BaseScreenWidget {
                 ExportDataEntity()
                   ..title = 'IHS_Clients_Report'
                   ..date = getDateByformat('dd-MM-yyyy', DateTime.now())
-                  ..columns = ScreeningDetailsEntity().toJson().keys.toList()
+                  ..columns = ScreeningDetailsEntity().toJson().keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList()
                   ..rows = reportData?.reportList ?? [],
               );
               if (context.mounted) {
@@ -486,7 +485,7 @@ class ReportsScreen extends BaseScreenWidget {
                   valueListenable: _onFilterChange,
                   builder: (context, value, child) {
                     final ticketsHeaderData =
-                        ScreeningDetailsEntity().toJson().keys.toList();
+                        ScreeningDetailsEntity().toJson().keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList();
                     final ticketsTableColunwidths = <int, FlexColumnWidth>{};
                     ticketsHeaderData.asMap().forEach((index, value) {
                       ticketsTableColunwidths[index] = const FlexColumnWidth(4);

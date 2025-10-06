@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
 
 class CampEntity extends BaseEntity {
@@ -70,8 +71,9 @@ class ScreeningDetailsEntity extends BaseEntity {
 
   bool get didConset => consent == 1;
   bool get isHypertension =>
-      ((int.tryParse(ncd?.hypertension?.systolic ?? '0') ?? 0) >= 160 ||
-          (int.tryParse(ncd?.hypertension?.diastolic ?? '0') ?? 0) >= 100);
+      ((int.tryParse(ncd?.hypertension?.systolic ?? '0') ?? 0) >= systolic ||
+          (int.tryParse(ncd?.hypertension?.diastolic ?? '0') ?? 0) >=
+              diastolic);
   bool get isDiabitic =>
       ((int.tryParse(ncd?.diabetes?.bloodsugar ?? '0') ?? 0) > 200);
   bool get isSyphilis => sti?.syphilis?.result == "Reactive";
@@ -142,6 +144,90 @@ class ScreeningDetailsEntity extends BaseEntity {
     return data;
   }
 
+  Map<String, dynamic> toFilterJson(int category) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    //data['action'] = action;
+    data['date_of_camp'] = dateOfCamp;
+    data['district'] = district;
+    data['mandal'] = mandal;
+    data['camp_location'] = campLocation;
+    data['state'] = state;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['age'] = age;
+    data['sex'] = sex;
+    data['pregnancystatus'] = pregnancystatus;
+    data['date_of_LMP'] = dateOfLMP;
+    data['contact_number'] = contactNumber;
+    data['aadher_number'] = aadherNumber;
+    data['client_address'] = clientAddress;
+    data['client_mandal'] = clientMandal;
+    data['occupation'] = occupation;
+    data['consent'] = consent;
+    switch (category) {
+      case 2:
+        {}
+      case 3:
+        {
+          if (ncd != null) {
+            data['hypertension'] =
+                '${ncd?.hypertension?.systolic ?? 0}/${ncd?.hypertension?.diastolic ?? 0} - ${ncd?.hypertension?.abnormal == "0" ? 'Normal' : 'Abnormal'} - ${ncd?.hypertension?.screened == "0" ? 'No' : 'Yes'}';
+          } else {
+            data['hypertension'] = '';
+          }
+        }
+      case 4:
+        {
+          if (ncd != null) {
+            data['diabetes'] =
+                '${ncd?.diabetes?.bloodsugar} - ${ncd?.diabetes?.abnormal == "0" ? 'Normal' : 'Abnormal'} - ${ncd?.diabetes?.screened == "0" ? 'No' : 'Yes'}';
+          } else {
+            data['diabetes'] = '';
+          }
+        }
+      case 5:
+        {
+          if (sti != null) {
+            data['hepB'] =
+                '${sti?.hepB?.done == "0" ? 'No' : 'Done'} - ${sti?.hepB?.result} - ${sti?.hepB?.referred == "0" ? 'Not Referred' : 'Referred'}';
+            data['hepC'] =
+                '${sti?.hepC?.done == "0" ? 'No' : 'Done'} - ${sti?.hepC?.result} - ${sti?.hepC?.referred == "0" ? 'Not Referred' : 'Referred'}';
+          } else {
+            data['hepB'] = '';
+            data['hepC'] = '';
+          }
+        }
+      case 6:
+        {
+          if (hiv != null) {
+            data['hiv'] =
+                hiv?.offered == '1'
+                    ? 'Offered - ${hiv?.result} - ${hiv?.alreadAtART == "0" ? 'AlreadAtART' : ''}\nICTC: ${hiv?.referredICTC == "0" ? 'No' : 'Referred'} ${hiv?.referredICTC == "0" ? '' : '- ${hiv?.nameOfICTC}'} - ${hiv?.confirmedICTC == "0" ? 'Not Confirmed' : 'Confirmed'} - ${hiv?.referredART == "0" ? 'Not ReferredART' : 'ReferredART'}'
+                    : 'No';
+          } else {
+            data['hiv'] = '';
+          }
+        }
+      case 7:
+        {
+          if (sti != null) {
+            data['syphilis'] =
+                '${sti?.syphilis?.done == "0" ? 'No' : 'Done'} - ${sti?.syphilis?.result} - ${sti?.syphilis?.referred == "0" ? 'Not Referred' : 'Referred'}';
+          } else {
+            data['syphilis'] = '';
+          }
+        }
+      case 8:
+        {
+          data['syndromiccases'] = syndromiccases;
+          data['syndromicreferred'] = syndromicreferred;
+        }
+      default:
+        {}
+    }
+    return data;
+  }
+
   Map<String, dynamic> toEditJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     //data['action'] = action;
@@ -195,7 +281,7 @@ class ScreeningDetailsEntity extends BaseEntity {
       'referredART': int.tryParse(hiv?.referredART ?? '0'),
     };
     data['syndromiccases'] = syndromiccases;
-    data['syndromicreferred'] = syndromicreferred;
+    data['syndromicreferred'] =  int.tryParse(syndromicreferred??'0');
 
     data['sti'] = {
       'syphilis': {

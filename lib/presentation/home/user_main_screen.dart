@@ -119,9 +119,9 @@ class _MainScreenState extends State<UserMainScreen> {
           )
           .then((value) {
             if (value is ServicesStateSuccess) {
-              final mandals =
+              final mandalsList =
                   cast<ListEntity>(value.responseEntity.entity).items;
-              mandals.addAll(mandals.cast<NameIDEntity>());
+              mandals.addAll(mandalsList.cast<NameIDEntity>());
             }
           });
     }

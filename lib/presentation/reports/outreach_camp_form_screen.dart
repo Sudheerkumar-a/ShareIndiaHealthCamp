@@ -87,7 +87,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
   }
 
   List<List<FormEntity>> _getFormFields(BuildContext context) {
-    final resources = context.resources;
+    //final resources = context.resources;
     // if (step1formFields.isEmpty) {
     //   final campLocations =
     //       [
@@ -789,6 +789,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'District'
           ..labelTe = 'District'
           ..type = 'collection'
+          ..canSearch = true
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select District'
           ..fieldValue = selectedDistrict
@@ -813,10 +814,20 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
               child.urlInputData = {'dist_id': value.id};
               child.inputFieldData = null;
               child.fieldValue = null;
+              fieldsData['client_mandal'] = null;
             }
-            print(
-              '${step2formFields[10].getLabel} ${step2formFields[10].inputFieldData}',
-            );
+            final child2 =
+                step2formFields
+                    .where((item) => item.name == 'clientvillage')
+                    .firstOrNull;
+            if (child2 != null) {
+              child2.inputFieldData?.remove('items');
+              child2.url = villageListApiUrl;
+              child2.urlInputData = {'mandal_id': value.id};
+              child2.inputFieldData = null;
+              child2.fieldValue = null;
+              fieldsData['clientvillage'] = null;
+            }
             fieldsData['client_district'] = value.id;
             _onDataChanged(true);
           },
@@ -831,6 +842,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..url = mandalListApiUrl
           ..urlInputData = {'dist_id': selectedDistrict.id}
           ..inputFieldData = null
+          ..fieldValue = (NameIDEntity()..id = fieldsData['client_mandal'])
           ..onDatachnage = (value) {
             final child =
                 step2formFields
@@ -842,6 +854,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
               child.urlInputData = {'mandal_id': value.id};
               child.inputFieldData = null;
               child.fieldValue = null;
+              fieldsData['clientvillage'] = null;
             }
             fieldsData['client_mandal'] = value.id;
             _onDataChanged(true);
@@ -1161,7 +1174,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
       final hivResults =
           [
                 {'id': '1', 'name': 'Positive'},
-                {'id': '2', 'name': 'Reactive'},
+                {'id': '2', 'name': 'Screened-Reactive'},
                 {'id': '3', 'name': 'Negative'},
               ]
               .map(
@@ -1189,7 +1202,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'Pregnancy status'
           ..labelTe = 'Pregnancy status'
           ..isHidden = fieldsData['sex'] != 'F'
-          ..fieldValue = fieldsData['pregnancystatus']
+          ..fieldValue = fieldsData['pregnancystatus']==1
           ..onDatachnage = (value) {
             final child =
                 step5formFields
@@ -1309,7 +1322,6 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                     .where((item) => item.name == 'alreadAtARTName')
                     .firstOrNull;
             child?.isHidden = !value;
-            child?.fieldValue = null;
             if (fieldsData['hiv']?['result'] == 'Reactive') {
               final child2 =
                   step5formFields
@@ -1373,31 +1385,11 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..isHidden = fieldsData['hiv']?['referredICTC'] != 1
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'ICTC Name'
-          ..inputFieldData = {
-            'items':
-                [
-                      {'id': '1', 'name': 'Anakapalli'},
-                      {'id': '2', 'name': 'Chittoor'},
-                      {'id': '3', 'name': 'Visakhapatnam'},
-                      {'id': '4', 'name': 'Anantapur'},
-                      {'id': '5', 'name': 'Eluru'},
-                      {'id': '6', 'name': 'SPSR Nellore'},
-                      {'id': '7', 'name': 'NTR'},
-                      {'id': '8', 'name': 'Kakinada'},
-                      {'id': '9', 'name': 'Guntur'},
-                      {'id': '10', 'name': 'Vizianagaram'},
-                      {'id': '11', 'name': 'Srikakulam'},
-                    ]
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
-          ..fieldValue = fieldsData['hiv']?['nameOfICTC']
+          ..inputFieldData = {'items': ictc, 'doSort': false}
+          ..fieldValue =
+              ictc
+                  .where((e) => e.name == fieldsData['hiv']?['nameOfICTC'])
+                  .firstOrNull
           ..onDatachnage = (value) {
             fieldsData['hiv']['nameOfICTC'] = value.name;
             _onDataChanged(false);
@@ -1433,161 +1425,161 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           },
       ]);
     }
-    if (indexTestingFormFields.isEmpty) {
-      indexTestingFormFields.addAll([
-        FormEntity()
-          ..name = 'indexTestingheader'
-          ..label = 'Offered Index (Spouse/Partner/Biological children)'
-          ..type = 'labelheader',
-        FormEntity()
-          ..name = 'partnertesting'
-          ..labelEn = 'Partner Testing'
-          ..labelTe = 'Partner Testing'
-          ..type = 'collection'
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..placeholderEn = 'Select Partner Testing'
-          ..inputFieldData = {
-            'items':
-                [
-                      {'id': '1', 'name': 'Yes'},
-                      {'id': '2', 'name': 'No'},
-                      {'id': '2', 'name': 'N/A'},
-                    ]
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
-          ..onDatachnage = (value) {
-            final child =
-                indexTestingFormFields
-                    .where((item) => item.name == 'partnertestno')
-                    .firstOrNull;
-            final child2 =
-                indexTestingFormFields
-                    .where((item) => item.name == 'agreedtosharepartnerdetails')
-                    .firstOrNull;
-            if (child != null) {
-              child.isHidden = !(value.id != 1);
-              child.fieldValue = null;
-            }
-            if (child2 != null) {
-              child2.isHidden = !(value.id == 1);
-              child2.fieldValue = null;
-            }
-            fieldsData['hiv']?['partnertesting'] = value.name;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'partnertestno'
-          ..label = 'Reason'
-          ..placeholder = 'Reason'
-          ..type = 'text'
-          ..isHidden = true
-          ..onDatachnage = (value) {
-            fieldsData['hiv']['partnertestno'] = value;
-            _onDataChanged(true);
-          },
+    // if (indexTestingFormFields.isEmpty) {
+    //   indexTestingFormFields.addAll([
+    //     FormEntity()
+    //       ..name = 'indexTestingheader'
+    //       ..label = 'Offered Index (Spouse/Partner/Biological children)'
+    //       ..type = 'labelheader',
+    //     FormEntity()
+    //       ..name = 'partnertesting'
+    //       ..labelEn = 'Partner Testing'
+    //       ..labelTe = 'Partner Testing'
+    //       ..type = 'collection'
+    //       ..validation = (FormValidationEntity()..isRequired = true)
+    //       ..placeholderEn = 'Select Partner Testing'
+    //       ..inputFieldData = {
+    //         'items':
+    //             [
+    //                   {'id': '1', 'name': 'Yes'},
+    //                   {'id': '2', 'name': 'No'},
+    //                   {'id': '2', 'name': 'N/A'},
+    //                 ]
+    //                 .map(
+    //                   (item) =>
+    //                       NameIDModel.fromDistrictsJson(
+    //                         item as Map<String, dynamic>,
+    //                       ).toEntity(),
+    //                 )
+    //                 .toList(),
+    //         'doSort': false,
+    //       }
+    //       ..onDatachnage = (value) {
+    //         final child =
+    //             indexTestingFormFields
+    //                 .where((item) => item.name == 'partnertestno')
+    //                 .firstOrNull;
+    //         final child2 =
+    //             indexTestingFormFields
+    //                 .where((item) => item.name == 'agreedtosharepartnerdetails')
+    //                 .firstOrNull;
+    //         if (child != null) {
+    //           child.isHidden = !(value.id != 1);
+    //           child.fieldValue = null;
+    //         }
+    //         if (child2 != null) {
+    //           child2.isHidden = !(value.id == 1);
+    //           child2.fieldValue = null;
+    //         }
+    //         fieldsData['hiv']?['partnertesting'] = value.name;
+    //         _onDataChanged(true);
+    //       },
+    //     FormEntity()
+    //       ..name = 'partnertestno'
+    //       ..label = 'Reason'
+    //       ..placeholder = 'Reason'
+    //       ..type = 'text'
+    //       ..isHidden = true
+    //       ..onDatachnage = (value) {
+    //         fieldsData['hiv']['partnertestno'] = value;
+    //         _onDataChanged(true);
+    //       },
 
-        FormEntity()
-          ..name = 'agreedtosharepartnerdetails'
-          ..type = 'confirmcheck'
-          ..label = 'Agreed to share partner details?'
-          ..isHidden = true
-          ..onDatachnage = (value) {
-            final childs = indexTestingFormFields.where(
-              (item) => [
-                'partnername',
-                'partnerrelationship',
-                'partnermobile',
-              ].contains(item.name),
-            );
-            for (var child in childs) {
-              child.isHidden = !value;
-              child.fieldValue = null;
-            }
-            fieldsData['hiv']['agreedtosharepartnerdetails'] = value ? 1 : 0;
-            _onDataChanged(true);
-          },
-        FormEntity()
-          ..name = 'partnername'
-          ..isHidden = true
-          ..labelEn = 'Partner Name'
-          ..labelTe = 'Partner Name'
-          ..type = 'text'
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Enter Partner Name'
-                ..requiredTe = 'Please Enter Partner Name'
-                ..regexEn = 'Please Enter Valid Partner Name'
-                ..regexTe = 'Please Enter Valid Partner Name')
-          ..placeholderEn = 'Partner Name'
-          ..placeholderTe = 'Partner Name'
-          ..onDatachnage = (value) {
-            fieldsData['hiv']['partnerName'] = value;
-            _onDataChanged(false);
-          },
+    //     FormEntity()
+    //       ..name = 'agreedtosharepartnerdetails'
+    //       ..type = 'confirmcheck'
+    //       ..label = 'Agreed to share partner details?'
+    //       ..isHidden = true
+    //       ..onDatachnage = (value) {
+    //         final childs = indexTestingFormFields.where(
+    //           (item) => [
+    //             'partnername',
+    //             'partnerrelationship',
+    //             'partnermobile',
+    //           ].contains(item.name),
+    //         );
+    //         for (var child in childs) {
+    //           child.isHidden = !value;
+    //           child.fieldValue = null;
+    //         }
+    //         fieldsData['hiv']['agreedtosharepartnerdetails'] = value ? 1 : 0;
+    //         _onDataChanged(true);
+    //       },
+    //     FormEntity()
+    //       ..name = 'partnername'
+    //       ..isHidden = true
+    //       ..labelEn = 'Partner Name'
+    //       ..labelTe = 'Partner Name'
+    //       ..type = 'text'
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..regex = nameRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..requiredEn = 'Please Enter Partner Name'
+    //             ..requiredTe = 'Please Enter Partner Name'
+    //             ..regexEn = 'Please Enter Valid Partner Name'
+    //             ..regexTe = 'Please Enter Valid Partner Name')
+    //       ..placeholderEn = 'Partner Name'
+    //       ..placeholderTe = 'Partner Name'
+    //       ..onDatachnage = (value) {
+    //         fieldsData['hiv']['partnerName'] = value;
+    //         _onDataChanged(false);
+    //       },
 
-        FormEntity()
-          ..name = 'partnerrelationship'
-          ..isHidden = true
-          ..labelEn = 'Partner Relationship'
-          ..labelTe = 'Partner Relationship'
-          ..type = 'collection'
-          ..validation = (FormValidationEntity()..isRequired = true)
-          ..placeholderEn = 'Select Partner Relationship'
-          ..inputFieldData = {
-            'items':
-                [
-                      {'id': '1', 'name': 'Spouse'},
-                      {'id': '2', 'name': 'Partner'},
-                      {'id': '3', 'name': 'Biological children'},
-                    ]
-                    .map(
-                      (item) =>
-                          NameIDModel.fromDistrictsJson(
-                            item as Map<String, dynamic>,
-                          ).toEntity(),
-                    )
-                    .toList(),
-            'doSort': false,
-          }
-          ..onDatachnage = (value) {
-            fieldsData['hiv']['partnerMandal'] = value.id;
-            _onDataChanged(false);
-          },
-        FormEntity()
-          ..name = 'partnermobile'
-          ..isHidden = true
-          ..labelEn = 'Partner Mobile'
-          ..labelTe = 'Partner Mobile'
-          ..type = 'number'
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = numberRegExp)
-          ..messages =
-              (FormMessageEntity()
-                ..requiredEn = 'Please Enter Partner Mobile'
-                ..requiredTe = 'Please Enter Partner Mobile'
-                ..regexEn = 'Please Enter Valid Partner Mobile'
-                ..regexTe = 'Please Enter Valid Partner Mobile')
-          ..placeholderEn = 'Partner Mobile'
-          ..placeholderTe = 'Partner Mobile'
-          ..onDatachnage = (value) {
-            fieldsData['hiv']['partnermobile'] = value;
-            _onDataChanged(false);
-          },
-      ]);
-    }
+    //     FormEntity()
+    //       ..name = 'partnerrelationship'
+    //       ..isHidden = true
+    //       ..labelEn = 'Partner Relationship'
+    //       ..labelTe = 'Partner Relationship'
+    //       ..type = 'collection'
+    //       ..validation = (FormValidationEntity()..isRequired = true)
+    //       ..placeholderEn = 'Select Partner Relationship'
+    //       ..inputFieldData = {
+    //         'items':
+    //             [
+    //                   {'id': '1', 'name': 'Spouse'},
+    //                   {'id': '2', 'name': 'Partner'},
+    //                   {'id': '3', 'name': 'Biological children'},
+    //                 ]
+    //                 .map(
+    //                   (item) =>
+    //                       NameIDModel.fromDistrictsJson(
+    //                         item as Map<String, dynamic>,
+    //                       ).toEntity(),
+    //                 )
+    //                 .toList(),
+    //         'doSort': false,
+    //       }
+    //       ..onDatachnage = (value) {
+    //         fieldsData['hiv']['partnerMandal'] = value.id;
+    //         _onDataChanged(false);
+    //       },
+    //     FormEntity()
+    //       ..name = 'partnermobile'
+    //       ..isHidden = true
+    //       ..labelEn = 'Partner Mobile'
+    //       ..labelTe = 'Partner Mobile'
+    //       ..type = 'number'
+    //       ..validation =
+    //           (FormValidationEntity()
+    //             ..isRequired = true
+    //             ..regex = numberRegExp)
+    //       ..messages =
+    //           (FormMessageEntity()
+    //             ..requiredEn = 'Please Enter Partner Mobile'
+    //             ..requiredTe = 'Please Enter Partner Mobile'
+    //             ..regexEn = 'Please Enter Valid Partner Mobile'
+    //             ..regexTe = 'Please Enter Valid Partner Mobile')
+    //       ..placeholderEn = 'Partner Mobile'
+    //       ..placeholderTe = 'Partner Mobile'
+    //       ..onDatachnage = (value) {
+    //         fieldsData['hiv']['partnermobile'] = value;
+    //         _onDataChanged(false);
+    //       },
+    //   ]);
+    // }
     fieldsData['sti'] ??= {};
     fieldsData['sti']['syphilis'] ??= {
       'done': 0,
@@ -1638,6 +1630,18 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'Referred?'
           ..labelTe = 'Referred?'
           ..isHidden = fieldsData['syndromicreferred'] == null
+          ..inputFieldData = {
+            'items':
+                syndromicCases
+                    .map(
+                      (item) =>
+                          NameIDModel.fromDistrictsJson(
+                            item as Map<String, dynamic>,
+                          ).toEntity(),
+                    )
+                    .toList(),
+            'doSort': false,
+          }
           ..fieldValue =
               fieldsData['syndromicreferred'] != null
                   ? fieldsData['syndromicreferred'] == 1
@@ -1656,17 +1660,25 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..isHidden = fieldsData['syndromicreferred'] != 1
           ..labelEn = 'Treatment Provided'
           ..labelTe = 'Treatment Provided'
-          ..type = 'text'
-          ..validation =
-              (FormValidationEntity()
-                ..isRequired = true
-                ..regex = nameRegExp)
+          ..type = 'collection'
+          ..multi = true
+          ..inputFieldData = {
+            'items':
+                treatmentprovided
+                    .map(
+                      (item) =>
+                          NameIDModel.fromDistrictsJson(
+                            item as Map<String, dynamic>,
+                          ).toEntity(),
+                    )
+                    .toList(),
+            'doSort': false,
+          }
+          ..validation = (FormValidationEntity()..isRequired = true)
           ..messages =
               (FormMessageEntity()
                 ..requiredEn = 'Please Enter Treatment Provided'
-                ..requiredTe = 'Please Enter Treatment Provided'
-                ..regexEn = 'Please Enter Valid Treatment Provided'
-                ..regexTe = 'Please Enter Valid Treatment Provided')
+                ..requiredTe = 'Please Enter Treatment Provided')
           ..placeholderEn = 'Treatment Provided'
           ..placeholderTe = 'Treatment Provided'
           ..onDatachnage = (value) {
@@ -1747,10 +1759,28 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
   }
 
   @override
+  void dispose() {
+    for (var e in step2formFields) {
+      e.textEditingController?.dispose();
+    }
+    for (var e in step6formFields) {
+      e.textEditingController?.dispose();
+    }
+    for (var e in step5formFields) {
+      e.textEditingController?.dispose();
+    }
+    super.dispose();
+  }
+
+  final List<String> stepButtonTexts = List.empty(growable: true);
+  final List<List<FormEntity>> formFields = List.empty(growable: true);
+  @override
   Widget build(BuildContext context) {
     final resources = context.resources;
+    
     fieldsData.addAll(widget.screeningDetails?.toEditJson() ?? {});
-    List<String> stepButtonTexts = [
+    if(stepButtonTexts.isEmpty) {
+      stepButtonTexts.addAll([
       //'Next',
       //'Next',
       'Next',
@@ -1759,12 +1789,13 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
       'Next',
       'Next',
       //'Next',
-      'Next',
+      //'Next',
       'Submit',
-      resources.string.submit,
-    ];
-    final formFields = _getFormFields(context);
-
+    ]);
+    }
+    if(formFields.isEmpty) {
+      formFields.addAll(_getFormFields(context));
+    }
     final currentStepFormFields = formFields[_stepNotifier.value - 1];
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -1944,8 +1975,6 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                           fieldsData['camp_local_poc_number'],
                                       "camp_local_poc_name":
                                           fieldsData['camp_local_poc_name'],
-                                      "treatmentprovided":
-                                          fieldsData['treatmentprovided'],
                                       "state": "Andhra Pradesh",
                                       "first_name": fieldsData['first_name'],
                                       "last_name": fieldsData['last_name'],
@@ -2041,9 +2070,22 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                               : '',
                                       "syndromicreferred":
                                           fieldsData['syndromicreferred'],
+                                      "treatmentprovided":
+                                          fieldsData['treatmentprovided']
+                                                  is List
+                                              ? (fieldsData['treatmentprovided']
+                                                  .map(
+                                                    (syndrom) => syndrom.name,
+                                                  )
+                                                  .join(', '))
+                                              : '',
                                       "sti": fieldsData['sti'],
                                       "remarks": fieldsData['remarks'],
                                     };
+                                    if(widget.screeningDetails?.id !=
+                                                      null) {
+                                      requestParams['id'] = widget.screeningDetails?.id;
+                                    }
                                     //jsonEncode(requestParams);
                                     Dialogs.loader(context);
                                     final response = await sl<ServicesBloc>()

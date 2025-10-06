@@ -6,7 +6,6 @@ import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
-import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';

@@ -55,6 +55,8 @@ class FormEntity extends BaseEntity {
   double? horizontalSpace;
   dynamic fieldValue;
   dynamic inputFieldData;
+  FocusNode? focusNode;
+  TextEditingController? textEditingController;
   Function(dynamic)? onDatachnage;
   List<String> responseFields = [];
   List<LKPchildrenEntity> lkpChildren = [];

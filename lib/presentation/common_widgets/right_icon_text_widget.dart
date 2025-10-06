@@ -6,7 +6,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/image_widget.
 
 const double defaultHeight = 27;
 
-class RightIconTextWidget extends StatelessWidget {
+class RightIconTextWidget extends StatefulWidget {
   final double height;
   final bool isEnabled;
   final String labelText;
@@ -60,20 +60,29 @@ class RightIconTextWidget extends StatelessWidget {
   });
 
   @override
+  State<RightIconTextWidget> createState() => _RightIconTextWidgetState();
+}
+
+class _RightIconTextWidgetState extends State<RightIconTextWidget> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Visibility(
-          visible: labelText.isNotEmpty,
+          visible: widget.labelText.isNotEmpty,
           child: Text.rich(
             TextSpan(
-              text: labelText,
+              text: widget.labelText,
               style: context.textFontWeight400.onFontSize(
                 context.resources.fontSize.dp14,
               ),
               children: [
-                if (isMandetory)
+                if (widget.isMandetory)
                   TextSpan(
                     text: ' *',
                     style: context.textFontWeight400
@@ -88,30 +97,31 @@ class RightIconTextWidget extends StatelessWidget {
         Align(
           alignment: Alignment.center,
           child: TextFormField(
-            enabled: isEnabled,
-            maxLines: maxLines,
-            maxLength: maxLength,
-            keyboardType: textInputType,
+            key: ValueKey(widget.labelText),
+            enabled: widget.isEnabled,
+            maxLines: widget.maxLines,
+            maxLength: widget.maxLength,
+            keyboardType: widget.textInputType,
             obscureText:
-                textInputType == TextInputType.visiblePassword ? true : false,
-            textInputAction: textInputAction,
-            controller: textController,
+                widget.textInputType == TextInputType.visiblePassword ? true : false,
+            textInputAction: widget.textInputAction,
+            controller: widget.textController,
             textAlignVertical: TextAlignVertical.center,
-            focusNode: focusNode,
-            autovalidateMode: autovalidateMode,
+            focusNode: widget.focusNode,
+            autovalidateMode: widget.autovalidateMode,
             validator: (value) {
-              if (isValid != null) {
-                return isValid?.call(value ?? '');
-              } else if (errorMessage.isNotEmpty &&
+              if (widget.isValid != null) {
+                return widget.isValid?.call(value ?? '');
+              } else if (widget.errorMessage.isNotEmpty &&
                   (value == null ||
                       value.isEmpty ||
-                      value.length < maxLengthValidation ||
-                      !RegExp(regex ?? '').hasMatch(value))) {
-                return errorMessage.isNotEmpty ? errorMessage : null;
+                      value.length < widget.maxLengthValidation ||
+                      !RegExp(widget.regex ?? '').hasMatch(value))) {
+                return widget.errorMessage.isNotEmpty ? widget.errorMessage : null;
               }
               return null;
             },
-            onChanged: onChanged,
+            onChanged: widget.onChanged,
             decoration: InputDecoration(
               filled: true,
               isDense: true,
@@ -120,7 +130,7 @@ class RightIconTextWidget extends StatelessWidget {
                 vertical: context.resources.dimen.dp12,
                 horizontal: context.resources.dimen.dp10,
               ),
-              hintText: hintText,
+              hintText: widget.hintText,
               hintStyle: context.textFontWeight400
                   .onFontSize(context.resources.fontSize.dp12)
                   .onFontFamily(
@@ -131,14 +141,14 @@ class RightIconTextWidget extends StatelessWidget {
                   )
                   .onColor(context.resources.color.colorD6D6D6),
               suffixIconConstraints: BoxConstraints(
-                maxHeight: height,
-                minHeight: height,
+                maxHeight: widget.height,
+                minHeight: widget.height,
               ),
               suffixIcon:
-                  (suffixIconPath ?? '').isNotEmpty
+                  (widget.suffixIconPath ?? '').isNotEmpty
                       ? InkWell(
                         onTap: () {
-                          suffixIconClick?.call();
+                          widget.suffixIconClick?.call();
                         },
                         child: Padding(
                           padding:
@@ -146,39 +156,39 @@ class RightIconTextWidget extends StatelessWidget {
                                   ? const EdgeInsets.only(right: 15.0)
                                   : const EdgeInsets.only(left: 15.0),
                           child:
-                              ImageWidget(path: suffixIconPath ?? '').loadImage,
+                              ImageWidget(path: widget.suffixIconPath ?? '').loadImage,
                         ),
                       )
                       : null,
               fillColor:
-                  isEnabled
-                      ? (fillColor ?? context.resources.color.colorWhite)
-                      : disableColor ??
+                  widget.isEnabled
+                      ? (widget.fillColor ?? context.resources.color.colorWhite)
+                      : widget.disableColor ??
                           context.resources.color.dividerColorB3B8BF,
               border: OutlineInputBorder(
-                borderSide: borderSide,
+                borderSide: widget.borderSide,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius ?? context.resources.dimen.dp10),
+                  Radius.circular(widget.borderRadius ?? context.resources.dimen.dp10),
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: borderSide,
+                borderSide: widget.borderSide,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius ?? context.resources.dimen.dp10),
+                  Radius.circular(widget.borderRadius ?? context.resources.dimen.dp10),
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: borderSide,
+                borderSide: widget.borderSide,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius ?? context.resources.dimen.dp10),
+                  Radius.circular(widget.borderRadius ?? context.resources.dimen.dp10),
                 ),
               ),
               errorStyle: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
             style:
-                fontFamily.isNotEmpty
+                widget.fontFamily.isNotEmpty
                     ? context.textFontWeight400
-                        .onFontFamily(fontFamily: fontFamily)
+                        .onFontFamily(fontFamily: widget.fontFamily)
                         .onFontSize(context.resources.fontSize.dp12)
                     : context.textFontWeight400.onFontSize(
                       context.resources.fontSize.dp12,

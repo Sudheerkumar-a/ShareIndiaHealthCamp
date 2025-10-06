@@ -12,7 +12,7 @@ class NcdScreeningWidget extends StatefulWidget {
   final String title;
   final bool isMandetory;
   final Function(Map) onSelected;
-  NcdScreeningWidget({
+  const NcdScreeningWidget({
     required this.title,
     required this.inputData,
     required this.onSelected,
@@ -28,6 +28,7 @@ class NcdScreeningWidget extends StatefulWidget {
 class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
   Map data = {};
 
+  final items = List<FormEntity>.empty(growable: true);
   List<Widget> _getWidgetsByData(BuildContext context, int row) {
     final widgets = List<Widget>.empty(growable: true);
     for (int c = 0; c < 2; c++) {
@@ -83,10 +84,8 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
     }
     return widgets;
   }
-
-  final items = List<FormEntity>.empty(growable: true);
-  @override
-  Widget build(BuildContext context) {
+@override
+  void initState() {
     data.addAll(
       widget.selctedData ?? {'screened': 0, 'values': {}, 'referred': 0},
     );
@@ -96,8 +95,8 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
           ..name = 'screened'
           ..type = 'confirmcheck'
           ..verticalSpace = 5
-          ..labelEn = 'Screened'
-          ..labelTe = 'Screened'
+          ..labelEn = 'Screened ${widget.title == 'Diabetes'?'(RBS)':''}'
+          ..labelTe = 'Screened ${widget.title == 'Diabetes'?'(RBS)':''}'
           ..fieldValue = data["screened"] != null ? data["screened"] == 1 : null
           ..onDatachnage = (value) {
             final childrens = items.sublist(1, items.length-(value?1:0));
@@ -132,6 +131,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..verticalSpace = 5
             ..isHidden = data["screened"] != 1
             ..placeholder = 'systolic'
+            ..textEditingController = TextEditingController()
             ..validation =
                 (FormValidationEntity()
                   ..isRequired = true
@@ -147,8 +147,8 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
                   items.where((item) => item.name == 'referred').firstOrNull;
               final isHiiden = child?.isHidden;
               child?.isHidden =
-                  ((int.tryParse(value) ?? 0) <= 160 &&
-                      (int.tryParse(data["diastolic"] ?? '0') ?? 0) <= 100);
+                  ((int.tryParse(value) ?? 0) <= systolic &&
+                      (int.tryParse(data["diastolic"] ?? '0') ?? 0) <= diastolic);
               child?.fieldValue = null;
               data["systolic"] = value;
               widget.onSelected.call(data);
@@ -165,6 +165,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..verticalSpace = 5
             ..isHidden = data["screened"] != 1
             ..placeholder = 'diastolic'
+            ..textEditingController = TextEditingController()
             ..validation =
                 (FormValidationEntity()
                   ..isRequired = true
@@ -180,8 +181,8 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
                   items.where((item) => item.name == 'referred').firstOrNull;
               final isHiiden = child?.isHidden;
               child?.isHidden =
-                  ((int.tryParse(value) ?? 0) <= 100 &&
-                      (int.tryParse(data["systolic"] ?? '0') ?? 0) <= 160);
+                  ((int.tryParse(value) ?? 0) <= diastolic &&
+                      (int.tryParse(data["systolic"] ?? '0') ?? 0) <= systolic);
               child?.fieldValue = null;
               data["diastolic"] = value;
               widget.onSelected.call(data);
@@ -199,6 +200,7 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
             ..verticalSpace = 5
             ..isHidden = data["screened"] != 1
             ..placeholder = 'Random Blood sugar'
+            ..textEditingController = TextEditingController()
             ..validation =
                 (FormValidationEntity()
                   ..isRequired = true
@@ -260,6 +262,18 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
         );
       }
     }
+    super.initState();
+  }
+@override
+void dispose() {
+  for (var e in items) {
+    e.textEditingController?.dispose();
+  }
+  super.dispose();
+}
+  @override
+  Widget build(BuildContext context) {
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -285,15 +299,13 @@ class _NcdScreeningWidgetState extends State<NcdScreeningWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(items.length, (index) {
-              return KeyedSubtree(
-                key: ValueKey(items[index].name),
-                child:
-                    (index == 0 || index == items.length - 1)
-                        ? items[index].getWidget(context)
-                        : SizedBox(
-                          width: 200,
-                          child: items[index].getWidget(context),
-                        ),
+              return SizedBox(
+                width: (index == 0 || index == items.length - 1)?null:200,
+                child: KeyedSubtree(
+                  key: ValueKey(items[index].name),
+                  child:
+                     items[index].getWidget(context),
+                ),
               );
             }),
           ),

@@ -15,6 +15,7 @@ class ReportListWidget extends StatelessWidget {
   final Map<int, FlexColumnWidth>? ticketsTableColunwidths;
   final int page;
   final int? totalPagecount;
+  final dynamic Function(dynamic)? getRowData;
   final Function(int)? onPageChange;
   final Function(dynamic)? onRowSelected;
   final Function(String, dynamic)? onColumnClick;
@@ -27,12 +28,13 @@ class ReportListWidget extends StatelessWidget {
     this.page = 1,
     this.totalPagecount,
     this.onPageChange,
+    this.getRowData,
     super.key,
   });
 
   List<Widget> _getTicketData(BuildContext context, dynamic rowEntity) {
     final list = List<Widget>.empty(growable: true);
-    rowEntity.toJson().forEach((key, value) {
+    ((getRowData?.call(rowEntity))??rowEntity.toJson()).forEach((key, value) {
       list.add(
         InkWell(
           onTap: () {

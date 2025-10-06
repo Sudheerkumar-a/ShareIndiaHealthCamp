@@ -8,6 +8,7 @@ import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/config/base_url_config.dart';
 import 'package:shareindia_health_camp/core/config/flavor_config.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
+import 'package:shareindia_health_camp/core/extensions/string_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
@@ -356,7 +357,7 @@ class ClientsByCampScreen extends BaseScreenWidget {
                       valueListenable: _onFilterChange,
                       builder: (context, value, child) {
                         final ticketsHeaderData =
-                            ScreeningDetailsEntity().toJson().keys.toList();
+                            ScreeningDetailsEntity().toJson().keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList();
                         final ticketsTableColunwidths =
                             <int, FlexColumnWidth>{};
                         ticketsHeaderData.asMap().forEach((index, value) {

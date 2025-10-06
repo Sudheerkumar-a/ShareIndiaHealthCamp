@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:app_version_update/data/models/app_version_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -452,16 +453,24 @@ Future<bool> exportToExcel(ExportDataEntity exportData) async {
   return true;
 }
 
-checkIsUpdateAvailabe(BuildContext context) {
-  AppVersionUpdate.checkForUpdates().then((data) {
-    if (data.canUpdate == true && context.mounted) {
-      showDialog(
+checkIsUpdateAvailabe(BuildContext context) async {
+  try {
+    AppVersionResult result = await AppVersionUpdate.checkForUpdates(
+      playStoreId: "com.ihs.apsacs",
+    );
+
+    if (result.storeVersion != null && result.canUpdate == true&&context.mounted) {
+     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
           return const UpdateDialogWidget();
         },
       );
+    } else {
+      printLog("App is up to date");
     }
-  });
+  } catch (e) {
+    printLog("Error checking update: $e");
+  }
 }

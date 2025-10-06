@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
@@ -93,42 +94,114 @@ extension FieldEntityExtension on FormEntity {
                             onDatachnage?.call(value);
                           },
                         )
-                        : canSearch == true
-                        ? DropdownSearchWidget<NameIDEntity>(
-                          isEnabled: isEnabled ?? true,
-                          list: inputFieldData?['items'] ?? [],
-                          height: resources.dimen.dp27,
-                          labelText: getLabel,
-                          errorMessage: isMandetory ? getLabel : '',
-                          isMandetory: isMandetory,
-                          hintText: getPlaceholder,
-                          selectedValue: fieldValue,
-                          callback: (value) async {
-                            fieldValue = value;
-                            onDatachnage?.call(value);
-                          },
-                        )
-                        : DropDownWidget<NameIDEntity>(
-                          isEnabled: isEnabled ?? true,
-                          list: inputFieldData?['items'] ?? [],
-                          height: resources.dimen.dp27,
-                          labelText: getLabel,
-                          errorMessage: isMandetory ? getLabel : '',
-                          isMandetory: isMandetory,
-                          hintText: getPlaceholder,
-                          selectedValue: fieldValue,
-                          callback: (value) async {
-                            fieldValue = value;
-                            onDatachnage?.call(value);
-                          },
+                        : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Visibility(
+                              visible: getLabel.isNotEmpty,
+                              child: Text.rich(
+                                TextSpan(
+                                  text: getLabel,
+                                  style: context.textFontWeight400.onFontSize(
+                                    context.resources.fontSize.dp14,
+                                  ),
+                                  children: [
+                                    if (isMandetory)
+                                      TextSpan(
+                                        text: ' *',
+                                        style: context.textFontWeight400
+                                            .onFontSize(
+                                              context.resources.fontSize.dp14,
+                                            )
+                                            .onColor(
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.error,
+                                            ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: context.resources.dimen.dp4),
+                            DropdownSearch<NameIDEntity>(
+                              key: ValueKey(
+                                (inputFieldData?['items'] ?? []).hashCode,
+                              ),
+                              selectedItem: fieldValue,
+                              items:
+                                  (filter, infiniteScrollProps) =>
+                                      inputFieldData?['items'] ?? [],
+                              itemAsString: (item) => item.toString(),
+
+                              decoratorProps: DropDownDecoratorProps(
+                                decoration: InputDecoration(
+                                  hintText: getPlaceholder,
+                                  isDense: true, // make it compact
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 12,
+                                  ),
+
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      10,
+                                    ), // 👈 rounded corners
+                                  ),
+                                ),
+                              ),
+                              compareFn: (a, b) => a.id == b.id,
+                              popupProps: PopupProps.menu(
+                                fit: FlexFit.loose,
+                                showSearchBox: canSearch ?? false,
+                                searchDelay: Duration.zero,
+                                constraints: BoxConstraints(),
+                                itemBuilder:
+                                    (context, item, isDisabled, isSelected) =>
+                                        ListTile(title: Text(item.toString())),
+                              ),
+                              onChanged: (value) {
+                                fieldValue = value;
+                                onDatachnage?.call(value);
+                              },
+                            ),
+                          ],
                         ),
+                // DropdownSearchWidget<NameIDEntity>(
+                //   isEnabled: isEnabled ?? true,
+                //   list: inputFieldData?['items'] ?? [],
+                //   height: resources.dimen.dp27,
+                //   labelText: getLabel,
+                //   errorMessage: isMandetory ? getLabel : '',
+                //   isMandetory: isMandetory,
+                //   hintText: getPlaceholder,
+                //   selectedValue: fieldValue,
+                //   callback: (value) async {
+                //     fieldValue = value;
+                //     onDatachnage?.call(value);
+                //   },
+                // )
+                // : DropDownWidget<NameIDEntity>(
+                //   isEnabled: isEnabled ?? true,
+                //   list: inputFieldData?['items'] ?? [],
+                //   height: resources.dimen.dp27,
+                //   labelText: getLabel,
+                //   errorMessage: isMandetory ? getLabel : '',
+                //   isMandetory: isMandetory,
+                //   hintText: getPlaceholder,
+                //   selectedValue: fieldValue,
+                //   callback: (value) async {
+                //     fieldValue = value;
+                //     onDatachnage?.call(value);
+                //   },
+                // ),
               ),
             );
           },
         );
       case 'text' || 'number' || 'phone' || 'textarea' || 'email' || 'password':
-        final textEditingController = TextEditingController();
-        textEditingController.text = fieldValue ?? '';
+        textEditingController ??= TextEditingController();
+        textEditingController?.text = fieldValue ?? '';
         return Visibility(
           visible: isVisible,
           child: Padding(
@@ -154,6 +227,7 @@ extension FieldEntityExtension on FormEntity {
               regex: validation?.regex,
               maxLength: validation?.maxLength,
               textController: textEditingController,
+              focusNode: focusNode,
               isValid: (value) {
                 if (value.isEmpty) {
                   return messages?.requiredMessage;

@@ -99,7 +99,7 @@ class ProfileScreen extends BaseScreenWidget {
                                                       context,
                                                     ).user?.isAdmin ==
                                                     2
-                                                ? 'Facility'
+                                                ? 'Mobile ICTC'
                                                 : 'DISHA',
                                         style: context.textFontWeight600
                                             .onFontSize(

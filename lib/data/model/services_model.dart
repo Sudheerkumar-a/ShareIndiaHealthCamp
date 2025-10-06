@@ -18,7 +18,7 @@ class ReportDataModel extends BaseModel {
     limit = response['limit'];
     total = int.tryParse(response['total'] ?? '0');
     pages = response['pages'];
-    if (response['data'] != null) {
+    if (response['data'] is List) {
       response['data'].forEach((v) {
         reportList.add(ScreeningDetailsModel.fromJson(v).toEntity());
       });

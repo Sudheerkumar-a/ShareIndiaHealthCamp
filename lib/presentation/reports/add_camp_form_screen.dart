@@ -186,7 +186,7 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
           ..type = 'image'
           ..placeholderEn = 'Photo Of Camp'
           ..fieldValue = fieldsData['image_camp']
-          ..validation = (FormValidationEntity()..isRequired = true)
+          ..validation = (FormValidationEntity()..isRequired = false)
           ..messages =
               (FormMessageEntity()..requiredEn = 'Please take Photo Of Camp')
           ..suffixIcon = DrawableAssets.icUpload
