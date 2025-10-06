@@ -128,7 +128,7 @@ class ClientsByCampScreen extends BaseScreenWidget {
 
     isAdmin = UserCredentialsEntity.details(context).user?.isAdmin ?? 1;
     districtId = UserCredentialsEntity.details(context).user?.districtId;
-    mandalId = UserCredentialsEntity.details(context).user?.mandalId;
+    //mandalId = UserCredentialsEntity.details(context).user?.mandalId;
     return SafeArea(
       bottom: true,
       child: Scaffold(
@@ -357,7 +357,11 @@ class ClientsByCampScreen extends BaseScreenWidget {
                       valueListenable: _onFilterChange,
                       builder: (context, value, child) {
                         final ticketsHeaderData =
-                            ScreeningDetailsEntity().toJson().keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList();
+                            ScreeningDetailsEntity()
+                                .toJson()
+                                .keys
+                                .map((e) => e.replaceAll('_', ' ').capitalize())
+                                .toList();
                         final ticketsTableColunwidths =
                             <int, FlexColumnWidth>{};
                         ticketsHeaderData.asMap().forEach((index, value) {

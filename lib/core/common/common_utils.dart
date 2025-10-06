@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:app_version_update/data/models/app_version_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,87 +13,15 @@ import 'package:shareindia_health_camp/core/common/log.dart';
 import 'package:shareindia_health_camp/core/config/flavor_config.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/enum/enum.dart';
-import 'package:map_launcher/map_launcher.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/data/local/user_data_db.dart';
 import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/update_dialog_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:mime/mime.dart';
 import 'package:app_version_update/app_version_update.dart';
 
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as excel;
-
-Future<void> openMapsSheet(
-  BuildContext context,
-  String title,
-  double lat,
-  double lang,
-) async {
-  try {
-    final availableMaps = await MapLauncher.installedMaps;
-    if (availableMaps.length > 1) {
-      if (context.mounted) {
-        showModalBottomSheet(
-          context: context,
-          builder: (BuildContext context) {
-            return SafeArea(
-              child: SingleChildScrollView(
-                child: Wrap(
-                  children: <Widget>[
-                    for (var map in availableMaps)
-                      Container(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: ListTile(
-                          onTap:
-                              () => map.showMarker(
-                                coords: Coords(lat, lang),
-                                title: title,
-                              ),
-                          title: Text(map.mapName),
-                          leading: SvgPicture.asset(
-                            map.icon,
-                            height: 30.0,
-                            width: 30.0,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      }
-    } else {
-      await availableMaps.first.showMarker(
-        coords: Coords(lat, lang),
-        title: title,
-      );
-    }
-  } catch (e) {
-    printLog(e.toString());
-  }
-}
-
-Future<void> launchMapUrl(
-  BuildContext context,
-  String title,
-  double lat,
-  double long,
-) async {
-  final availableMaps = await MapLauncher.installedMaps;
-  await availableMaps.first.showMarker(coords: Coords(lat, long), title: title);
-}
-
-callNumber(BuildContext context, String number) async {
-  final result = await FlutterPhoneDirectCaller.callNumber(number);
-  if (result == false && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Center(child: Text('could_not_launch_this_app'))),
-    );
-  }
-}
+import 'package:url_launcher/url_launcher.dart';
 
 sendEmail(BuildContext context, String email) async {
   final result = await launchUrl(
@@ -366,7 +293,7 @@ List<PriorityType> getPriorityTypes() {
   ];
 }
 
-Future<bool> exportToExcel(ExportDataEntity exportData) async {
+Future<bool> exportToExcel(ExportDataEntity exportData, {int? category}) async {
   try {
     final workbook = excel.Workbook();
     final sheet = workbook.worksheets[0];
@@ -410,7 +337,8 @@ Future<bool> exportToExcel(ExportDataEntity exportData) async {
 
     for (int row = 0; row < exportData.rows.length; row++) {
       final item = exportData.rows[row];
-      final columnsData = item.toExcel();
+      final columnsData =
+          category != null ? item.toFilterJson(category) : item.toExcel();
       int col = 0;
       for (var item in (columnsData as Map<String, dynamic>).entries) {
         final value = '${item.value ?? ''}';
@@ -459,8 +387,10 @@ checkIsUpdateAvailabe(BuildContext context) async {
       playStoreId: "com.ihs.apsacs",
     );
 
-    if (result.storeVersion != null && result.canUpdate == true&&context.mounted) {
-     showDialog(
+    if (result.storeVersion != null &&
+        result.canUpdate == true &&
+        context.mounted) {
+      showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {

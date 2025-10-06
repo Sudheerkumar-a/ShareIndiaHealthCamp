@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
@@ -654,6 +656,8 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                 ..max = 100)
           ..messages =
               (FormMessageEntity()
+                ..requiredEn = 'Please Enter Age'
+                ..requiredTe = 'Please Enter Age'
                 ..maxEn = 'please enter age below 100'
                 ..maxTe = 'please enter age below 100')
           ..placeholderEn = 'Age'
@@ -1202,7 +1206,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelEn = 'Pregnancy status'
           ..labelTe = 'Pregnancy status'
           ..isHidden = fieldsData['sex'] != 'F'
-          ..fieldValue = fieldsData['pregnancystatus']==1
+          ..fieldValue = fieldsData['pregnancystatus'] == 1
           ..onDatachnage = (value) {
             final child =
                 step5formFields
@@ -1322,7 +1326,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                     .where((item) => item.name == 'alreadAtARTName')
                     .firstOrNull;
             child?.isHidden = !value;
-            if (fieldsData['hiv']?['result'] == 'Reactive') {
+            if (fieldsData['hiv']?['result'] == 'Screened-Reactive') {
               final child2 =
                   step5formFields
                       .where((item) => item.name == 'referredtoICTC')
@@ -1777,23 +1781,23 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    
+
     fieldsData.addAll(widget.screeningDetails?.toEditJson() ?? {});
-    if(stepButtonTexts.isEmpty) {
+    if (stepButtonTexts.isEmpty) {
       stepButtonTexts.addAll([
-      //'Next',
-      //'Next',
-      'Next',
-      'Next',
-      'Next',
-      'Next',
-      'Next',
-      //'Next',
-      //'Next',
-      'Submit',
-    ]);
+        //'Next',
+        //'Next',
+        'Next',
+        'Next',
+        'Next',
+        'Next',
+        'Next',
+        //'Next',
+        //'Next',
+        'Submit',
+      ]);
     }
-    if(formFields.isEmpty) {
+    if (formFields.isEmpty) {
       formFields.addAll(_getFormFields(context));
     }
     final currentStepFormFields = formFields[_stepNotifier.value - 1];
@@ -1962,20 +1966,20 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                     final requestParams = {
                                       "action": "insert",
                                       "camp_id": widget.campId,
-                                      "date_of_camp":
-                                          fieldsData['date_of_camp'],
-                                      "mandal": fieldsData['mandal'],
-                                      "district": fieldsData['district'],
-                                      "camp_location":
-                                          fieldsData['camp_location'],
-                                      "village": fieldsData['village'],
-                                      "camp_village":
-                                          fieldsData['camp_location_other'],
-                                      "camp_local_poc_number":
-                                          fieldsData['camp_local_poc_number'],
-                                      "camp_local_poc_name":
-                                          fieldsData['camp_local_poc_name'],
-                                      "state": "Andhra Pradesh",
+                                      // "date_of_camp":
+                                      //     fieldsData['date_of_camp'],
+                                      // "mandal": fieldsData['mandal'],
+                                      // "district": fieldsData['district'],
+                                      // "camp_location":
+                                      //     fieldsData['camp_location'],
+                                      // "village": fieldsData['village'],
+                                      // "camp_village":
+                                      //     fieldsData['camp_location_other'],
+                                      // "camp_local_poc_number":
+                                      //     fieldsData['camp_local_poc_number'],
+                                      // "camp_local_poc_name":
+                                      //     fieldsData['camp_local_poc_name'],
+                                      // "state": "Andhra Pradesh",
                                       "first_name": fieldsData['first_name'],
                                       "last_name": fieldsData['last_name'],
                                       "age": fieldsData['age'],
@@ -1984,7 +1988,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                           fieldsData['pregnancystatus'] ?? 0,
                                       "date_of_LMP":
                                           fieldsData['date_of_LMP'] ?? '',
-                                      "maritalstatus":
+                                      "marital_status":
                                           fieldsData['maritalstatus'] ?? 0,
                                       "contact_number":
                                           fieldsData['contact_number'],
@@ -2070,7 +2074,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                               : '',
                                       "syndromicreferred":
                                           fieldsData['syndromicreferred'],
-                                      "treatmentprovided":
+                                      "syndromic_treatment_provided":
                                           fieldsData['treatmentprovided']
                                                   is List
                                               ? (fieldsData['treatmentprovided']
@@ -2082,9 +2086,9 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                                       "sti": fieldsData['sti'],
                                       "remarks": fieldsData['remarks'],
                                     };
-                                    if(widget.screeningDetails?.id !=
-                                                      null) {
-                                      requestParams['id'] = widget.screeningDetails?.id;
+                                    if (widget.screeningDetails?.id != null) {
+                                      requestParams['id'] =
+                                          widget.screeningDetails?.id;
                                     }
                                     //jsonEncode(requestParams);
                                     Dialogs.loader(context);

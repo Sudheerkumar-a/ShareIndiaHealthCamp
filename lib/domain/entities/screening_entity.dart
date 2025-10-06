@@ -48,6 +48,7 @@ class ScreeningDetailsEntity extends BaseEntity {
   String? lastName;
   String? age;
   String? sex;
+  String? maritalStatus;
   String? pregnancystatus;
   String? dateOfLMP;
   String? contactNumber;
@@ -62,11 +63,111 @@ class ScreeningDetailsEntity extends BaseEntity {
   HivEntity? hiv;
   String? syndromiccases;
   String? syndromicreferred;
+  String? syndromicTreatmentProvided;
   StiEntity? sti;
   String? remarks;
 
   Map<String, dynamic> toExcel() {
-    return toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    //data['action'] = action;
+    data['date_of_camp'] = dateOfCamp;
+    data['district'] = district;
+    data['mandal'] = mandal;
+    data['camp_location'] = campLocation;
+    data['state'] = state;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['age'] = age;
+    data['sex'] = sex;
+    data['marital_status'] = maritalStatus;
+    data['contact_number'] = contactNumber;
+    data['aadher_number'] = aadherNumber;
+    data['client_address'] = clientAddress;
+    data['client_mandal'] = clientMandal;
+    data['occupation'] = occupation;
+    data['consent'] = consent;
+    if (medHistory != null) {
+      data['Diabetes'] = medHistory?.diabetes == "0" ? 'No' : 'Yes';
+      data['On_treatment'] = onTreatment?.diabetes == "0" ? 'No' : 'Yes';
+      data['HTN'] = medHistory?.hTN == "0" ? 'No' : 'Yes';
+      data['On_treatment'] = onTreatment?.hTN == "0" ? 'No' : 'Yes';
+      data['Hepatitis'] = medHistory?.hepatitis == "0" ? 'No' : 'Yes';
+      data['On_treatment'] = onTreatment?.hepatitis == "0" ? 'No' : 'Yes';
+    } else {
+      data['Diabetes'] = '';
+      data['HTN'] = '';
+      data['Hepatitis'] = '';
+    }
+
+    if (ncd != null) {
+      data['diabetes_screened'] = ncd?.diabetes?.screened == "0" ? 'No' : 'Yes';
+      data['diabetes_Result'] = ncd?.diabetes?.bloodsugar ?? '0';
+      data['diabetes_Reffered'] = ncd?.diabetes?.abnormal == "0" ? 'No' : 'Yes';
+      data['hypertension_screened'] =
+          ncd?.hypertension?.screened == "0" ? 'No' : 'Yes';
+      data['hypertension_Systolic'] = ncd?.hypertension?.systolic ?? '0';
+      data['hypertension_Diastolic'] = ncd?.hypertension?.diastolic ?? '0';
+      data['hypertension_Reffered'] =
+          ncd?.hypertension?.abnormal == "0" ? 'No' : 'Yes';
+    } else {
+      data['diabetes_screened'] = '';
+      data['diabetes_Result'] = '';
+      data['diabetes_Reffered'] = '';
+      data['hypertension_screened'] = '';
+      data['hypertension_Systolic'] = '';
+      data['hypertension_Diastolic'] = '';
+      data['hypertension_Reffered'] = '';
+    }
+    if (hiv != null) {
+      data['pregnancystatus'] = pregnancystatus;
+      data['date_of_LMP'] = dateOfLMP;
+      data['Hiv_Offered'] = hiv?.result ?? '';
+      data['Alread_At_ART'] = hiv?.alreadAtART == "0" ? 'No' : 'Yes';
+      data['ART_Name'] = hiv?.nameOfART ?? '';
+      data['Referred_ICTC'] = hiv?.referredICTC == "0" ? 'No' : 'Referred';
+      data['Confirmed_ICTC'] =
+          hiv?.confirmedICTC == "0" ? 'Not Confirmed' : 'Confirmed';
+      data['Referred_ART'] =
+          hiv?.referredART == "0" ? 'Not ReferredART' : 'ReferredART';
+    } else {
+      data['pregnancystatus'] = pregnancystatus;
+      data['date_of_LMP'] = dateOfLMP;
+      data['Hiv_Offered'] = '';
+      data['Alread_At_ART'] = '';
+      data['ART_Name'] = '';
+      data['Referred_ICTC'] = '';
+      data['Confirmed_ICTC'] = '';
+      data['Referred_ART'] = '';
+    }
+    data['syndromiccases'] = syndromiccases;
+    data['syndromicreferred'] = syndromicreferred;
+    data['treatment_provided'] = syndromicTreatmentProvided;
+    if (sti != null) {
+      data['syphilis_done'] = sti?.syphilis?.done == "0" ? 'No' : 'Done';
+      data['syphilis_result'] = sti?.syphilis?.result ?? '';
+      data['syphilis_referred'] =
+          sti?.syphilis?.referred == "0" ? 'Not Referred' : 'Referred';
+      data['hepB_done'] = sti?.hepB?.done == "0" ? 'No' : 'Done';
+      data['hepB_result'] = sti?.hepB?.result ?? '';
+      data['hepB_referred'] =
+          sti?.hepB?.referred == "0" ? 'Not Referred' : 'Referred';
+      data['hepC_done'] = sti?.hepC?.done == "0" ? 'No' : 'Done';
+      data['hepC_result'] = sti?.hepC?.result ?? '';
+      data['hepC_referred'] =
+          sti?.hepC?.referred == "0" ? 'Not Referred' : 'Referred';
+    } else {
+      data['syphilis_done'] = '';
+      data['syphilis_result'] = '';
+      data['syphilis_referred'] = '';
+      data['hepB_done'] = '';
+      data['hepB_result'] = '';
+      data['hepB_referred'] = '';
+      data['hepC_done'] = '';
+      data['hepC_result'] = '';
+      data['hepC_referred'] = '';
+    }
+    data['remarks'] = remarks;
+    return data;
   }
 
   bool get didConset => consent == 1;
@@ -94,6 +195,7 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['last_name'] = lastName;
     data['age'] = age;
     data['sex'] = sex;
+    data['marital_status'] = maritalStatus;
     data['pregnancystatus'] = pregnancystatus;
     data['date_of_LMP'] = dateOfLMP;
     data['contact_number'] = contactNumber;
@@ -128,6 +230,7 @@ class ScreeningDetailsEntity extends BaseEntity {
     }
     data['syndromiccases'] = syndromiccases;
     data['syndromicreferred'] = syndromicreferred;
+    data['treatment_provided'] = syndromicTreatmentProvided;
     if (sti != null) {
       data['syphilis'] =
           '${sti?.syphilis?.done == "0" ? 'No' : 'Done'} - ${sti?.syphilis?.result} - ${sti?.syphilis?.referred == "0" ? 'Not Referred' : 'Referred'}';
@@ -156,8 +259,7 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['last_name'] = lastName;
     data['age'] = age;
     data['sex'] = sex;
-    data['pregnancystatus'] = pregnancystatus;
-    data['date_of_LMP'] = dateOfLMP;
+    data['marital_status'] = maritalStatus;
     data['contact_number'] = contactNumber;
     data['aadher_number'] = aadherNumber;
     data['client_address'] = clientAddress;
@@ -170,19 +272,32 @@ class ScreeningDetailsEntity extends BaseEntity {
       case 3:
         {
           if (ncd != null) {
-            data['hypertension'] =
-                '${ncd?.hypertension?.systolic ?? 0}/${ncd?.hypertension?.diastolic ?? 0} - ${ncd?.hypertension?.abnormal == "0" ? 'Normal' : 'Abnormal'} - ${ncd?.hypertension?.screened == "0" ? 'No' : 'Yes'}';
+            data['hypertension_screened'] =
+                ncd?.hypertension?.screened == "0" ? 'No' : 'Yes';
+            data['hypertension_Systolic'] = ncd?.hypertension?.systolic ?? '0';
+            data['hypertension_Diastolic'] =
+                ncd?.hypertension?.diastolic ?? '0';
+            data['hypertension_Reffered'] =
+                ncd?.hypertension?.abnormal == "0" ? 'No' : 'Yes';
           } else {
-            data['hypertension'] = '';
+            data['hypertension_screened'] = '';
+            data['hypertension_Systolic'] = '';
+            data['hypertension_Diastolic'] = '';
+            data['hypertension_Reffered'] = '';
           }
         }
       case 4:
         {
           if (ncd != null) {
-            data['diabetes'] =
-                '${ncd?.diabetes?.bloodsugar} - ${ncd?.diabetes?.abnormal == "0" ? 'Normal' : 'Abnormal'} - ${ncd?.diabetes?.screened == "0" ? 'No' : 'Yes'}';
+            data['diabetes_screened'] =
+                ncd?.diabetes?.screened == "0" ? 'No' : 'Yes';
+            data['diabetes_Result'] = ncd?.diabetes?.bloodsugar ?? '0';
+            data['diabetes_Reffered'] =
+                ncd?.diabetes?.abnormal == "0" ? 'No' : 'Yes';
           } else {
-            data['diabetes'] = '';
+            data['diabetes_screened'] = '';
+            data['diabetes_Result'] = '';
+            data['diabetes_Reffered'] = '';
           }
         }
       case 5:
@@ -200,12 +315,26 @@ class ScreeningDetailsEntity extends BaseEntity {
       case 6:
         {
           if (hiv != null) {
-            data['hiv'] =
-                hiv?.offered == '1'
-                    ? 'Offered - ${hiv?.result} - ${hiv?.alreadAtART == "0" ? 'AlreadAtART' : ''}\nICTC: ${hiv?.referredICTC == "0" ? 'No' : 'Referred'} ${hiv?.referredICTC == "0" ? '' : '- ${hiv?.nameOfICTC}'} - ${hiv?.confirmedICTC == "0" ? 'Not Confirmed' : 'Confirmed'} - ${hiv?.referredART == "0" ? 'Not ReferredART' : 'ReferredART'}'
-                    : 'No';
+            data['pregnancystatus'] = pregnancystatus;
+            data['date_of_LMP'] = dateOfLMP;
+            data['Hiv_Offered'] = hiv?.result ?? '';
+            data['Alread_At_ART'] = hiv?.alreadAtART == "0" ? 'No' : 'Yes';
+            data['ART_Name'] = hiv?.nameOfART ?? '';
+            data['Referred_ICTC'] =
+                hiv?.referredICTC == "0" ? 'No' : 'Referred';
+            data['Confirmed_ICTC'] =
+                hiv?.confirmedICTC == "0" ? 'Not Confirmed' : 'Confirmed';
+            data['Referred_ART'] =
+                hiv?.referredART == "0" ? 'Not ReferredART' : 'ReferredART';
           } else {
-            data['hiv'] = '';
+            data['pregnancystatus'] = pregnancystatus;
+            data['date_of_LMP'] = dateOfLMP;
+            data['Hiv_Offered'] = '';
+            data['Alread_At_ART'] = '';
+            data['ART_Name'] = '';
+            data['Referred_ICTC'] = '';
+            data['Confirmed_ICTC'] = '';
+            data['Referred_ART'] = '';
           }
         }
       case 7:
@@ -221,6 +350,7 @@ class ScreeningDetailsEntity extends BaseEntity {
         {
           data['syndromiccases'] = syndromiccases;
           data['syndromicreferred'] = syndromicreferred;
+          data['treatment_provided'] = syndromicTreatmentProvided;
         }
       default:
         {}
@@ -242,7 +372,7 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['last_name'] = lastName;
     data['age'] = age;
     data['sex'] = sex;
-    data['maritalstatus'] = '';
+    data['maritalstatus'] = maritalStatus;
     data['pregnancystatus'] = int.tryParse('${pregnancystatus ?? 0}');
     data['date_of_LMP'] = dateOfLMP;
     data['contact_number'] = contactNumber;
@@ -281,8 +411,8 @@ class ScreeningDetailsEntity extends BaseEntity {
       'referredART': int.tryParse(hiv?.referredART ?? '0'),
     };
     data['syndromiccases'] = syndromiccases;
-    data['syndromicreferred'] =  int.tryParse(syndromicreferred??'0');
-
+    data['syndromicreferred'] = int.tryParse(syndromicreferred ?? '0');
+    data['treatment_provided'] = syndromicTreatmentProvided;
     data['sti'] = {
       'syphilis': {
         'done': int.tryParse(sti?.syphilis?.done ?? '0'),
@@ -368,6 +498,7 @@ class HivEntity extends BaseEntity {
   String? offered;
   String? result;
   String? alreadAtART;
+  String? nameOfART;
   String? referredICTC;
   String? nameOfICTC;
   String? confirmedICTC;
@@ -378,6 +509,7 @@ class HivEntity extends BaseEntity {
     data['offered'] = offered;
     data['result'] = result;
     data['alreadAtART'] = alreadAtART;
+    data['nameOfART'] = nameOfART;
     data['referredICTC'] = referredICTC;
     data['nameOfICTC'] = nameOfICTC;
     data['confirmedICTC'] = confirmedICTC;

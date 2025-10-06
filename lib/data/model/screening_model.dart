@@ -62,6 +62,7 @@ class ScreeningDetailsModel extends BaseModel {
   String? lastName;
   String? age;
   String? sex;
+  String? maritalStatus;
   String? pregnancystatus;
   String? dateOfLMP;
   String? contactNumber;
@@ -76,6 +77,7 @@ class ScreeningDetailsModel extends BaseModel {
   HivEntity? hiv;
   String? syndromiccases;
   String? syndromicreferred;
+  String? syndromicTreatmentProvided;
   StiEntity? sti;
   String? remarks;
 
@@ -92,6 +94,7 @@ class ScreeningDetailsModel extends BaseModel {
     lastName = json['last_name'];
     age = json['age'];
     sex = json['sex'];
+    maritalStatus = json['marital_status'];
     pregnancystatus = json['pregnancystatus'];
     dateOfLMP = json['date_of_LMP'];
     contactNumber = json['contact_number'];
@@ -114,6 +117,7 @@ class ScreeningDetailsModel extends BaseModel {
         json['hiv'] != null ? HivModel.fromJson(json['hiv']).toEntity() : null;
     syndromiccases = json['syndromiccases'];
     syndromicreferred = json['syndromicreferred'];
+    syndromicTreatmentProvided = json['syndromic_treatment_provided'];
     sti =
         json['sti'] != null ? StiModel.fromJson(json['sti']).toEntity() : null;
     remarks = json['remarks'];
@@ -134,6 +138,7 @@ class ScreeningDetailsModel extends BaseModel {
       ..lastName = lastName
       ..age = age
       ..sex = sex
+      ..maritalStatus = maritalStatus
       ..pregnancystatus = pregnancystatus
       ..dateOfLMP = dateOfLMP
       ..contactNumber = contactNumber
@@ -148,6 +153,7 @@ class ScreeningDetailsModel extends BaseModel {
       ..hiv = hiv
       ..syndromiccases = syndromiccases
       ..syndromicreferred = syndromicreferred
+      ..syndromicTreatmentProvided = syndromicTreatmentProvided
       ..sti = sti
       ..remarks = remarks;
   }
@@ -243,6 +249,7 @@ class HivModel extends BaseModel {
   String? offered;
   String? result;
   String? alreadAtART;
+  String? nameOfART;
   String? referredICTC;
   String? nameOfICTC;
   String? confirmedICTC;
@@ -252,6 +259,7 @@ class HivModel extends BaseModel {
     offered = '${json['offered'] ?? ''}';
     result = '${json['result'] ?? ''}';
     alreadAtART = '${json['alreadAtART'] ?? ''}';
+    nameOfART = '${json['nameOfART'] ?? ''}';
     referredICTC = '${json['referredICTC'] ?? ''}';
     nameOfICTC = '${json['nameOfICTC'] ?? ''}';
     confirmedICTC = '${json['confirmedICTC'] ?? ''}';
@@ -264,6 +272,7 @@ class HivModel extends BaseModel {
       ..offered = offered
       ..result = result
       ..alreadAtART = alreadAtART
+      ..nameOfART = nameOfART
       ..referredICTC = referredICTC
       ..nameOfICTC = nameOfICTC
       ..confirmedICTC = confirmedICTC

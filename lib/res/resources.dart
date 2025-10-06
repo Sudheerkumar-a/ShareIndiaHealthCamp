@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/enum/enum.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
@@ -51,7 +50,7 @@ class Resources {
           AppSettingsDB.appThemeKey,
           ThemeEnum.red.name,
         );
-    Phoenix.rebirth(context);
+    //Phoenix.rebirth(context);
   }
 
   bool get isLocalEn => selectedLocalValue == LocalEnum.en.name;
@@ -76,7 +75,7 @@ class Resources {
             LocalEnum.te.name,
           );
     }
-    Phoenix.rebirth(context);
+    //Phoenix.rebirth(context);
   }
 
   String getLocal() {
@@ -120,7 +119,7 @@ class Resources {
 
   void setFontSize(FontSizeEnum size) {
     context.appSettingsDB.put(AppSettingsDB.appFontSizeKey, size.size);
-    Phoenix.rebirth(context);
+    //Phoenix.rebirth(context);
   }
 
   FontDimensions get fontSize {

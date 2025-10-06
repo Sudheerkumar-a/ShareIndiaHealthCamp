@@ -16,9 +16,13 @@ import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/presentation/home/filter_by_category_screen.dart';
+import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 
 class UserDashboard extends BaseScreenWidget {
@@ -26,8 +30,10 @@ class UserDashboard extends BaseScreenWidget {
   final _serviceBloc = sl<ServicesBloc>();
   final _onMonthChanged = ValueNotifier('');
   final _onDistrictChanged = ValueNotifier(0);
+  final isapiCalled = false;
   int? districtId;
   int? mandalId;
+  final ValueNotifier<List<String>> filteredDates = ValueNotifier([]);
   _navigateToFilterScreen(BuildContext context, int category, bool isAdmin) {
     FilterByCategoryScreen.start(
       context,
@@ -45,7 +51,9 @@ class UserDashboard extends BaseScreenWidget {
     final resources = context.resources;
     _onMonthChanged.value = getDateByformat('MM', DateTime.now());
     Future.delayed(Duration.zero, () {
-      _serviceBloc.getDashboardData(requestParams: {}, emitResponse: true);
+      if (isapiCalled == false) {
+        _serviceBloc.getDashboardData(requestParams: {}, emitResponse: true);
+      }
     });
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
@@ -182,6 +190,216 @@ class UserDashboard extends BaseScreenWidget {
                                 },
                               ),
                           SizedBox(height: resources.dimen.dp10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ValueListenableBuilder(
+                                  valueListenable: filteredDates,
+                                  builder: (context, value, child) {
+                                    return Container(
+                                      height: resources.dimen.dp40,
+                                      decoration:
+                                          BackgroundBoxDecoration(
+                                            radious: resources.dimen.dp10,
+                                            boarderColor:
+                                                resources
+                                                    .color
+                                                    .sideBarItemUnselected,
+                                            boarderWidth: 1,
+                                          ).roundedCornerBox,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: resources.dimen.dp5,
+                                      ),
+
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(width: resources.dimen.dp10),
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {
+                                                showDatePicker(
+                                                  context: context,
+                                                  firstDate: DateTime.now().add(
+                                                    const Duration(days: -365),
+                                                  ),
+                                                  lastDate: DateTime.now(),
+                                                ).then((dateTime) {
+                                                  if (dateTime != null) {
+                                                    filteredDates.value =
+                                                        List<String>.empty(
+                                                          growable: true,
+                                                        )..add(
+                                                          getDateByformat(
+                                                            'yyyy/MM/dd',
+                                                            dateTime,
+                                                          ),
+                                                        );
+                                                  }
+                                                });
+                                              },
+                                              child: Text.rich(
+                                                TextSpan(
+                                                  text:
+                                                      value.isNotEmpty
+                                                          ? value[0]
+                                                          : resources
+                                                              .string
+                                                              .startDate,
+                                                  children: [
+                                                    WidgetSpan(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                              left: 5.0,
+                                                            ),
+                                                        child: const Icon(
+                                                          Icons
+                                                              .calendar_month_sharp,
+                                                          size: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                style: context.textFontWeight400
+                                                    .onFontSize(
+                                                      resources.fontSize.dp10,
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: resources.dimen.dp10),
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {
+                                                if (value.isNotEmpty) {
+                                                  showDatePicker(
+                                                    context: context,
+                                                    initialDate:
+                                                        getDateTimeByString(
+                                                          'yyyy/MM/dd',
+                                                          value[0],
+                                                        ),
+                                                    firstDate:
+                                                        getDateTimeByString(
+                                                          'yyyy/MM/dd',
+                                                          value[0],
+                                                        ),
+                                                    lastDate: DateTime.now(),
+                                                  ).then((dateTime) {
+                                                    if (dateTime != null) {
+                                                      filteredDates.value =
+                                                          List<String>.empty(
+                                                              growable: true,
+                                                            )
+                                                            ..add(value[0])
+                                                            ..add(
+                                                              getDateByformat(
+                                                                'yyyy/MM/dd',
+                                                                dateTime.add(
+                                                                  const Duration(
+                                                                    hours: 24,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                      if (context.mounted) {
+                                                        //_updateReport(context);
+                                                      }
+                                                    }
+                                                  });
+                                                } else {
+                                                  Dialogs.showInfoDialog(
+                                                    context,
+                                                    PopupType.fail,
+                                                    resources
+                                                            .string
+                                                            .pleaseSelect +
+                                                        resources
+                                                            .string
+                                                            .startDate,
+                                                  );
+                                                }
+                                              },
+                                              child: Text.rich(
+                                                TextSpan(
+                                                  text:
+                                                      value.length > 1
+                                                          ? value[1]
+                                                          : resources
+                                                              .string
+                                                              .endDate,
+                                                  children: [
+                                                    WidgetSpan(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                              left: 5.0,
+                                                            ),
+                                                        child: const Icon(
+                                                          Icons
+                                                              .calendar_month_sharp,
+                                                          size: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                style: context.textFontWeight400
+                                                    .onFontSize(
+                                                      resources.fontSize.dp10,
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: resources.dimen.dp5),
+                                          InkWell(
+                                            onTap: () {
+                                              if (filteredDates
+                                                  .value
+                                                  .isNotEmpty) {
+                                                filteredDates.value =
+                                                    List.empty();
+                                                // _updateReport(context);
+                                              }
+                                            },
+                                            child: const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 5,
+                                              ),
+                                              child: Icon(
+                                                Icons.clear,
+                                                size: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: resources.dimen.dp5),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              // SizedBox(width: resources.dimen.dp10),
+                              // InkWell(
+                              //   onTap: () async {},
+
+                              //   child: ActionButtonWidget(
+                              //     text: 'Search',
+                              //     radious: resources.dimen.dp15,
+                              //     textSize: resources.fontSize.dp12,
+                              //     padding: EdgeInsets.symmetric(
+                              //       vertical: resources.dimen.dp5,
+                              //       horizontal: resources.dimen.dp15,
+                              //     ),
+                              //     color: resources.color.viewBgColorLight,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+
+                          SizedBox(height: resources.dimen.dp10),
                           ValueListenableBuilder(
                             valueListenable: _onDistrictChanged,
                             builder: (context, value, child) {
@@ -198,6 +416,67 @@ class UserDashboard extends BaseScreenWidget {
                                           .firstOrNull;
                               return Column(
                                 children: [
+                                  IntrinsicHeight(
+                                    child: Container(
+                                      height: double.infinity,
+                                      padding: EdgeInsets.all(
+                                        resources.dimen.dp10,
+                                      ),
+                                      decoration:
+                                          BackgroundBoxDecoration(
+                                            boxColor:
+                                                resources.color.colorWhite,
+                                            radious: resources.dimen.dp10,
+                                          ).roundedCornerBox,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {
+                                                _navigateToFilterScreen(
+                                                  context,
+                                                  1,
+                                                  isAdmin,
+                                                );
+                                              },
+                                              child: Text(
+                                                textAlign: TextAlign.left,
+                                                'Total Camps',
+                                                style:
+                                                    context.textFontWeight600,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: resources.dimen.dp20),
+                                          InkWell(
+                                            onTap: () {
+                                              _navigateToFilterScreen(
+                                                context,
+                                                1,
+                                                isAdmin,
+                                              );
+                                            },
+                                            child: Text.rich(
+                                              textAlign: TextAlign.center,
+                                              TextSpan(
+                                                text:
+                                                    overalData?.totalCamps ??
+                                                    '10',
+                                                style: context.textFontWeight600
+                                                    .onFontSize(22)
+                                                    .onColor(
+                                                      resources
+                                                          .color
+                                                          .viewBgColor,
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: resources.dimen.dp10),
                                   IntrinsicHeight(
                                     child: Row(
                                       children: [
@@ -740,26 +1019,22 @@ class UserDashboard extends BaseScreenWidget {
                                               .toUpperCase())
                                     .getWidget(context),
                               ),
-                              SizedBox(width: resources.dimen.dp10),
-                              Expanded(
-                                flex: 1,
-                                child: (FormEntity()
-                                      ..type = 'collection'
-                                      ..fieldValue = months.firstWhere(
-                                        (m) => m.id == DateTime.now().month,
-                                      )
-                                      ..inputFieldData = {
-                                        'items': months,
-                                        'doSort': false,
-                                      }
-                                      ..onDatachnage = (value) async {
-                                        _onMonthChanged.value =
-                                            value.id < 10
-                                                ? '0${value.id}'
-                                                : '${value.id}';
-                                      })
-                                    .getWidget(context),
-                              ),
+                              // SizedBox(width: resources.dimen.dp10),
+                              // Expanded(
+                              //   flex: 1,
+                              //   child: DropDownWidget<NameIDEntity>(
+                              //     selectedValue: months.firstWhere(
+                              //       (m) => m.id == DateTime.now().month,
+                              //     ),
+                              //     callback: (value) async {
+                              //       _onMonthChanged.value =
+                              //           (value?.id ?? 0) < 10
+                              //               ? '0${value?.id}'
+                              //               : '${value?.id}';
+                              //     },
+                              //     list: months,
+                              //   ),
+                              // ),
                             ],
                           ),
                           ValueListenableBuilder(

@@ -162,30 +162,31 @@ class ReportsScreen extends BaseScreenWidget {
               style: context.textFontWeight600,
             ),
           ),
-            if (UserCredentialsEntity.details(context).user?.isAdmin == 0) ...[
-              InkWell(
-                onTap: () async {
-                  AgentListScreen.start(context);
-                },
-                child: ActionButtonWidget(
-                  text: 'Add M-ICTC counsellor/LT',
-                  radious: resources.dimen.dp15,
-                  textSize: resources.fontSize.dp12,
-                  padding: EdgeInsets.symmetric(
-                    vertical: resources.dimen.dp5,
-                    horizontal: resources.dimen.dp15,
-                  ),
-                  color: resources.color.viewBgColorLight,
+          if (UserCredentialsEntity.details(context).user?.isAdmin == 0) ...[
+            InkWell(
+              onTap: () async {
+                AgentListScreen.start(context);
+              },
+              child: ActionButtonWidget(
+                text: 'Add M-ICTC counsellor/LT',
+                radious: resources.dimen.dp15,
+                textSize: resources.fontSize.dp12,
+                padding: EdgeInsets.symmetric(
+                  vertical: resources.dimen.dp5,
+                  horizontal: resources.dimen.dp15,
                 ),
+                color: resources.color.viewBgColorLight,
               ),
-            ],
-            
-      if (UserCredentialsEntity.details(context).user?.isAdmin != 1&&UserCredentialsEntity.details(context).user?.isAdmin != 0) ...[
+            ),
+          ],
+
+          if (UserCredentialsEntity.details(context).user?.isAdmin != 1 &&
+              UserCredentialsEntity.details(context).user?.isAdmin != 0) ...[
             SizedBox(width: resources.dimen.dp10),
             InkWell(
               onTap: () async {
                 CampListScreen.start(context).then((doRefresh) {
-                  if ((doRefresh??false) && context.mounted) {
+                  if ((doRefresh ?? false) && context.mounted) {
                     _updateReport(context);
                   }
                 });
@@ -201,7 +202,7 @@ class ReportsScreen extends BaseScreenWidget {
                 color: resources.color.viewBgColorLight,
               ),
             ),
-      ],
+          ],
         ],
       ),
       if (UserCredentialsEntity.details(context).user?.isAdmin == 1) ...[
@@ -371,7 +372,12 @@ class ReportsScreen extends BaseScreenWidget {
                 ExportDataEntity()
                   ..title = 'IHS_Clients_Report'
                   ..date = getDateByformat('dd-MM-yyyy', DateTime.now())
-                  ..columns = ScreeningDetailsEntity().toJson().keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList()
+                  ..columns =
+                      ScreeningDetailsEntity()
+                          .toExcel()
+                          .keys
+                          .map((e) => e.replaceAll('_', ' ').capitalize())
+                          .toList()
                   ..rows = reportData?.reportList ?? [],
               );
               if (context.mounted) {
@@ -466,7 +472,7 @@ class ReportsScreen extends BaseScreenWidget {
 
     isAdmin = UserCredentialsEntity.details(context).user?.isAdmin ?? 1;
     districtId = UserCredentialsEntity.details(context).user?.districtId;
-    mandalId = UserCredentialsEntity.details(context).user?.mandalId;
+    //mandalId = UserCredentialsEntity.details(context).user?.mandalId;
     return Padding(
       padding: EdgeInsets.all(resources.dimen.dp20),
       child: SingleChildScrollView(
@@ -485,7 +491,11 @@ class ReportsScreen extends BaseScreenWidget {
                   valueListenable: _onFilterChange,
                   builder: (context, value, child) {
                     final ticketsHeaderData =
-                        ScreeningDetailsEntity().toJson().keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList();
+                        ScreeningDetailsEntity()
+                            .toJson()
+                            .keys
+                            .map((e) => e.replaceAll('_', ' ').capitalize())
+                            .toList();
                     final ticketsTableColunwidths = <int, FlexColumnWidth>{};
                     ticketsHeaderData.asMap().forEach((index, value) {
                       ticketsTableColunwidths[index] = const FlexColumnWidth(4);

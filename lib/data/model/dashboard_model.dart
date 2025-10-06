@@ -215,6 +215,7 @@ class DistrictWiseTotalModel extends BaseModel {
   String? districtName;
   String? mandalId;
   String? mandalName;
+  String? totalCamps;
   String? totalClient;
   String? totalScreened;
   String? hivReactive;
@@ -233,6 +234,7 @@ class DistrictWiseTotalModel extends BaseModel {
     districtName = json['district_name'] ?? json['dist_name'];
     mandalId = json['mandal_id'];
     mandalName = json['mandal_name'];
+    totalCamps = json['total_camps'];
     totalClient = json['total_client'];
     totalScreened = json['total_screened'];
     hivReactive = json['hiv_reactive'];
@@ -253,6 +255,7 @@ class DistrictWiseTotalModel extends BaseModel {
       ..mandalId = mandalId
       ..mandalName = mandalName
       ..totalClient = totalClient
+      ..totalCamps = totalCamps
       ..totalScreened = totalScreened
       ..hivReactive = hivReactive
       ..hypertension = hypertension

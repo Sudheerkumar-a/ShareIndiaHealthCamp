@@ -81,6 +81,7 @@ class DistrictWiseTotalEntity extends BaseEntity {
   String? districtName;
   String? mandalId;
   String? mandalName;
+  String? totalCamps;
   String? totalClient;
   String? totalScreened;
   String? hivReactive;

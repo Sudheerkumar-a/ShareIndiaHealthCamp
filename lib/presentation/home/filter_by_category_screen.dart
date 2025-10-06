@@ -112,8 +112,14 @@ class FilterByCategoryScreen extends BaseScreenWidget {
                 ExportDataEntity()
                   ..title = 'IHS_Clients_Report'
                   ..date = getDateByformat('dd-MM-yyyy', DateTime.now())
-                  ..columns = ScreeningDetailsEntity().toJson().keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList()
+                  ..columns =
+                      ScreeningDetailsEntity()
+                          .toFilterJson(category)
+                          .keys
+                          .map((e) => e.replaceAll('_', ' ').capitalize())
+                          .toList()
                   ..rows = reportData?.reportList ?? [],
+                category: category,
               );
               if (context.mounted) {
                 Dialogs.dismiss(context);
@@ -259,7 +265,11 @@ class FilterByCategoryScreen extends BaseScreenWidget {
                       valueListenable: _onFilterChange,
                       builder: (context, value, child) {
                         final ticketsHeaderData =
-                            ScreeningDetailsEntity().toFilterJson(category).keys.map((e)=>e.replaceAll('_', ' ').capitalize()).toList();
+                            ScreeningDetailsEntity()
+                                .toFilterJson(category)
+                                .keys
+                                .map((e) => e.replaceAll('_', ' ').capitalize())
+                                .toList();
                         final ticketsTableColunwidths =
                             <int, FlexColumnWidth>{};
                         ticketsHeaderData.asMap().forEach((index, value) {
@@ -272,7 +282,8 @@ class FilterByCategoryScreen extends BaseScreenWidget {
                           ticketsTableColunwidths: ticketsTableColunwidths,
                           page: reportData?.page ?? 0,
                           totalPagecount: reportData?.pages ?? 0,
-                          getRowData: (rowEntity)=>rowEntity.toFilterJson(category),
+                          getRowData:
+                              (rowEntity) => rowEntity.toFilterJson(category),
                           onColumnClick: (key, ticket) {
                             ViewScreeningDetails.start(
                               context,

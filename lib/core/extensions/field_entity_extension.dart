@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
+import 'package:shareindia_health_camp/core/common/log.dart';
 import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
@@ -12,8 +13,6 @@ import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/checkbox_list_input_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/dialog_upload_attachment.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_search_widget.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/location_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/multi_select_dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/ncd_screening_widget.dart';
@@ -27,26 +26,33 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 extension FieldEntityExtension on FormEntity {
   Future<List<NameIDEntity>?> _getAccountTypes() async {
-    if (url == null && inputFieldData?['items'] == null) {
+    if (url == null) {
       return null;
     }
-    if (inputFieldData?['items'] == null) {
-      final response = await sl<ServicesBloc>().getFieldInputData(
-        apiUrl: url ?? '',
-        requestParams: urlInputData ?? {},
-        requestModel: requestModel ?? ListModel.fromMandalJson,
-      );
-      if (response is ServicesStateSuccess) {
-        return Future<List<NameIDEntity>>.value(
+    // if (inputFieldData?['items'] is List) {
+    //   return Future.value(
+    //     (inputFieldData?['items'] ?? []) as List<NameIDEntity>,
+    //   );
+    // } else if (inputFieldData?['items'] == null) {
+    printLog(
+      '$getLabel List Api inputFieldData null: ${(inputFieldData?['items'] ?? [])}',
+    );
+    final response = await sl<ServicesBloc>().getFieldInputData(
+      apiUrl: url ?? '',
+      requestParams: urlInputData ?? {},
+      requestModel: requestModel ?? ListModel.fromMandalJson,
+    );
+    if (response is ServicesStateSuccess) {
+      final list =
           ((response).responseEntity.entity as ListEntity).items
               .map((item) => item as NameIDEntity)
-              .toList(),
-        );
-      } else {
-        return Future<List<NameIDEntity>>.value([]);
-      }
+              .toList();
+      printLog('$getLabel List Api : ${list}');
+      return Future<List<NameIDEntity>>.value(list);
+    } else {
+      return Future<List<NameIDEntity>>.value([]);
     }
-    return Future.value((inputFieldData?['items'] ?? []) as List<NameIDEntity>);
+    // }
   }
 
   Widget getWidget(BuildContext context) {
@@ -55,32 +61,20 @@ extension FieldEntityExtension on FormEntity {
     bool isMandetory = (isVisible && (validation?.isRequired ?? false));
     switch (type) {
       case 'collection':
-        return FutureBuilder<List<NameIDEntity>?>(
-          future: _getAccountTypes(),
-          builder: (context, snapshot) {
-            if (inputFieldData?['doSort'] ?? true) {
-              (snapshot.data ?? []).sort(
-                (a, b) => (a.toString()).compareTo(b.toString()),
-              );
-            }
-            if (snapshot.data != null) {
-              if (inputFieldData == null) {
-                inputFieldData = {'items': snapshot.data};
-              } else {
-                inputFieldData['items'] = snapshot.data;
-              }
-            }
-            return Visibility(
-              visible: isVisible,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: verticalSpace ?? 10.0,
-                  horizontal: horizontalSpace ?? 0.0,
-                ),
-                child:
-                    multi == true
+        return Visibility(
+          visible: isVisible,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: verticalSpace ?? 10.0,
+              horizontal: horizontalSpace ?? 0.0,
+            ),
+            child:
+                url == null
+                    ? (multi == true
                         ? MultiSelectDropDownWidget<NameIDEntity>(
-                          list: snapshot.data ?? [],
+                          list:
+                              inputFieldData?['items'] ??
+                              List<NameIDEntity>.empty(growable: true),
                           height: resources.dimen.dp27,
                           labelText: getLabel,
                           errorMessage: isMandetory ? getLabel : '',
@@ -125,15 +119,21 @@ extension FieldEntityExtension on FormEntity {
                             ),
                             SizedBox(height: context.resources.dimen.dp4),
                             DropdownSearch<NameIDEntity>(
-                              key: ValueKey(
-                                (inputFieldData?['items'] ?? []).hashCode,
-                              ),
+                              key: ValueKey(name),
+                              enabled: isEnabled ?? true,
                               selectedItem: fieldValue,
                               items:
                                   (filter, infiniteScrollProps) =>
-                                      inputFieldData?['items'] ?? [],
+                                      inputFieldData?['items'] ??
+                                      List<NameIDEntity>.empty(growable: true),
                               itemAsString: (item) => item.toString(),
-
+                              validator: (value) {
+                                if (value == null && isMandetory) {
+                                  return messages?.requiredMessage ??
+                                      'Please Select $getLabel';
+                                }
+                                return null;
+                              },
                               decoratorProps: DropDownDecoratorProps(
                                 decoration: InputDecoration(
                                   hintText: getPlaceholder,
@@ -156,48 +156,269 @@ extension FieldEntityExtension on FormEntity {
                                 showSearchBox: canSearch ?? false,
                                 searchDelay: Duration.zero,
                                 constraints: BoxConstraints(),
+                                searchFieldProps: TextFieldProps(
+                                  autofocus: true,
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 8,
+                                    ),
+                                    hintText: "Search...",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  style:
+                                      context
+                                          .textFontWeight400, // Optional: reduce text size
+                                ),
                                 itemBuilder:
                                     (context, item, isDisabled, isSelected) =>
-                                        ListTile(title: Text(item.toString())),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 20,
+                                            vertical: 10,
+                                          ),
+                                          child: Text(item.toString()),
+                                        ),
+                                containerBuilder:
+                                    (context, popupWidget) => SafeArea(
+                                      top: false,
+                                      bottom: true,
+                                      child: popupWidget,
+                                    ),
                               ),
+
                               onChanged: (value) {
                                 fieldValue = value;
                                 onDatachnage?.call(value);
+                                Future.delayed(Duration.zero).then((value) {
+                                  if (context.mounted) {
+                                    FocusScope.of(context).unfocus();
+                                  }
+                                });
                               },
                             ),
                           ],
-                        ),
-                // DropdownSearchWidget<NameIDEntity>(
-                //   isEnabled: isEnabled ?? true,
-                //   list: inputFieldData?['items'] ?? [],
-                //   height: resources.dimen.dp27,
-                //   labelText: getLabel,
-                //   errorMessage: isMandetory ? getLabel : '',
-                //   isMandetory: isMandetory,
-                //   hintText: getPlaceholder,
-                //   selectedValue: fieldValue,
-                //   callback: (value) async {
-                //     fieldValue = value;
-                //     onDatachnage?.call(value);
-                //   },
-                // )
-                // : DropDownWidget<NameIDEntity>(
-                //   isEnabled: isEnabled ?? true,
-                //   list: inputFieldData?['items'] ?? [],
-                //   height: resources.dimen.dp27,
-                //   labelText: getLabel,
-                //   errorMessage: isMandetory ? getLabel : '',
-                //   isMandetory: isMandetory,
-                //   hintText: getPlaceholder,
-                //   selectedValue: fieldValue,
-                //   callback: (value) async {
-                //     fieldValue = value;
-                //     onDatachnage?.call(value);
-                //   },
-                // ),
-              ),
-            );
-          },
+                        ))
+                    : FutureBuilder<List<NameIDEntity>?>(
+                      future: _getAccountTypes(),
+                      builder: (context, snapshot) {
+                        if (inputFieldData?['doSort'] ?? true) {
+                          (snapshot.data ?? []).sort(
+                            (a, b) => (a.toString()).compareTo(b.toString()),
+                          );
+                        }
+                        if (snapshot.data != null) {
+                          if (inputFieldData == null) {
+                            inputFieldData = {'items': snapshot.data};
+                          } else {
+                            inputFieldData['items'] = snapshot.data;
+                          }
+                        }
+                        final list = snapshot.data ?? [];
+                        printLog('$getLabel List : ${list}');
+                        return Visibility(
+                          visible: isVisible,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: verticalSpace ?? 10.0,
+                              horizontal: horizontalSpace ?? 0.0,
+                            ),
+                            child:
+                                multi == true
+                                    ? MultiSelectDropDownWidget<NameIDEntity>(
+                                      list: list,
+                                      height: resources.dimen.dp27,
+                                      labelText: getLabel,
+                                      errorMessage: isMandetory ? getLabel : '',
+                                      isMandetory: isMandetory,
+                                      hintText: getPlaceholder,
+                                      selectedItems:
+                                          fieldValue ??
+                                          List<NameIDEntity>.empty(
+                                            growable: true,
+                                          ),
+                                      callback: (value) async {
+                                        fieldValue = value;
+                                        onDatachnage?.call(value);
+                                      },
+                                    )
+                                    : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Visibility(
+                                          visible: getLabel.isNotEmpty,
+                                          child: Text.rich(
+                                            TextSpan(
+                                              text: getLabel,
+                                              style: context.textFontWeight400
+                                                  .onFontSize(
+                                                    context
+                                                        .resources
+                                                        .fontSize
+                                                        .dp14,
+                                                  ),
+                                              children: [
+                                                if (isMandetory)
+                                                  TextSpan(
+                                                    text: ' *',
+                                                    style: context
+                                                        .textFontWeight400
+                                                        .onFontSize(
+                                                          context
+                                                              .resources
+                                                              .fontSize
+                                                              .dp14,
+                                                        )
+                                                        .onColor(
+                                                          Theme.of(
+                                                            context,
+                                                          ).colorScheme.error,
+                                                        ),
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: context.resources.dimen.dp4,
+                                        ),
+                                        DropdownSearch<NameIDEntity>(
+                                          key: ValueKey(name),
+                                          enabled: isEnabled ?? true,
+                                          selectedItem: fieldValue,
+                                          items:
+                                              (filter, infiniteScrollProps) =>
+                                                  list,
+                                          itemAsString:
+                                              (item) => item.toString(),
+                                          validator: (value) {
+                                            if (value == null && isMandetory) {
+                                              return messages
+                                                      ?.requiredMessage ??
+                                                  'Please Select $getLabel';
+                                            }
+                                            return null;
+                                          },
+                                          decoratorProps:
+                                              DropDownDecoratorProps(
+                                                decoration: InputDecoration(
+                                                  hintText: getPlaceholder,
+                                                  isDense:
+                                                      true, // make it compact
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 12,
+                                                      ),
+
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          10,
+                                                        ), // 👈 rounded corners
+                                                  ),
+                                                ),
+                                              ),
+                                          compareFn: (a, b) => a.id == b.id,
+                                          popupProps: PopupProps.menu(
+                                            fit: FlexFit.loose,
+                                            showSearchBox: canSearch ?? false,
+                                            searchDelay: Duration.zero,
+                                            constraints: BoxConstraints(),
+                                            searchFieldProps: TextFieldProps(
+                                              autofocus: true,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 8,
+                                                    ),
+                                                hintText: "Search...",
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              style:
+                                                  context
+                                                      .textFontWeight400, // Optional: reduce text size
+                                            ),
+                                            itemBuilder:
+                                                (
+                                                  context,
+                                                  item,
+                                                  isDisabled,
+                                                  isSelected,
+                                                ) => Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 20,
+                                                    vertical: 10,
+                                                  ),
+                                                  child: Text(item.toString()),
+                                                ),
+                                            containerBuilder:
+                                                (context, popupWidget) =>
+                                                    SafeArea(
+                                                      top: false,
+                                                      bottom: true,
+                                                      child: popupWidget,
+                                                    ),
+                                          ),
+
+                                          onChanged: (value) {
+                                            fieldValue = value;
+                                            onDatachnage?.call(value);
+                                            Future.delayed(Duration.zero).then((
+                                              value,
+                                            ) {
+                                              if (context.mounted) {
+                                                FocusScope.of(
+                                                  context,
+                                                ).unfocus();
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                            // DropdownSearchWidget<NameIDEntity>(
+                            //   isEnabled: isEnabled ?? true,
+                            //   list: inputFieldData?['items'] ?? [],
+                            //   height: resources.dimen.dp27,
+                            //   labelText: getLabel,
+                            //   errorMessage: isMandetory ? getLabel : '',
+                            //   isMandetory: isMandetory,
+                            //   hintText: getPlaceholder,
+                            //   selectedValue: fieldValue,
+                            //   callback: (value) async {
+                            //     fieldValue = value;
+                            //     onDatachnage?.call(value);
+                            //   },
+                            // )
+                            // : DropDownWidget<NameIDEntity>(
+                            //   isEnabled: isEnabled ?? true,
+                            //   list: inputFieldData?['items'] ?? [],
+                            //   height: resources.dimen.dp27,
+                            //   labelText: getLabel,
+                            //   errorMessage: isMandetory ? getLabel : '',
+                            //   isMandetory: isMandetory,
+                            //   hintText: getPlaceholder,
+                            //   selectedValue: fieldValue,
+                            //   callback: (value) async {
+                            //     fieldValue = value;
+                            //     onDatachnage?.call(value);
+                            //   },
+                            // ),
+                          ),
+                        );
+                      },
+                    ),
+          ),
         );
       case 'text' || 'number' || 'phone' || 'textarea' || 'email' || 'password':
         textEditingController ??= TextEditingController();
