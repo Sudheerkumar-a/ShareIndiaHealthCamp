@@ -46,6 +46,7 @@ class TbEntity extends BaseEntity {
 class DashboardEntity extends BaseEntity {
   List<DistrictWiseMonthlyEntity>? districtWiseMonthly;
   List<DistrictWiseTotalEntity>? districtWiseTotal;
+  List<DistrictWiseTotalEntity>? bottomDistrictWiseTotal;
   DistrictWiseTotalEntity? overallTotal;
 }
 

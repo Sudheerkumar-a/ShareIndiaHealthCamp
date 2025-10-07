@@ -122,6 +122,7 @@ class TbModel extends BaseModel {
 
 class DashboardModel extends BaseModel {
   List<DistrictWiseMonthlyEntity>? districtWiseMonthly;
+  List<DistrictWiseTotalEntity>? bottomDistrictWiseTotal;
   List<DistrictWiseTotalEntity>? districtWiseTotal;
   DistrictWiseTotalEntity? overallTotal;
 
@@ -144,6 +145,14 @@ class DashboardModel extends BaseModel {
         districtWiseTotal!.add(DistrictWiseTotalModel.fromJson(v).toEntity());
       });
     }
+    if (json['bottom_district_wise_total'] != null) {
+      bottomDistrictWiseTotal = <DistrictWiseTotalEntity>[];
+      json['bottom_district_wise_total'].forEach((v) {
+        bottomDistrictWiseTotal!.add(
+          DistrictWiseTotalModel.fromJson(v).toEntity(),
+        );
+      });
+    }
     overallTotal =
         json['overall_total'] != null
             ? DistrictWiseTotalModel.fromJson(json['overall_total']).toEntity()
@@ -154,6 +163,7 @@ class DashboardModel extends BaseModel {
   toEntity() {
     return DashboardEntity()
       ..districtWiseMonthly = districtWiseMonthly
+      ..bottomDistrictWiseTotal = bottomDistrictWiseTotal
       ..districtWiseTotal = districtWiseTotal
       ..overallTotal = overallTotal;
   }

@@ -391,13 +391,13 @@ class ScreeningDetailsEntity extends BaseEntity {
 
     data['hypertension'] = {
       'screened': int.tryParse(ncd?.hypertension?.screened ?? ''),
-      'systolic': ncd?.hypertension?.systolic,
-      'diastolic': ncd?.hypertension?.diastolic,
+      'systolic': ncd?.hypertension?.systolic?.trim(),
+      'diastolic': ncd?.hypertension?.diastolic?.trim(),
       'referred': int.tryParse(ncd?.hypertension?.abnormal ?? ''),
     };
     data['diabetes'] = {
       'screened': int.tryParse(ncd?.diabetes?.screened ?? ''),
-      'bloodsugar': ncd?.diabetes?.bloodsugar,
+      'bloodsugar': ncd?.diabetes?.bloodsugar?.trim(),
       'referred': int.tryParse(ncd?.diabetes?.abnormal ?? ''),
     };
     data['hiv'] = {

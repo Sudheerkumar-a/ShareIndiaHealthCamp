@@ -219,8 +219,8 @@ class FilterByCategoryScreen extends BaseScreenWidget {
     Map<String, dynamic> requestParams = {
       'limit': 1000,
       'page': index,
-      'district': districtId,
-      'mandal': mandalId,
+      'district': districtId == 0 ? null : districtId,
+      'mandal': mandalId == 0 ? null : mandalId,
       'state': 'Andhra Pradesh',
       'date_from': startDate,
       'date_to': endDate,
