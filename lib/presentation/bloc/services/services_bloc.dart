@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
+import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/entities/api_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,7 +106,14 @@ class ServicesBloc extends Cubit<ServicesState> {
     required String apiUrl,
     required Map<String, dynamic> requestParams,
     required dynamic Function(Map<String, dynamic>) requestModel,
+    // List<NameIDEntity> cacheList = const [],
   }) async {
+    // if (cacheList.isNotEmpty) {
+    //   print('Cache List : ${cacheList.length}');
+    //   return ServicesStateSuccess(
+    //     responseEntity: ApiEntity()..entity = (ListEntity()..items = cacheList),
+    //   );
+    // }
     final result = await servicesUseCase.getFieldData(
       apiUrl: apiUrl,
       requestParams: requestParams,

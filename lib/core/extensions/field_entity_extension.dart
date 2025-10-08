@@ -218,7 +218,6 @@ extension FieldEntityExtension on FormEntity {
                           }
                         }
                         final list = snapshot.data ?? [];
-                        printLog('$getLabel List : ${list}');
                         return Visibility(
                           visible: isVisible,
                           child: Padding(
@@ -289,7 +288,15 @@ extension FieldEntityExtension on FormEntity {
                                         DropdownSearch<NameIDEntity>(
                                           key: ValueKey(name),
                                           enabled: isEnabled ?? true,
-                                          selectedItem: fieldValue,
+                                          selectedItem:
+                                              (fieldValue is int)
+                                                  ? list
+                                                      .where(
+                                                        (e) =>
+                                                            e.id == fieldValue,
+                                                      )
+                                                      .firstOrNull
+                                                  : fieldValue,
                                           items:
                                               (filter, infiniteScrollProps) =>
                                                   list,

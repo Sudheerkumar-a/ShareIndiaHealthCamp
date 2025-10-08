@@ -846,7 +846,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..url = mandalListApiUrl
           ..urlInputData = {'dist_id': selectedDistrict.id}
           ..inputFieldData = null
-          ..fieldValue = (NameIDEntity()..id = fieldsData['client_mandal'])
+          ..fieldValue = fieldsData['client_mandal']
           ..onDatachnage = (value) {
             final child =
                 step2formFields

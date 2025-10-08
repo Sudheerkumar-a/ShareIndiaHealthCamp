@@ -15,21 +15,45 @@ import 'package:shareindia_health_camp/presentation/common_widgets/report_list_w
 import 'package:shareindia_health_camp/presentation/reports/add_camp_form_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/clients_by_camp_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_screen.dart';
-import '../../domain/entities/user_credentials_entity.dart';
 import '../../injection_container.dart';
 
 // ignore: must_be_immutable
 class CampListScreen extends StatefulWidget {
-  static Future<dynamic> start(BuildContext context) {
+  static Future<dynamic> start(
+    BuildContext context, {
+    int? districtId,
+    int? mandalId,
+    String? startDate,
+    String? endDate,
+    bool canEdit = true,
+  }) {
     return Navigator.of(context, rootNavigator: true).push(
       PageTransition(
         type: PageTransitionType.rightToLeft,
-        child: CampListScreen(),
+        child: CampListScreen(
+          districtId: districtId,
+          mandalId: mandalId,
+          startDate: startDate,
+          endDate: endDate,
+          canEdit: canEdit,
+        ),
       ),
     );
   }
 
-  const CampListScreen({super.key});
+  final int? districtId;
+  final int? mandalId;
+  final String? startDate;
+  final String? endDate;
+  final bool canEdit;
+  const CampListScreen({
+    this.districtId,
+    this.mandalId,
+    this.startDate,
+    this.endDate,
+    this.canEdit = true,
+    super.key,
+  });
 
   @override
   State<CampListScreen> createState() => _CampListScreenState();
@@ -57,40 +81,42 @@ class _CampListScreenState extends State<CampListScreen> {
   List<Widget> _getFilterBar(BuildContext context) {
     final resources = context.resources;
     return [
-      Row(
-        children: [
-          Expanded(child: SizedBox()),
+      if (widget.canEdit) ...[
+        Row(
+          children: [
+            Expanded(child: SizedBox()),
 
-          InkWell(
-            onTap: () async {
-              AddCampFormScreen.start(context).then((value) {
-                if (value is int && context.mounted) {
-                  OutreachCampFormScreen.start(context, campId: value).then((
-                    value,
-                  ) {
-                    if (value == true) {
-                      _updateData(context);
-                    }
-                  });
-                }
-              });
-            },
-            child: ActionButtonWidget(
-              text: 'Add camp details',
-              radious: resources.dimen.dp15,
-              textSize: resources.fontSize.dp12,
-              padding: EdgeInsets.symmetric(
-                vertical: resources.dimen.dp5,
-                horizontal: resources.dimen.dp15,
+            InkWell(
+              onTap: () async {
+                AddCampFormScreen.start(context).then((value) {
+                  if (value is int && context.mounted) {
+                    OutreachCampFormScreen.start(context, campId: value).then((
+                      value,
+                    ) {
+                      if (value == true) {
+                        _updateData(context);
+                      }
+                    });
+                  }
+                });
+              },
+              child: ActionButtonWidget(
+                text: 'Add camp details',
+                radious: resources.dimen.dp15,
+                textSize: resources.fontSize.dp12,
+                padding: EdgeInsets.symmetric(
+                  vertical: resources.dimen.dp5,
+                  horizontal: resources.dimen.dp15,
+                ),
+                color: resources.color.viewBgColorLight,
               ),
-              color: resources.color.viewBgColorLight,
             ),
-          ),
-        ],
-      ),
-      SizedBox(height: resources.dimen.dp15),
+          ],
+        ),
+        SizedBox(height: resources.dimen.dp15),
+      ],
       Text(
-        'Camps (*To check camp details or Add New Client, click on the respective Camp)',
+        'Camps (*To check camp details ${widget.canEdit ? 'or Add New Client' : ''}, click on the respective Camp)',
         style: context.textFontWeight600,
       ),
     ];
@@ -100,7 +126,10 @@ class _CampListScreenState extends State<CampListScreen> {
     //Dialogs.loader(context);
     _servicesBloc.getCampList(
       requestParams: {
-        'district_id': UserCredentialsEntity.details(context).user?.districtId,
+        'district': widget.districtId,
+        'mandal': widget.mandalId,
+        'start_date': widget.startDate,
+        'end_date': widget.endDate,
       },
       emitResponse: true,
     );
@@ -180,11 +209,8 @@ class _CampListScreenState extends State<CampListScreen> {
                           totalPagecount: 1,
                           onRowSelected: (ticket) {},
                           onColumnClick: (p0, p1) async {
-                            ClientsByCampScreen.start(
-                              context,
-                              p1,
-                            ).then((p0){
-                              if(context.mounted) {
+                            ClientsByCampScreen.start(context, p1).then((p0) {
+                              if (context.mounted) {
                                 _updateData(context);
                               }
                             });

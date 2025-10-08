@@ -5,6 +5,7 @@ import 'package:shareindia_health_camp/core/extensions/string_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
+import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
@@ -31,6 +32,7 @@ class ViewScreeningDetails extends BaseScreenWidget {
   Widget build(BuildContext context) {
     final resource = context.resources;
     final data = screeningDetails.toJson();
+    final role = UserCredentialsEntity.details(context).user?.isAdmin;
     return SafeArea(
       bottom: true,
       child: Scaffold(
@@ -96,85 +98,88 @@ class ViewScreeningDetails extends BaseScreenWidget {
                   itemCount: data.length,
                 ),
               ),
-              SizedBox(height: context.resources.dimen.dp10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Dialogs.showContentHeightBottomSheetDialog(
-                        context,
-                        DiscardChangesDialog(
-                          data: {
-                            'title': 'Alert',
-                            'description': 'Do you want to delete this details',
-                            'action': 'Proceed',
-                          },
-                          callback: (action) async {
-                            if (action == 2) {
-                              return;
-                            }
-                            Dialogs.loader(context);
-                            final response = await sl<ServicesBloc>()
-                                .submitData(
-                                  apiUrl: screenDeleteApiUrl,
-                                  requestParams: {'id': screeningDetails.id},
+              if (role == 2) ...[
+                SizedBox(height: context.resources.dimen.dp10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Dialogs.showContentHeightBottomSheetDialog(
+                          context,
+                          DiscardChangesDialog(
+                            data: {
+                              'title': 'Alert',
+                              'description':
+                                  'Do you want to delete this details',
+                              'action': 'Proceed',
+                            },
+                            callback: (action) async {
+                              if (action == 2) {
+                                return;
+                              }
+                              Dialogs.loader(context);
+                              final response = await sl<ServicesBloc>()
+                                  .submitData(
+                                    apiUrl: screenDeleteApiUrl,
+                                    requestParams: {'id': screeningDetails.id},
+                                  );
+                              if (!context.mounted) {
+                                return;
+                              }
+                              Dialogs.dismiss(context);
+                              if (response is ServicesStateSuccess) {
+                                Dialogs.showInfoDialog(
+                                  context,
+                                  PopupType.success,
+                                  'Successfully Submitted',
+                                ).then((value) {
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                });
+                              } else if (response is ServicesStateApiError) {
+                                Dialogs.showInfoDialog(
+                                  context,
+                                  PopupType.fail,
+                                  response.message,
                                 );
-                            if (!context.mounted) {
-                              return;
-                            }
-                            Dialogs.dismiss(context);
-                            if (response is ServicesStateSuccess) {
-                              Dialogs.showInfoDialog(
-                                context,
-                                PopupType.success,
-                                'Successfully Submitted',
-                              ).then((value) {
-                                if (context.mounted) {
-                                  Navigator.pop(context);
-                                }
-                              });
-                            } else if (response is ServicesStateApiError) {
-                              Dialogs.showInfoDialog(
-                                context,
-                                PopupType.fail,
-                                response.message,
-                              );
-                            }
-                          },
+                              }
+                            },
+                          ),
+                        );
+                      },
+                      child: ActionButtonWidget(
+                        text: 'Delete',
+                        width: 110,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: context.resources.dimen.dp20,
+                          vertical: context.resources.dimen.dp7,
                         ),
-                      );
-                    },
-                    child: ActionButtonWidget(
-                      text: 'Delete',
-                      width: 110,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: context.resources.dimen.dp20,
-                        vertical: context.resources.dimen.dp7,
                       ),
                     ),
-                  ),
-                  SizedBox(width: context.resources.dimen.dp20),
-                  InkWell(
-                    onTap: () async {
-                      OutreachCampFormScreen.start(
-                        context,
-                        campId: screeningDetails.campId ?? 0,
-                        screeningDetails: screeningDetails,
-                      );
-                    },
-                    child: ActionButtonWidget(
-                      text: 'Edit',
-                      width: 120,
-                      color: context.resources.color.viewBgColor,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: context.resources.dimen.dp20,
-                        vertical: context.resources.dimen.dp7,
+                    SizedBox(width: context.resources.dimen.dp20),
+                    InkWell(
+                      onTap: () async {
+                        OutreachCampFormScreen.start(
+                          context,
+                          campId: screeningDetails.campId ?? 0,
+                          screeningDetails: screeningDetails,
+                        );
+                      },
+                      child: ActionButtonWidget(
+                        text: 'Edit',
+                        width: 120,
+                        color: context.resources.color.viewBgColor,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: context.resources.dimen.dp20,
+                          vertical: context.resources.dimen.dp7,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
               SizedBox(height: context.resources.dimen.dp20),
             ],
           ),

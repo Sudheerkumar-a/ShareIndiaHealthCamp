@@ -22,6 +22,7 @@ import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_w
 import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/presentation/home/filter_by_category_screen.dart';
+import 'package:shareindia_health_camp/presentation/reports/camp_list_screen.dart';
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 import 'package:shareindia_health_camp/res/resources.dart';
@@ -420,8 +421,26 @@ class UserDashboard extends BaseScreenWidget {
                                           //   1,
                                           //   isAdmin,
                                           // );
+                                          CampListScreen.start(
+                                            context,
+                                            districtId:
+                                                districtId == 0
+                                                    ? null
+                                                    : districtId,
+                                            mandalId:
+                                                mandalId == 0 ? null : mandalId,
+                                            startDate:
+                                                filteredDates.value.length > 1
+                                                    ? filteredDates.value[0]
+                                                    : null,
+                                            endDate:
+                                                filteredDates.value.length > 1
+                                                    ? filteredDates.value[1]
+                                                    : null,
+                                            canEdit: false,
+                                          );
                                         },
-                                        child: Text( 
+                                        child: Text(
                                           textAlign: TextAlign.left,
                                           'Total Camps',
                                           style: context.textFontWeight600,
