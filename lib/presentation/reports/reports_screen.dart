@@ -464,15 +464,18 @@ class ReportsScreen extends BaseScreenWidget {
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    Future.delayed(Duration.zero, () {
-      if (context.mounted) {
-        _updateReport(context);
-      }
-    });
-
     isAdmin = UserCredentialsEntity.details(context).user?.isAdmin ?? 1;
     districtId = UserCredentialsEntity.details(context).user?.districtId;
     //mandalId = UserCredentialsEntity.details(context).user?.mandalId;
+    Future.delayed(Duration.zero, () {
+      if (context.mounted) {
+        _updateReport(context);
+        if (isAdmin == 2) {
+          _servicesBloc.insertMandalList(districtId ?? 0);
+        }
+      }
+    });
+
     return Padding(
       padding: EdgeInsets.all(resources.dimen.dp20),
       child: SingleChildScrollView(

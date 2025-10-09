@@ -123,16 +123,17 @@ class _CampListScreenState extends State<CampListScreen> {
   }
 
   _updateData(BuildContext context) async {
-    //Dialogs.loader(context);
-    _servicesBloc.getCampList(
-      requestParams: {
-        'district': widget.districtId,
-        'mandal': widget.mandalId,
-        'start_date': widget.startDate,
-        'end_date': widget.endDate,
-      },
-      emitResponse: true,
-    );
+    // //Dialogs.loader(context);
+    // _servicesBloc.getCampList(
+    //   requestParams: {
+    //     'district': widget.districtId,
+    //     'mandal': widget.mandalId,
+    //     'start_date': widget.startDate,
+    //     'end_date': widget.endDate,
+    //   },
+    //   emitResponse: true,
+    // );
+    _servicesBloc.getLocalCampList(requestParams: {}, emitResponse: true);
     // if (context.mounted) {
     //   Dialogs.dismiss(context);
     //   if (responseState is ServicesStateSuccess) {

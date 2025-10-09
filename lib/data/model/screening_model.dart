@@ -17,18 +17,18 @@ class CampModel extends BaseModel {
   String? latitude;
   String? longitude;
   CampModel.fromJson(Map<String, dynamic> json) {
-    id = int.tryParse(json['id']);
+    id = int.tryParse('${json['id']}');
     dateOfCamp = json['date_of_camp'];
     photoOfCamp = json['photo_of_camp'];
-    mandal = json['mandal'];
-    district = json['district'];
-    village = json['village'];
+    mandal = '${json['mandal']}';
+    district = '${json['district']}';
+    village = '${json['village']}';
     campLocation = json['camp_location'];
     campVillage = json['camp_village'];
     localPocName = json['local_poc_name'];
     localPocNumber = json['local_poc_number'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
+    latitude = '${json['latitude']}';
+    longitude = '${json['longitude']}';
   }
 
   @override

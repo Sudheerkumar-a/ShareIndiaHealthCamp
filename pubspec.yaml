@@ -68,8 +68,13 @@ dependencies:
   app_version_update: ^6.1.0
   http_parser: ^4.1.2
   url_launcher: ^6.3.2
+  drift: ^2.28.2
+  drift_flutter: ^0.2.7
+  sqlite3_flutter_libs: ^0.5.40
 
 dev_dependencies:
+  drift_dev: ^2.28.3
+  build_runner: ^2.9.0
   flutter_test:
     sdk: flutter
 

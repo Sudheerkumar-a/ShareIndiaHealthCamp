@@ -9,6 +9,8 @@ import 'package:shareindia_health_camp/core/constants/constants.dart';
 import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
+import 'package:shareindia_health_camp/core/network/network_info.dart';
+import 'package:shareindia_health_camp/data/local/local_database.dart';
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
 import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
@@ -123,6 +125,28 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                 .first,
           ).toEntity();
       fieldsData['district'] = selectedDistrict.id;
+      sl<ServicesBloc>().getLocalMandalList().then((mandals) {
+        final child =
+            step1formFields.where((item) => item.name == 'mandal').firstOrNull;
+        child?.url = null;
+        child?.inputFieldData = {'items': mandals};
+        _onDataChanged(true);
+      });
+      sl<NetworkInfo>().isConnected().then((value) {
+        if (!value) {
+          final child =
+              step1formFields
+                  .where((item) => item.name == 'village')
+                  .firstOrNull;
+          child?.url = null;
+          child?.type = 'text';
+          child?.onDatachnage = (value) {
+            fieldsData['village'] = value;
+            _onDataChanged(false);
+          };
+          _onDataChanged(true);
+        }
+      });
       // sl<ServicesBloc>()
       //     .getFieldInputData(
       //       apiUrl: mandalListApiUrl,
@@ -525,65 +549,102 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
                                       "latitude": position?.latitude,
                                       "longitude": position?.longitude,
                                     };
-                                    if (fieldsData['image_camp']
-                                        is UploadResponseEntity) {
-                                      requestParams['photo_of_camp'] =
-                                          MultipartFile.fromBytes(
-                                            fieldsData['image_camp'].bytes,
-                                            filename:
-                                                fieldsData['image_camp']
-                                                    .documentName,
-                                            contentType:
-                                                fieldsData['image_camp']
-                                                    .mediaType,
-                                          );
-                                    }
                                     //jsonEncode(requestParams);
-                                    Dialogs.loader(context);
-                                    final response = await sl<ServicesBloc>()
-                                        .submitMultipartData(
-                                          apiUrl: campSubmitApiUrl,
-                                          requestParams: requestParams,
+                                    sl<NetworkInfo>().isConnected().then((
+                                      value,
+                                    ) async {
+                                      if (!value && context.mounted) {
+                                        Dialogs.showDialogWithClose(
+                                          context,
+                                          DiscardChangesDialog(
+                                            data: {
+                                              'title': 'Alert',
+                                              'description':
+                                                  'No Internet Connection, Do want to save this data locally and sync later',
+                                              'action': 'Proceed',
+                                            },
+                                            callback: (value) {
+                                              if (action == 1) {
+                                                Dialogs.loader(context);
+                                                sl<LocalDatabase>()
+                                                    .insertCamp(requestParams)
+                                                    .then((value) {
+                                                      if (context.mounted) {
+                                                        Dialogs.dismiss(
+                                                          context,
+                                                        );
+                                                        Navigator.pop(
+                                                          context,
+                                                          value,
+                                                        );
+                                                      }
+                                                    });
+                                              }
+                                            },
+                                          ),
                                         );
-
-                                    if (!context.mounted) {
-                                      return;
-                                    }
-                                    Dialogs.dismiss(context);
-                                    if (response is ServicesStateSuccess) {
-                                      Dialogs.showContentHeightBottomSheetDialog(
-                                        context,
-                                        DiscardChangesDialog(
-                                          data: {
-                                            'title': 'Alert',
-                                            'description':
-                                                'Successfully Created Camp, Do you want ADD New Client',
-                                            'action': 'Proceed',
-                                          },
-                                          callback: (action) async {
-                                            if (context.mounted) {
-                                              Navigator.pop(
-                                                context,
-                                                action == 1
-                                                    ? (response
-                                                                .responseEntity
-                                                                .entity
-                                                            as SingleDataEntity)
-                                                        .value
-                                                    : null,
+                                      } else if (context.mounted) {
+                                        if (fieldsData['image_camp']
+                                            is UploadResponseEntity) {
+                                          requestParams['photo_of_camp'] =
+                                              MultipartFile.fromBytes(
+                                                fieldsData['image_camp'].bytes,
+                                                filename:
+                                                    fieldsData['image_camp']
+                                                        .documentName,
+                                                contentType:
+                                                    fieldsData['image_camp']
+                                                        .mediaType,
                                               );
-                                            }
-                                          },
-                                        ),
-                                      );
-                                    } else if (response
-                                        is ServicesStateApiError) {
-                                      Dialogs.showInfoDialog(
-                                        context,
-                                        PopupType.fail,
-                                        response.message,
-                                      );
-                                    }
+                                        }
+                                        Dialogs.loader(context);
+                                        final response =
+                                            await sl<ServicesBloc>()
+                                                .submitMultipartData(
+                                                  apiUrl: campSubmitApiUrl,
+                                                  requestParams: requestParams,
+                                                );
+                                        if (context.mounted) {
+                                          Dialogs.dismiss(context);
+                                          if (response
+                                              is ServicesStateSuccess) {
+                                            Dialogs.showContentHeightBottomSheetDialog(
+                                              context,
+                                              DiscardChangesDialog(
+                                                data: {
+                                                  'title': 'Alert',
+                                                  'description':
+                                                      'Successfully Created Camp, Do you want ADD New Client',
+                                                  'action': 'Proceed',
+                                                },
+                                                callback: (action) async {
+                                                  if (context.mounted) {
+                                                    Navigator.pop(
+                                                      context,
+                                                      action == 1
+                                                          ? (response
+                                                                      .responseEntity
+                                                                      .entity
+                                                                  as SingleDataEntity)
+                                                              .value
+                                                          : null,
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            );
+                                          } else if (response
+                                              is ServicesStateApiError) {
+                                            Dialogs.showInfoDialog(
+                                              context,
+                                              PopupType.fail,
+                                              response.message,
+                                            );
+                                          }
+                                        }
+                                      }
+                                      return value;
+                                    });
                                   },
                                 ),
                               );

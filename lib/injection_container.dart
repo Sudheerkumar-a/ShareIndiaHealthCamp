@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shareindia_health_camp/core/config/flavor_config.dart';
 import 'package:shareindia_health_camp/core/network/network_info.dart';
+import 'package:shareindia_health_camp/data/local/local_database.dart';
 import 'package:shareindia_health_camp/data/remote/dio_logging_interceptor.dart';
 import 'package:shareindia_health_camp/data/remote/remote_data_source.dart';
 import 'package:shareindia_health_camp/data/repository/apis_repository_impl.dart';
@@ -19,7 +20,9 @@ Future<void> init() async {
    */
   // Bloc
   sl.registerFactory(() => UserBloc(userUseCase: sl()));
-  sl.registerFactory(() => ServicesBloc(servicesUseCase: sl()));
+  sl.registerFactory(
+    () => ServicesBloc(servicesUseCase: sl(), localDatabase: sl()),
+  );
   // Use Case
   sl.registerLazySingleton(() => ServicesUseCase(apisRepository: sl()));
   sl.registerLazySingleton(() => UserUseCase(apisRepository: sl()));
@@ -42,6 +45,9 @@ Future<void> init() async {
   /**
    * ! External
    */
+  // Local Data Source
+  sl.registerLazySingleton<LocalDatabase>(() => LocalDatabase());
+  // Dio
   sl.registerLazySingleton(() {
     final dio = Dio();
     dio.options.baseUrl = FlavorConfig.instance.values.portalBaseUrl;
