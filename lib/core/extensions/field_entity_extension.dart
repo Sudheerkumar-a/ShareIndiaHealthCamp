@@ -151,11 +151,43 @@ extension FieldEntityExtension on FormEntity {
                                 ),
                               ),
                               compareFn: (a, b) => a.id == b.id,
-                              popupProps: PopupProps.menu(
-                                fit: FlexFit.loose,
+                              popupProps: PopupProps.dialog(
+                                //fit: FlexFit.loose,
                                 showSearchBox: canSearch ?? false,
                                 searchDelay: Duration.zero,
-                                constraints: BoxConstraints(),
+                                //constraints: BoxConstraints(),
+                                containerBuilder: (context, popupWidget) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    insetPadding: const EdgeInsets.all(
+                                      0,
+                                    ), // makes it wrap content
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize:
+                                          MainAxisSize
+                                              .min, // 👈 shrink vertically
+                                      children: [
+                                        SizedBox(height: 15,),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0,
+                                          ),
+                                          child: Text(
+                                            getPlaceholder,
+                                            style: context.textFontWeight600,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: popupWidget,
+                                        ), // 👈 injects the default search + list
+                                      ],
+                                    ),
+                                  );
+                                },
                                 searchFieldProps: TextFieldProps(
                                   autofocus: true,
                                   decoration: InputDecoration(
@@ -169,9 +201,7 @@ extension FieldEntityExtension on FormEntity {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  style:
-                                      context
-                                          .textFontWeight400, // Optional: reduce text size
+                                  style: context.textFontWeight400,
                                 ),
                                 itemBuilder:
                                     (context, item, isDisabled, isSelected) =>
@@ -182,12 +212,12 @@ extension FieldEntityExtension on FormEntity {
                                           ),
                                           child: Text(item.toString()),
                                         ),
-                                containerBuilder:
-                                    (context, popupWidget) => SafeArea(
-                                      top: false,
-                                      bottom: true,
-                                      child: popupWidget,
-                                    ),
+                                // containerBuilder:
+                                //     (context, popupWidget) => SafeArea(
+                                //       top: false,
+                                //       bottom: true,
+                                //       child: popupWidget,
+                                //     ),
                               ),
 
                               onChanged: (value) {
@@ -340,11 +370,51 @@ extension FieldEntityExtension on FormEntity {
                                                 ),
                                               ),
                                           compareFn: (a, b) => a.id == b.id,
-                                          popupProps: PopupProps.menu(
-                                            fit: FlexFit.loose,
+                                          popupProps: PopupProps.dialog(
+                                            //fit: FlexFit.loose,
                                             showSearchBox: canSearch ?? false,
                                             searchDelay: Duration.zero,
-                                            constraints: BoxConstraints(),
+                                            //constraints: BoxConstraints(),
+                                            containerBuilder: (
+                                              context,
+                                              popupWidget,
+                                            ) {
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                insetPadding:
+                                                    const EdgeInsets.all(
+                                                      0,
+                                                    ), // makes it wrap content
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisSize:
+                                                      MainAxisSize
+                                                          .min, // 👈 shrink vertically
+                                                  children: [
+                                                    SizedBox(height: 15,),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 20.0,
+                                                          ),
+                                                      child: Text(
+                                                        getPlaceholder,
+                                                        style:
+                                                            context
+                                                                .textFontWeight600,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: popupWidget,
+                                                    ), // 👈 injects the default search + list
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                             searchFieldProps: TextFieldProps(
                                               autofocus: true,
                                               decoration: InputDecoration(
@@ -377,13 +447,13 @@ extension FieldEntityExtension on FormEntity {
                                                   ),
                                                   child: Text(item.toString()),
                                                 ),
-                                            containerBuilder:
-                                                (context, popupWidget) =>
-                                                    SafeArea(
-                                                      top: false,
-                                                      bottom: true,
-                                                      child: popupWidget,
-                                                    ),
+                                            // containerBuilder:
+                                            //     (context, popupWidget) =>
+                                            //         SafeArea(
+                                            //           top: false,
+                                            //           bottom: true,
+                                            //           child: popupWidget,
+                                            //         ),
                                           ),
 
                                           onChanged: (value) {

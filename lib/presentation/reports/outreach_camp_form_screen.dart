@@ -828,7 +828,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
               child2.inputFieldData?.remove('items');
               child2.url = villageListApiUrl;
               child2.urlInputData = {'mandal_id': value.id};
-              child2.inputFieldData = null;
+              //child2.inputFieldData = null;
               child2.fieldValue = null;
               fieldsData['clientvillage'] = null;
             }
@@ -856,7 +856,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
               child.inputFieldData?.remove('items');
               child.url = villageListApiUrl;
               child.urlInputData = {'mandal_id': value.id};
-              child.inputFieldData = null;
+              //child.inputFieldData = null;
               child.fieldValue = null;
               fieldsData['clientvillage'] = null;
             }
