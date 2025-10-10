@@ -218,6 +218,15 @@ extension FieldEntityExtension on FormEntity {
                           }
                         }
                         final list = snapshot.data ?? [];
+                        if (list.isEmpty &&
+                            inputFieldData?['extraItems']
+                                is List<NameIDEntity>) {
+                          for (final item in inputFieldData?['extraItems']) {
+                            if (!list.any((element) => element.id == item.id)) {
+                              list.add(item);
+                            }
+                          }
+                        }
                         return Visibility(
                           visible: isVisible,
                           child: Padding(

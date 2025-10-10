@@ -872,8 +872,34 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..requestModel = ListModel.fromvillageJson
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Village'
+          ..inputFieldData = {
+            'extraItems': [
+              NameIDEntity()
+                ..id = 0
+                ..name = 'Other',
+            ],
+          }
           ..onDatachnage = (value) {
+            final child =
+                step2formFields
+                    .where((item) => item.name == 'othervillage')
+                    .firstOrNull;
+            if (child != null) {
+              child.isHidden = value.id != 0;
+            }
             fieldsData['clientvillage'] = value.id;
+            _onDataChanged(true);
+          },
+        FormEntity()
+          ..name = 'othervillage'
+          ..type = 'text'
+          ..isHidden = true
+          ..validation = (FormValidationEntity()..isRequired = true)
+          ..placeholderEn = 'Enter Village'
+          ..placeholderTe = 'Enter Village'
+          ..fieldValue = fieldsData['client_village']
+          ..onDatachnage = (value) {
+            fieldsData['othervillage'] = value;
             _onDataChanged(false);
           },
         FormEntity()
@@ -921,7 +947,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..placeholderTe = 'Occupation'
           ..fieldValue = fieldsData['occupation']
           ..onDatachnage = (value) {
-            fieldsData['occupation'] = value.name;
+            fieldsData['occupation'] = value;
             _onDataChanged(false);
           },
       ]);
