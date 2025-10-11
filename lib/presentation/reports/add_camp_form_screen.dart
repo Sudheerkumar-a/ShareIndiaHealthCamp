@@ -249,6 +249,17 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
               child.inputFieldData = null;
               child.fieldValue = null;
             }
+            final child2 =
+                step1formFields
+                    .where((item) => item.name == 'village')
+                    .firstOrNull;
+            if (child2 != null) {
+              child2.inputFieldData?.remove('items');
+              child2.url = villageListApiUrl;
+              child2.urlInputData = {'mandal_id': 0};
+              //child.inputFieldData = null;
+              child2.fieldValue = null;
+            }
             fieldsData['district'] = value.id;
             _onDataChanged(true);
           },
@@ -271,7 +282,7 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
               child.inputFieldData?.remove('items');
               child.url = villageListApiUrl;
               child.urlInputData = {'mandal_id': value.id};
-              child.inputFieldData = null;
+              //child.inputFieldData = null;
               child.fieldValue = null;
             }
             fieldsData['mandal'] = value.id;
@@ -286,8 +297,35 @@ class _AddCampFormScreenState extends State<AddCampFormScreen> {
           ..requestModel = ListModel.fromvillageJson
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Village'
+          ..inputFieldData = {
+            'extraItems': [
+              NameIDEntity()
+                ..id = 0
+                ..name = 'Other',
+            ],
+          }
           ..onDatachnage = (value) {
+            final child =
+                step1formFields
+                    .where((item) => item.name == 'othervillage')
+                    .firstOrNull;
+            if (child != null) {
+              child.isHidden = value.id != 0;
+            }
             fieldsData['village'] = value.id;
+            _onDataChanged(true);
+          },
+
+        FormEntity()
+          ..name = 'othervillage'
+          ..type = 'text'
+          ..isHidden = true
+          ..validation = (FormValidationEntity()..isRequired = true)
+          ..placeholderEn = 'Enter Village'
+          ..placeholderTe = 'Enter Village'
+          ..fieldValue = fieldsData['client_village']
+          ..onDatachnage = (value) {
+            fieldsData['village'] = value;
             _onDataChanged(false);
           },
         FormEntity()

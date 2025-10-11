@@ -171,7 +171,7 @@ extension FieldEntityExtension on FormEntity {
                                           MainAxisSize
                                               .min, // 👈 shrink vertically
                                       children: [
-                                        SizedBox(height: 15,),
+                                        SizedBox(height: 15),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 20.0,
@@ -395,7 +395,7 @@ extension FieldEntityExtension on FormEntity {
                                                       MainAxisSize
                                                           .min, // 👈 shrink vertically
                                                   children: [
-                                                    SizedBox(height: 15,),
+                                                    SizedBox(height: 15),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.symmetric(
@@ -736,7 +736,7 @@ extension FieldEntityExtension on FormEntity {
               maxSize: validation?.maxSize ?? 1,
               selectedFileData: inputFieldData,
               fillColor: resources.color.colorWhite,
-              fileType: UploadOptions.takephoto,
+              fileType: UploadOptions.image,
               borderSide: BorderSide(),
               onSelected: (uploadResponseEntity) async {
                 if (uploadResponseEntity?.documentData != null) {

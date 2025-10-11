@@ -459,7 +459,7 @@ class UserDashboard extends BaseScreenWidget {
                                       child: Text.rich(
                                         textAlign: TextAlign.center,
                                         TextSpan(
-                                          text: overalData?.totalCamps ?? '10',
+                                          text: overalData?.totalCamps ?? '0',
                                           style: context.textFontWeight600
                                               .onFontSize(22)
                                               .onColor(

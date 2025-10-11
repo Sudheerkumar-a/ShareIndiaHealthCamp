@@ -121,6 +121,7 @@ class DialogUploadAttachmentWidget extends StatelessWidget {
     return Column(
       children: [
         if (fileType == UploadOptions.any ||
+            fileType == UploadOptions.image ||
             fileType == UploadOptions.takephoto)
           InkWell(
             onTap: () {
