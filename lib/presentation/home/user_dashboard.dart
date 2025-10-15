@@ -2,7 +2,7 @@
 
 import 'dart:math';
 
-import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz.dart' show cast;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
@@ -16,10 +16,7 @@ import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/user_credentials_entity.dart';
 import 'package:shareindia_health_camp/injection_container.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
-import 'package:shareindia_health_camp/presentation/common_widgets/dropdown_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/report_list_widget.dart';
 import 'package:shareindia_health_camp/presentation/home/filter_by_category_screen.dart';
 import 'package:shareindia_health_camp/presentation/reports/camp_list_screen.dart';
@@ -27,20 +24,36 @@ import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 import 'package:shareindia_health_camp/res/drawables/background_box_decoration.dart';
 import 'package:shareindia_health_camp/res/resources.dart';
 
-class UserDashboard extends BaseScreenWidget {
-  UserDashboard({super.key});
+class UserDashboard extends StatefulWidget {
+  const UserDashboard({super.key});
+
+  @override
+  State<UserDashboard> createState() => _UserDashboardState();
+}
+
+class _UserDashboardState extends State<UserDashboard> {
   final _serviceBloc = sl<ServicesBloc>();
+
   final _onMonthChanged = ValueNotifier('');
+
   final _onPageChanged = ValueNotifier(false);
+
   final _onDistrictChanged = ValueNotifier(0);
+
   final isapiCalled = false;
+
   int? districtId;
+
   int? mandalId;
+
   int pageIndex = 0;
+
   final ValueNotifier<ServicesState> _currentState = ValueNotifier(
     ServicesStateLoading(),
   );
+
   final ValueNotifier<List<String>> filteredDates = ValueNotifier([]);
+
   _navigateToFilterScreen(BuildContext context, int category, bool isAdmin) {
     FilterByCategoryScreen.start(
       context,
@@ -55,9 +68,10 @@ class UserDashboard extends BaseScreenWidget {
 
   _requestDataRefresh() {
     Future.delayed(Duration(milliseconds: 500), () {
+      pageIndex = 0;
       _serviceBloc.getDashboardData(
         requestParams: {
-          'diastrict': districtId == 0 ? null : districtId,
+          'district': districtId == 0 ? null : districtId,
           'mandal': mandalId == 0 ? null : mandalId,
           'start_date':
               filteredDates.value.length > 1 ? filteredDates.value[0] : null,
@@ -133,7 +147,8 @@ class UserDashboard extends BaseScreenWidget {
                                 ).toEntity(),
                           )
                           .toList()
-                        ..add(
+                        ..insert(
+                          0,
                           NameIDEntity()
                             ..id = 0
                             ..name = 'ALL',
@@ -352,16 +367,19 @@ class UserDashboard extends BaseScreenWidget {
   }
 
   @override
+  void initState() {
+    districtId = UserCredentialsEntity.details(context).user?.districtId ?? 0;
+    Future.delayed(Duration.zero, () {
+      _requestDataRefresh();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final resources = context.resources;
     final isAdmin = UserCredentialsEntity.details(context).user?.isAdmin == 1;
-    districtId = UserCredentialsEntity.details(context).user?.districtId ?? 0;
     _onMonthChanged.value = getDateByformat('MM', DateTime.now());
-    Future.delayed(Duration.zero, () {
-      if (isapiCalled == false) {
-        _serviceBloc.getDashboardData(requestParams: {}, emitResponse: true);
-      }
-    });
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
       child: BlocProvider<ServicesBloc>(

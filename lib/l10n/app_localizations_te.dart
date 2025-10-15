@@ -139,7 +139,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get huvReactive => 'హెచ్ఐవీ పాజిటివ్';
 
   @override
-  String get districtWiseData => 'District Wise Data\'';
+  String get districtWiseData => 'District Wise Data';
 
   @override
   String get mandalWiseData => 'మండల వారీ డేటా';

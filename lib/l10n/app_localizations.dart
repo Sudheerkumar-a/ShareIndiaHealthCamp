@@ -359,7 +359,7 @@ abstract class AppLocalizations {
   /// No description provided for @districtWiseData.
   ///
   /// In en, this message translates to:
-  /// **'District Wise Data\''**
+  /// **'District Wise Data'**
   String get districtWiseData;
 
   /// No description provided for @mandalWiseData.

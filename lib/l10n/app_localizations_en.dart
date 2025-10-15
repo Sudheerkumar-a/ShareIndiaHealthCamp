@@ -139,7 +139,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get huvReactive => 'HIV Reactive';
 
   @override
-  String get districtWiseData => 'District Wise Data\'';
+  String get districtWiseData => 'District Wise Data';
 
   @override
   String get mandalWiseData => 'Mandal Wise Data';

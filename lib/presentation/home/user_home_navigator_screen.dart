@@ -28,7 +28,5 @@ class UserHomeNavigatorScreen extends BaseScreenWidget {
   }
 
   @override
-  doDispose() {
-    userDashboard.doDispose();
-  }
+  doDispose() {}
 }
