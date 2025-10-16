@@ -10,11 +10,13 @@ import 'package:shareindia_health_camp/core/config/flavor_config.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/string_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
+import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/dialog_upload_attachment.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/document_preview_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/image_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/msearch_user_app_bar.dart';
@@ -52,6 +54,9 @@ class ClientsByCampScreen extends BaseScreenWidget {
   String? selectedStatus;
   Map<String, dynamic>? filteredData;
   final ValueNotifier<List<String>> filteredDates = ValueNotifier([]);
+  final ValueNotifier<UploadResponseEntity?> _onUploadImage = ValueNotifier(
+    null,
+  );
 
   List<Widget> _getFilterBar(BuildContext context) {
     final resources = context.resources;
@@ -179,40 +184,108 @@ class ClientsByCampScreen extends BaseScreenWidget {
                           ),
                           SizedBox(width: resources.dimen.dp10),
                           Expanded(
-                            child: Text.rich(
-                              TextSpan(
-                                text: 'Camp Photo:\n',
-                                style: context.textFontWeight400.onFontSize(
-                                  resources.fontSize.dp12,
-                                ),
-                                children: [
+                            child: ValueListenableBuilder(
+                              valueListenable: _onUploadImage,
+                              builder: (context, value, child) {
+                                return Text.rich(
                                   TextSpan(
-                                    text:
-                                        (campEntity.photoOfCamp ?? '')
-                                            .split('/')
-                                            .last,
-                                    style: context.textFontWeight600
-                                        .onFontSize(resources.fontSize.dp12)
-                                        .copyWith(
-                                          decoration: TextDecoration.underline,
-                                        ),
-                                    recognizer:
-                                        TapGestureRecognizer()
-                                          ..onTap = () {
-                                            Dialogs.showDialogWithClose(
-                                              context,
-                                              maxWidth:
-                                                  getScrrenSize(context).width -
-                                                  40,
-                                              ImageWidget(
-                                                path:
-                                                    'http://13.232.63.203/health/${campEntity.photoOfCamp ?? ''}',
-                                              ).loadImage,
-                                            );
-                                          },
+                                    text: 'Camp Photo:\n',
+                                    style: context.textFontWeight400.onFontSize(
+                                      resources.fontSize.dp12,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            campEntity.photoOfCamp?.isEmpty ==
+                                                    true
+                                                ? value == null
+                                                    ? 'Upload Photo'
+                                                    : value.documentName
+                                                : (campEntity.photoOfCamp ?? '')
+                                                    .split('/')
+                                                    .last,
+                                        style: context.textFontWeight600
+                                            .onFontSize(resources.fontSize.dp12)
+                                            .copyWith(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                        recognizer:
+                                            TapGestureRecognizer()
+                                              ..onTap = () {
+                                                if (campEntity
+                                                        .photoOfCamp
+                                                        ?.isEmpty ==
+                                                    true) {
+                                                  if (value == null) {
+                                                    Dialogs.showBottomSheetDialogTransperrent(
+                                                      context,
+                                                      DialogUploadAttachmentWidget(
+                                                        fileType:
+                                                            UploadOptions.image,
+                                                        maxSize: 5,
+                                                      ),
+                                                      callback: (value) {
+                                                        if (value != null) {
+                                                          final selectedFileData =
+                                                              UploadResponseEntity();
+                                                          selectedFileData
+                                                                  .documentData =
+                                                              value['fileNamebase64data'];
+                                                          selectedFileData
+                                                                  .documentName =
+                                                              value['fileName'];
+                                                          selectedFileData
+                                                                  .bytes =
+                                                              value['fileBytes'];
+                                                          selectedFileData
+                                                                  .mediaType =
+                                                              value['contentType'];
+                                                          _onUploadImage.value =
+                                                              selectedFileData;
+                                                        }
+                                                      },
+                                                    );
+                                                  } else {
+                                                    Dialogs.showDialogWithClose(
+                                                      context,
+                                                      maxWidth:
+                                                          getScrrenSize(
+                                                            context,
+                                                          ).width -
+                                                          40,
+                                                      DocumentPreviewWidget(
+                                                        base64Data:
+                                                            value
+                                                                .documentData ??
+                                                            '',
+                                                        fileName:
+                                                            value
+                                                                .documentName ??
+                                                            '',
+                                                      ),
+                                                    );
+                                                  }
+                                                } else {
+                                                  Dialogs.showDialogWithClose(
+                                                    context,
+                                                    maxWidth:
+                                                        getScrrenSize(
+                                                          context,
+                                                        ).width -
+                                                        40,
+                                                    ImageWidget(
+                                                      path:
+                                                          'http://13.232.63.203/health/${campEntity.photoOfCamp ?? ''}',
+                                                    ).loadImage,
+                                                  );
+                                                }
+                                              },
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             ),
                           ),
                         ],

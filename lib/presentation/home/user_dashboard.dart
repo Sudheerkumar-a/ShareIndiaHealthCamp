@@ -700,11 +700,11 @@ class _UserDashboardState extends State<UserDashboard> {
                                   Expanded(
                                     child: InkWell(
                                       onTap: () {
-                                        _navigateToFilterScreen(
-                                          context,
-                                          5,
-                                          isAdmin,
-                                        );
+                                        // _navigateToFilterScreen(
+                                        //   context,
+                                        //   5,
+                                        //   isAdmin,
+                                        // );
                                       },
                                       child: Container(
                                         height: double.infinity,
@@ -730,60 +730,80 @@ class _UserDashboardState extends State<UserDashboard> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Expanded(
-                                                  child: Text.rich(
-                                                    textAlign: TextAlign.center,
-                                                    TextSpan(
-                                                      text: 'B',
-                                                      style:
-                                                          context
-                                                              .textFontWeight600,
-                                                      children: [
-                                                        TextSpan(
-                                                          text:
-                                                              '\n${overalData?.hepatitisA ?? '0'}',
-                                                          style: context
-                                                              .textFontWeight600
-                                                              .onFontSize(
-                                                                resources
-                                                                    .fontSize
-                                                                    .dp20,
-                                                              )
-                                                              .onColor(
-                                                                resources
-                                                                    .color
-                                                                    .viewBgColor,
-                                                              ),
-                                                        ),
-                                                      ],
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      _navigateToFilterScreen(
+                                                        context,
+                                                        9,
+                                                        isAdmin,
+                                                      );
+                                                    },
+                                                    child: Text.rich(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      TextSpan(
+                                                        text: 'B',
+                                                        style:
+                                                            context
+                                                                .textFontWeight600,
+                                                        children: [
+                                                          TextSpan(
+                                                            text:
+                                                                '\n${overalData?.hepatitisB ?? '0'}',
+                                                            style: context
+                                                                .textFontWeight600
+                                                                .onFontSize(
+                                                                  resources
+                                                                      .fontSize
+                                                                      .dp20,
+                                                                )
+                                                                .onColor(
+                                                                  resources
+                                                                      .color
+                                                                      .viewBgColor,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                                 Expanded(
-                                                  child: Text.rich(
-                                                    textAlign: TextAlign.center,
-                                                    TextSpan(
-                                                      text: 'C',
-                                                      style:
-                                                          context
-                                                              .textFontWeight600,
-                                                      children: [
-                                                        TextSpan(
-                                                          text:
-                                                              '\n${overalData?.hepatitisB ?? '0'}',
-                                                          style: context
-                                                              .textFontWeight600
-                                                              .onFontSize(
-                                                                resources
-                                                                    .fontSize
-                                                                    .dp20,
-                                                              )
-                                                              .onColor(
-                                                                resources
-                                                                    .color
-                                                                    .viewBgColor,
-                                                              ),
-                                                        ),
-                                                      ],
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      _navigateToFilterScreen(
+                                                        context,
+                                                        10,
+                                                        isAdmin,
+                                                      );
+                                                    },
+                                                    child: Text.rich(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      TextSpan(
+                                                        text: 'C',
+                                                        style:
+                                                            context
+                                                                .textFontWeight600,
+                                                        children: [
+                                                          TextSpan(
+                                                            text:
+                                                                '\n${overalData?.hepatitisB ?? '0'}',
+                                                            style: context
+                                                                .textFontWeight600
+                                                                .onFontSize(
+                                                                  resources
+                                                                      .fontSize
+                                                                      .dp20,
+                                                                )
+                                                                .onColor(
+                                                                  resources
+                                                                      .color
+                                                                      .viewBgColor,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

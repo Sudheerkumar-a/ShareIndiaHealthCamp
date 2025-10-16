@@ -58,7 +58,7 @@ class FilterByCategoryScreen extends BaseScreenWidget {
   final ValueNotifier<bool> _onFilterChange = ValueNotifier(false);
   // final ValueNotifier<UserEntity?> _selectedEmployee = ValueNotifier(null);
   int isAdmin = 1;
-  String? selectedStatus;
+  String? filtertype;
   Map<String, dynamic>? filteredData;
   final ValueNotifier<List<String>> filteredDates = ValueNotifier([]);
 
@@ -93,6 +93,14 @@ class FilterByCategoryScreen extends BaseScreenWidget {
       case 8:
         {
           title = 'STI Cases';
+        }
+      case 9:
+        {
+          title = '${resources.string.hepatitis} - B';
+        }
+      case 10:
+        {
+          title = '${resources.string.hepatitis} - C';
         }
       default:
         {
@@ -153,52 +161,6 @@ class FilterByCategoryScreen extends BaseScreenWidget {
         reportData = cast<ReportDataEntity>(
           responseState.responseEntity.entity,
         );
-        switch (category) {
-          case 2:
-            {
-              reportData?.reportList =
-                  reportData?.reportList.where((e) => e.didConset).toList() ??
-                  [];
-            }
-          case 3:
-            {
-              reportData?.reportList =
-                  reportData?.reportList
-                      .where((e) => e.isHypertension)
-                      .toList() ??
-                  [];
-            }
-          case 4:
-            {
-              reportData?.reportList =
-                  reportData?.reportList.where((e) => e.isDiabitic).toList() ??
-                  [];
-            }
-          case 5:
-            {
-              reportData?.reportList =
-                  reportData?.reportList.where((e) => e.isHep).toList() ?? [];
-            }
-          case 6:
-            {
-              reportData?.reportList =
-                  reportData?.reportList.where((e) => e.isHiv).toList() ?? [];
-            }
-          case 7:
-            {
-              reportData?.reportList =
-                  reportData?.reportList.where((e) => e.isSyphilis).toList() ??
-                  [];
-            }
-          case 8:
-            {
-              reportData?.reportList =
-                  reportData?.reportList.where((e) => e.isSTICase).toList() ??
-                  [];
-            }
-          default:
-            {}
-        }
 
         totalPagecount = reportData?.total;
       }
@@ -216,6 +178,46 @@ class FilterByCategoryScreen extends BaseScreenWidget {
       startDate = dateFormat.format(startTime);
       endDate = dateFormat.format(endTime);
     }
+    if (filtertype == null) {
+      switch (category) {
+        case 3:
+          {
+            filtertype = 'hypertension';
+          }
+        case 4:
+          {
+            filtertype = 'diabetes';
+          }
+        case 5:
+          {
+            filtertype = 'hepatitis';
+          }
+        case 6:
+          {
+            filtertype = 'hivreactive';
+          }
+        case 7:
+          {
+            filtertype = 'syphills';
+          }
+        case 8:
+          {
+            filtertype = 'sticases';
+          }
+        case 9:
+          {
+            filtertype = 'hepatitisb';
+          }
+        case 10:
+          {
+            filtertype = 'hepatitisc';
+          }
+        default:
+          {
+            filtertype = '';
+          }
+      }
+    }
     Map<String, dynamic> requestParams = {
       'limit': 1000,
       'page': index,
@@ -224,6 +226,7 @@ class FilterByCategoryScreen extends BaseScreenWidget {
       'state': 'Andhra Pradesh',
       'date_from': startDate,
       'date_to': endDate,
+      'filter_type': filtertype,
     };
     return requestParams;
   }

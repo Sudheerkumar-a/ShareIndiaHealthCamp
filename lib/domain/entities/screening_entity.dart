@@ -300,7 +300,7 @@ class ScreeningDetailsEntity extends BaseEntity {
             data['diabetes_Reffered'] = '';
           }
         }
-      case 5:
+      case 5 || 9 || 10:
         {
           if (sti != null) {
             data['hepB'] =

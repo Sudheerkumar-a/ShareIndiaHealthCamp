@@ -83,6 +83,7 @@ class DialogUploadAttachmentWidget extends StatelessWidget {
             mimeSplit?[1] ?? 'jpeg',
           ),
           'fileBytes': bytes,
+          'fileNamebase64data': base64.encode(bytes),
         };
         if (context.mounted) {
           Navigator.pop(context, data);
