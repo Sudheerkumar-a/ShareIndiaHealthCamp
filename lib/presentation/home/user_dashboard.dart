@@ -788,7 +788,7 @@ class _UserDashboardState extends State<UserDashboard> {
                                                         children: [
                                                           TextSpan(
                                                             text:
-                                                                '\n${overalData?.hepatitisB ?? '0'}',
+                                                                '\n${overalData?.hepatitisC ?? '0'}',
                                                             style: context
                                                                 .textFontWeight600
                                                                 .onFontSize(

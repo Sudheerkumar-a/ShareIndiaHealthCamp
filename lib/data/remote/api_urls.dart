@@ -15,3 +15,4 @@ const String agentListApiUrl = 'campaign/list_field_agents.php';
 const String deleteAgentApiUrl = 'campaign/delete_agent.php';
 const String campSubmitApiUrl = 'campaign/camp_insert.php';
 const String campListApiUrl = 'campaign/list_camps.php';
+const String campUpdatePhotoApiUrl = 'campaign/camp_photo.php';

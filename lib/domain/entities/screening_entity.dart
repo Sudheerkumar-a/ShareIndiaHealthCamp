@@ -19,7 +19,7 @@ class CampEntity extends BaseEntity {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    //data['id'] = id;
+    data['id'] = id;
     data['date_of_camp'] = dateOfCamp;
     //data['photo_of_camp'] = photoOfCamp;
     data['district'] = district;

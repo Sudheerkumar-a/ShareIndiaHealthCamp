@@ -48,7 +48,6 @@ android {
 
         create("development") {
             dimension = "mode"
-            applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             resValue("string", "app_name", "IHS-Dev")
         }

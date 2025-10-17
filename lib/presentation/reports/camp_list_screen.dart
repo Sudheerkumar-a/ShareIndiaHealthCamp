@@ -159,12 +159,19 @@ class _CampListScreenState extends State<CampListScreen> {
   @override
   Widget build(BuildContext context) {
     final resources = context.resources;
-    final ticketsHeaderData = ['Date Of Camp', 'District', 'Mandal', 'Village'];
+    final ticketsHeaderData = [
+      'ID',
+      'Date Of Camp',
+      'District',
+      'Mandal',
+      'Village',
+    ];
     final ticketsTableColunwidths = {
-      0: const FlexColumnWidth(4),
+      0: const FlexColumnWidth(2),
       1: const FlexColumnWidth(4),
       2: const FlexColumnWidth(4),
-      3: const FlexColumnWidth(3),
+      3: const FlexColumnWidth(4),
+      4: const FlexColumnWidth(3),
     };
     return SafeArea(
       child: Scaffold(

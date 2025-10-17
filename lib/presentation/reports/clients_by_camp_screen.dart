@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -10,11 +11,13 @@ import 'package:shareindia_health_camp/core/config/flavor_config.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/string_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
+import 'package:shareindia_health_camp/data/remote/api_urls.dart';
 import 'package:shareindia_health_camp/domain/entities/master_data_entities.dart';
 import 'package:shareindia_health_camp/domain/entities/screening_entity.dart';
 import 'package:shareindia_health_camp/domain/entities/services_entity.dart';
 import 'package:shareindia_health_camp/presentation/bloc/services/services_bloc.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/action_button_widget.dart';
+import 'package:shareindia_health_camp/presentation/common_widgets/alert_dialog_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/base_screen_widget.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/dialog_upload_attachment.dart';
 import 'package:shareindia_health_camp/presentation/common_widgets/document_preview_widget.dart';
@@ -225,7 +228,7 @@ class ClientsByCampScreen extends BaseScreenWidget {
                                                             UploadOptions.image,
                                                         maxSize: 5,
                                                       ),
-                                                      callback: (value) {
+                                                      callback: (value) async {
                                                         if (value != null) {
                                                           final selectedFileData =
                                                               UploadResponseEntity();
@@ -241,8 +244,55 @@ class ClientsByCampScreen extends BaseScreenWidget {
                                                           selectedFileData
                                                                   .mediaType =
                                                               value['contentType'];
-                                                          _onUploadImage.value =
-                                                              selectedFileData;
+                                                          final requestParams = {
+                                                            'camp_id':
+                                                                campEntity.id,
+                                                            'photo_of_camp': MultipartFile.fromBytes(
+                                                              selectedFileData
+                                                                  .bytes!,
+                                                              filename:
+                                                                  selectedFileData
+                                                                      .documentName,
+                                                              contentType:
+                                                                  selectedFileData
+                                                                      .mediaType,
+                                                            ),
+                                                          };
+                                                          Dialogs.loader(
+                                                            context,
+                                                          );
+                                                          final response = await _servicesBloc
+                                                              .submitMultipartData(
+                                                                apiUrl:
+                                                                    campUpdatePhotoApiUrl,
+                                                                requestParams:
+                                                                    requestParams,
+                                                              );
+                                                          if (!context
+                                                              .mounted) {
+                                                            return;
+                                                          }
+                                                          Dialogs.dismiss(
+                                                            context,
+                                                          );
+                                                          if (response
+                                                              is ServicesStateSuccess) {
+                                                            Dialogs.showInfoDialog(
+                                                              context,
+                                                              PopupType.success,
+                                                              'Camp photo updated successfully',
+                                                            );
+                                                            _onUploadImage
+                                                                    .value =
+                                                                selectedFileData;
+                                                          } else if (response
+                                                              is ServicesStateApiError) {
+                                                            Dialogs.showInfoDialog(
+                                                              context,
+                                                              PopupType.fail,
+                                                              response.message,
+                                                            );
+                                                          }
                                                         }
                                                       },
                                                     );
