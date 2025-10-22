@@ -67,6 +67,11 @@ class ScreeningDetailsEntity extends BaseEntity {
   StiEntity? sti;
   String? remarks;
 
+  String yesNoStatus(String? value) {
+    if (value == null || value.isEmpty) return '';
+    return value == '0' ? 'No' : 'Yes';
+  }
+
   Map<String, dynamic> toExcel() {
     final Map<String, dynamic> data = <String, dynamic>{};
     //data['action'] = action;
@@ -87,28 +92,29 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['occupation'] = occupation;
     data['consent'] = consent;
     if (medHistory != null) {
-      data['Diabetes'] = medHistory?.diabetes == "0" ? 'No' : 'Yes';
-      data['On_treatment'] = onTreatment?.diabetes == "0" ? 'No' : 'Yes';
-      data['HTN'] = medHistory?.hTN == "0" ? 'No' : 'Yes';
-      data['On_treatment'] = onTreatment?.hTN == "0" ? 'No' : 'Yes';
-      data['Hepatitis'] = medHistory?.hepatitis == "0" ? 'No' : 'Yes';
-      data['On_treatment'] = onTreatment?.hepatitis == "0" ? 'No' : 'Yes';
+      data['Diabetes'] = yesNoStatus(medHistory?.diabetes);
+      data['On_treatment'] = yesNoStatus(onTreatment?.diabetes);
+      data['HTN'] = yesNoStatus(medHistory?.hTN);
+      data['On_treatment'] = yesNoStatus(onTreatment?.hTN);
+      data['Hepatitis'] = yesNoStatus(medHistory?.hepatitis);
+      data['On_treatment'] = yesNoStatus(onTreatment?.hepatitis);
     } else {
       data['Diabetes'] = '';
+      data['On_treatment'] = '';
       data['HTN'] = '';
+      data['On_treatment'] = '';
       data['Hepatitis'] = '';
+      data['On_treatment'] = '';
     }
 
     if (ncd != null) {
-      data['diabetes_screened'] = ncd?.diabetes?.screened == "0" ? 'No' : 'Yes';
+      data['diabetes_screened'] = yesNoStatus(ncd?.diabetes?.screened);
       data['diabetes_Result'] = ncd?.diabetes?.bloodsugar ?? '0';
-      data['diabetes_Reffered'] = ncd?.diabetes?.abnormal == "0" ? 'No' : 'Yes';
-      data['hypertension_screened'] =
-          ncd?.hypertension?.screened == "0" ? 'No' : 'Yes';
+      data['diabetes_Reffered'] = yesNoStatus(ncd?.diabetes?.abnormal);
+      data['hypertension_screened'] = yesNoStatus(ncd?.hypertension?.screened);
       data['hypertension_Systolic'] = ncd?.hypertension?.systolic ?? '0';
       data['hypertension_Diastolic'] = ncd?.hypertension?.diastolic ?? '0';
-      data['hypertension_Reffered'] =
-          ncd?.hypertension?.abnormal == "0" ? 'No' : 'Yes';
+      data['hypertension_Reffered'] = yesNoStatus(ncd?.hypertension?.abnormal);
     } else {
       data['diabetes_screened'] = '';
       data['diabetes_Result'] = '';
@@ -121,18 +127,18 @@ class ScreeningDetailsEntity extends BaseEntity {
     if (hiv != null) {
       data['pregnancystatus'] = pregnancystatus;
       data['date_of_LMP'] = dateOfLMP;
-      data['Hiv_Offered'] = hiv?.result ?? '';
-      data['Alread_At_ART'] = hiv?.alreadAtART == "0" ? 'No' : 'Yes';
+      data['Hiv_Offered'] = hiv?.offered ?? '';
+      data['Hiv_Result'] = hiv?.result ?? '';
+      data['Alread_At_ART'] = yesNoStatus(hiv?.alreadAtART);
       data['ART_Name'] = hiv?.nameOfART ?? '';
-      data['Referred_ICTC'] = hiv?.referredICTC == "0" ? 'No' : 'Referred';
-      data['Confirmed_ICTC'] =
-          hiv?.confirmedICTC == "0" ? 'Not Confirmed' : 'Confirmed';
-      data['Referred_ART'] =
-          hiv?.referredART == "0" ? 'Not ReferredART' : 'ReferredART';
+      data['Referred_ICTC'] = yesNoStatus(hiv?.referredICTC);
+      data['Confirmed_ICTC'] = yesNoStatus(hiv?.confirmedICTC);
+      data['Referred_ART'] = yesNoStatus(hiv?.referredART);
     } else {
       data['pregnancystatus'] = pregnancystatus;
       data['date_of_LMP'] = dateOfLMP;
       data['Hiv_Offered'] = '';
+      data['Hiv_Result'] = '';
       data['Alread_At_ART'] = '';
       data['ART_Name'] = '';
       data['Referred_ICTC'] = '';
@@ -143,18 +149,15 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['syndromicreferred'] = syndromicreferred;
     data['treatment_provided'] = syndromicTreatmentProvided;
     if (sti != null) {
-      data['syphilis_done'] = sti?.syphilis?.done == "0" ? 'No' : 'Done';
+      data['syphilis_done'] = yesNoStatus(sti?.syphilis?.done);
       data['syphilis_result'] = sti?.syphilis?.result ?? '';
-      data['syphilis_referred'] =
-          sti?.syphilis?.referred == "0" ? 'Not Referred' : 'Referred';
-      data['hepB_done'] = sti?.hepB?.done == "0" ? 'No' : 'Done';
+      data['syphilis_referred'] = yesNoStatus(sti?.syphilis?.referred);
+      data['hepB_done'] = yesNoStatus(sti?.hepB?.done);
       data['hepB_result'] = sti?.hepB?.result ?? '';
-      data['hepB_referred'] =
-          sti?.hepB?.referred == "0" ? 'Not Referred' : 'Referred';
-      data['hepC_done'] = sti?.hepC?.done == "0" ? 'No' : 'Done';
+      data['hepB_referred'] = yesNoStatus(sti?.hepB?.referred);
+      data['hepC_done'] = yesNoStatus(sti?.hepC?.done);
       data['hepC_result'] = sti?.hepC?.result ?? '';
-      data['hepC_referred'] =
-          sti?.hepC?.referred == "0" ? 'Not Referred' : 'Referred';
+      data['hepC_referred'] = yesNoStatus(sti?.hepC?.referred);
     } else {
       data['syphilis_done'] = '';
       data['syphilis_result'] = '';

@@ -368,6 +368,38 @@ class ReportsScreen extends BaseScreenWidget {
           InkWell(
             onTap: () async {
               Dialogs.loader(context);
+              // if ((reportData?.page ?? 1) * 10 >= (reportData?.total ?? 0)) {
+              //   await exportToExcel(
+              //     ExportDataEntity()
+              //       ..title = 'IHS_Clients_Report'
+              //       ..date = getDateByformat('dd-MM-yyyy', DateTime.now())
+              //       ..columns =
+              //           ScreeningDetailsEntity()
+              //               .toExcel()
+              //               .keys
+              //               .map((e) => e.replaceAll('_', ' ').capitalize())
+              //               .toList()
+              //       ..rows = reportData?.reportList ?? [],
+              //   );
+              // } else {
+              final list = List<ScreeningDetailsEntity>.empty(growable: true);
+              int pages = reportData?.pages ?? 100;
+              for (int i = 0; i < pages; i++) {
+                final responseState = await _servicesBloc.getReportsData(
+                  requestParams: _getFilteredData(i + 1, limit: 40),
+                );
+                if (responseState is ServicesStateSuccess) {
+                  final reportData = cast<ReportDataEntity>(
+                    responseState.responseEntity.entity,
+                  );
+                  pages = reportData.pages ?? pages;
+                  if ((reportData.reportList).isEmpty) {
+                    break;
+                  }
+                  list.addAll(reportData.reportList);
+                }
+              }
+
               await exportToExcel(
                 ExportDataEntity()
                   ..title = 'IHS_Clients_Report'
@@ -378,8 +410,9 @@ class ReportsScreen extends BaseScreenWidget {
                           .keys
                           .map((e) => e.replaceAll('_', ' ').capitalize())
                           .toList()
-                  ..rows = reportData?.reportList ?? [],
+                  ..rows = list,
               );
+              // }
               if (context.mounted) {
                 Dialogs.dismiss(context);
               }
@@ -418,7 +451,7 @@ class ReportsScreen extends BaseScreenWidget {
     }
   }
 
-  Map<String, dynamic> _getFilteredData(int? index) {
+  Map<String, dynamic> _getFilteredData(int? index, {int limit = 10}) {
     String? startDate;
     String? endDate;
     if (filteredDates.value.isNotEmpty) {
@@ -431,7 +464,7 @@ class ReportsScreen extends BaseScreenWidget {
     Map<String, dynamic> requestParams =
         isAdmin == 0
             ? {
-              'limit': 10,
+              'limit': limit,
               'page': index,
               'district': districtId,
               'mandal': null,
@@ -441,7 +474,7 @@ class ReportsScreen extends BaseScreenWidget {
             }
             : isAdmin == 2
             ? {
-              'limit': 10,
+              'limit': limit,
               'page': index,
               'district': districtId,
               'mandal': mandalId,
@@ -450,7 +483,7 @@ class ReportsScreen extends BaseScreenWidget {
               'date_to': endDate,
             }
             : {
-              'limit': 10,
+              'limit': limit,
               'page': index,
               'district': filteredData?['dist_id'],
               'mandal': filteredData?['mandal_id'],

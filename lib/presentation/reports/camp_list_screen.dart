@@ -26,6 +26,7 @@ class CampListScreen extends StatefulWidget {
     String? startDate,
     String? endDate,
     bool canEdit = true,
+    bool showNavigationbar = true,
   }) {
     return Navigator.of(context, rootNavigator: true).push(
       PageTransition(
@@ -36,17 +37,20 @@ class CampListScreen extends StatefulWidget {
           startDate: startDate,
           endDate: endDate,
           canEdit: canEdit,
+          showNavigationbar: showNavigationbar,
         ),
       ),
     );
   }
 
+  final bool showNavigationbar;
   final int? districtId;
   final int? mandalId;
   final String? startDate;
   final String? endDate;
   final bool canEdit;
   const CampListScreen({
+    this.showNavigationbar = true,
     this.districtId,
     this.mandalId,
     this.startDate,
@@ -175,10 +179,13 @@ class _CampListScreenState extends State<CampListScreen> {
     };
     return SafeArea(
       child: Scaffold(
-        appBar: MSearchUserAppBarWidget(
-          title: 'Integrated Health Services (IHS)',
-          showBack: true,
-        ),
+        appBar:
+            widget.showNavigationbar
+                ? MSearchUserAppBarWidget(
+                  title: 'Integrated Health Services (IHS)',
+                  showBack: true,
+                )
+                : null,
         body: Padding(
           padding: EdgeInsets.all(resources.dimen.dp20),
           child: SingleChildScrollView(

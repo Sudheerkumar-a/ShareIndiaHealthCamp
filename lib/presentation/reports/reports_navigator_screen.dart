@@ -11,13 +11,19 @@ class ReportsNavigatorScreen extends BaseScreenWidget {
   @override
   Widget build(BuildContext context) {
     reportKey = GlobalKey<NavigatorState>();
-    reportsScreen = ReportsScreen();
+    reportsScreen =
+        // UserCredentialsEntity.details(context).user?.isAdmin == 2
+        //     ? CampListScreen(showNavigationbar: false)
+        //     :
+        ReportsScreen();
     return Navigator(
       key: reportKey,
       initialRoute: '/',
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            builder: (BuildContext _) => reportsScreen, settings: settings);
+          builder: (BuildContext _) => reportsScreen,
+          settings: settings,
+        );
       },
       onPopPage: (route, result) {
         return true;
