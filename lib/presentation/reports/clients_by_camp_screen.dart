@@ -501,7 +501,6 @@ class ClientsByCampScreen extends BaseScreenWidget {
                             ViewScreeningDetails.start(
                               context,
                               cast<ScreeningDetailsEntity>(ticket),
-                              campId: campEntity.id,
                             );
                           },
                           onPageChange: (page) {

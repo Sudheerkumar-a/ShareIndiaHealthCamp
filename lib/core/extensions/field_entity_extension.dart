@@ -672,7 +672,7 @@ extension FieldEntityExtension on FormEntity {
                     context,
                     firstDate: firstDate,
                     initialDate:
-                        (fieldValue ?? '').isNotEmpty
+                        fieldValue != null
                             ? getDateTimeByString(
                               'dd/MM/yyyy',
                               fieldValue ?? '',

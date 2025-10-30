@@ -1,9 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:shareindia_health_camp/core/constants/constants.dart';
-import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/domain/entities/base_entity.dart';
-import 'package:shareindia_health_camp/domain/entities/single_data_entity.dart';
 
 class CampEntity extends BaseEntity {
   int? id;
@@ -56,10 +54,7 @@ class ScreeningDetailsEntity extends BaseEntity {
   String? contactNumber;
   String? aadherNumber;
   String? clientAddress;
-  String? clientMandal;
-  int? clientMandalID;
-  String? clientVillage;
-  int? clientVillageID;
+  int? clientMandal;
   String? occupation;
   int? consent;
   MedHistoryEntity? medHistory;
@@ -98,7 +93,6 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['aadher_number'] = aadherNumber;
     data['client_address'] = clientAddress;
     data['client_mandal'] = clientMandal;
-    data['client_village'] = clientVillage;
     data['occupation'] = occupation;
     data['consent'] = consent;
     if (medHistory != null) {
@@ -215,7 +209,6 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['aadher_number'] = aadherNumber;
     data['client_address'] = clientAddress;
     data['client_mandal'] = clientMandal;
-    data['client_village'] = clientVillage;
     data['occupation'] = occupation;
     data['consent'] = consent;
 
@@ -278,7 +271,6 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['aadher_number'] = aadherNumber;
     data['client_address'] = clientAddress;
     data['client_mandal'] = clientMandal;
-    data['client_village'] = clientVillage;
     data['occupation'] = occupation;
     data['consent'] = consent;
     switch (category) {
@@ -393,22 +385,15 @@ class ScreeningDetailsEntity extends BaseEntity {
     data['aadher_number'] = aadherNumber;
     data['client_address'] = clientAddress;
     data['client_district'] = '';
-    data['client_mandal'] = clientMandalID;
-    data['client_mandal_id'] = clientMandalID;
-    data['client_village'] = clientVillage;
-    data['clientvillage'] = clientVillageID;
+    data['client_mandal'] = clientMandal;
     data['occupation'] = occupation;
     data['consent'] = consent;
-    data['knowndiabetes'] = int.tryParse(medHistory?.diabetes ?? '0');
-    data['knownhtn'] = int.tryParse(medHistory?.hTN ?? '0');
-    data['knownhepatitis'] = int.tryParse(medHistory?.hepatitis ?? '0');
-    data['ontreatmentknowndiabetes'] = int.tryParse(
-      onTreatment?.diabetes ?? '0',
-    );
-    data['ontreatmentknownhtn'] = int.tryParse(onTreatment?.hTN ?? '0');
-    data['ontreatmentknownhepatitis'] = int.tryParse(
-      onTreatment?.hepatitis ?? '0',
-    );
+    data['knowndiabetes'] = medHistory?.diabetes;
+    data['knownhtn'] = medHistory?.hTN;
+    data['knownhepatitis'] = medHistory?.hepatitis;
+    data['ontreatmentknowndiabetes'] = onTreatment?.diabetes;
+    data['ontreatmentknownhtn'] = onTreatment?.hTN;
+    data['ontreatmentknownhepatitis'] = onTreatment?.hepatitis;
 
     data['hypertension'] = {
       'screened': int.tryParse(ncd?.hypertension?.screened ?? ''),
@@ -431,32 +416,9 @@ class ScreeningDetailsEntity extends BaseEntity {
       'confirmedICTC': int.tryParse(hiv?.confirmedICTC ?? '0'),
       'referredART': int.tryParse(hiv?.referredART ?? '0'),
     };
-    data['syndromiccases'] =
-        syndromicCases
-            .map(
-              (e) =>
-                  NameIDEntity()
-                    ..id = int.tryParse(e['id'] ?? '0')
-                    ..name = e['name'],
-            )
-            .toList()
-            .where((e) => (syndromiccases?.contains(e.name ?? '0') == true))
-            .toList(); // syndromiccases;
+    data['syndromiccases'] = syndromiccases;
     data['syndromicreferred'] = int.tryParse(syndromicreferred ?? '0');
-    data['treatment_provided'] =
-        treatmentprovided
-            .map(
-              (e) =>
-                  NameIDEntity()
-                    ..id = int.tryParse(e['id'] ?? '0')
-                    ..name = e['name'],
-            )
-            .toList()
-            .where(
-              (e) =>
-                  (syndromicTreatmentProvided?.contains(e.name ?? '0') == true),
-            )
-            .toList();
+    data['treatment_provided'] = syndromicTreatmentProvided;
     data['sti'] = {
       'syphilis': {
         'done': int.tryParse(sti?.syphilis?.done ?? '0'),
