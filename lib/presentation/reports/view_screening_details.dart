@@ -17,17 +17,29 @@ import 'package:shareindia_health_camp/presentation/reports/outreach_camp_form_s
 import 'package:shareindia_health_camp/presentation/utils/dialogs.dart';
 
 class ViewScreeningDetails extends BaseScreenWidget {
-  static start(BuildContext context, ScreeningDetailsEntity screeningDetails) {
+  static start(
+    BuildContext context,
+    ScreeningDetailsEntity screeningDetails, {
+    int? campId,
+  }) {
     Navigator.of(context, rootNavigator: true).push(
       PageTransition(
         type: PageTransitionType.rightToLeft,
-        child: ViewScreeningDetails(screeningDetails: screeningDetails),
+        child: ViewScreeningDetails(
+          campId: campId,
+          screeningDetails: screeningDetails,
+        ),
       ),
     );
   }
 
+  final int? campId;
   final ScreeningDetailsEntity screeningDetails;
-  const ViewScreeningDetails({required this.screeningDetails, super.key});
+  const ViewScreeningDetails({
+    this.campId,
+    required this.screeningDetails,
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     final resource = context.resources;
@@ -163,7 +175,7 @@ class ViewScreeningDetails extends BaseScreenWidget {
                       onTap: () async {
                         OutreachCampFormScreen.start(
                           context,
-                          campId: screeningDetails.campId ?? 0,
+                          campId: campId ?? 0,
                           screeningDetails: screeningDetails,
                         );
                       },

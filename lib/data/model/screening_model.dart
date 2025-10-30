@@ -68,7 +68,10 @@ class ScreeningDetailsModel extends BaseModel {
   String? contactNumber;
   String? aadherNumber;
   String? clientAddress;
-  int? clientMandal;
+  String? clientMandal;
+  int? clientMandalID;
+  String? clientVillage;
+  int? clientVillageID;
   String? occupation;
   int? consent;
   MedHistoryEntity? medHistory;
@@ -100,7 +103,11 @@ class ScreeningDetailsModel extends BaseModel {
     contactNumber = json['contact_number'];
     aadherNumber = json['aadher_number'];
     clientAddress = json['client_address'];
-    clientMandal = int.tryParse(json['client_mandal']) ?? 0;
+    clientMandal = json['client_mandal'];
+    clientVillage = json['client_village'];
+    clientMandalID = int.tryParse(json['client_mandal_id']) ?? 0;
+    clientVillageID = int.tryParse(json['client_village_id']) ?? 0;
+
     occupation = json['occupation'];
     consent = int.tryParse(json['consent']) ?? 0;
     medHistory =
@@ -145,6 +152,9 @@ class ScreeningDetailsModel extends BaseModel {
       ..aadherNumber = aadherNumber
       ..clientAddress = clientAddress
       ..clientMandal = clientMandal
+      ..clientMandalID = clientMandalID
+      ..clientVillage = clientVillage
+      ..clientVillageID = clientVillageID
       ..occupation = occupation
       ..consent = consent
       ..medHistory = medHistory
