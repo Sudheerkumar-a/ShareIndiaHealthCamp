@@ -869,6 +869,9 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..labelTe = 'Village'
           ..type = 'collection'
           ..canSearch = true
+          ..url = villageListApiUrl
+          ..urlInputData = {'mandal_id': fieldsData['client_mandal']}
+          ..fieldValue = fieldsData['clientvillage']
           ..requestModel = ListModel.fromvillageJson
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Village'
@@ -1633,6 +1636,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
           ..multi = true
           ..validation = (FormValidationEntity()..isRequired = true)
           ..placeholderEn = 'Select Partner Relationship'
+          ..fieldValue = fieldsData['syndromiccases']
           ..inputFieldData = {
             'items':
                 syndromicCases
@@ -1711,6 +1715,7 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
                 ..requiredTe = 'Please Enter Treatment Provided')
           ..placeholderEn = 'Treatment Provided'
           ..placeholderTe = 'Treatment Provided'
+          ..fieldValue = fieldsData['treatmentprovided']
           ..onDatachnage = (value) {
             fieldsData['treatmentprovided'] = value;
             _onDataChanged(false);
@@ -1808,7 +1813,9 @@ class _OutreachCampFormScreenState extends State<OutreachCampFormScreen> {
   Widget build(BuildContext context) {
     final resources = context.resources;
 
-    fieldsData.addAll(widget.screeningDetails?.toEditJson() ?? {});
+    if (fieldsData.isEmpty) {
+      fieldsData.addAll(widget.screeningDetails?.toEditJson() ?? {});
+    }
     if (stepButtonTexts.isEmpty) {
       stepButtonTexts.addAll([
         //'Next',
