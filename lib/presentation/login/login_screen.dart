@@ -47,7 +47,7 @@ class LoginScreen extends BaseScreenWidget {
     final resource = context.resources;
     if (FlavorConfig.isDevelopment()) {
       _emailTextController.text =
-          'chintapalli_ramesh@gmail.com'; //'srinu431@gmail.com';
+          'dishaysrkadapaannamayya@gmail.com'; //'srinu431@gmail.com';
       _passwordTextController.text = 'Works@909';
     }
     return SafeArea(

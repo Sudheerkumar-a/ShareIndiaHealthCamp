@@ -35,6 +35,7 @@ class UserModel extends BaseModel {
   String? district;
   String? mandal;
   int? isAdmin;
+  List<int> otherDistricts = [];
   UserModel();
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -46,6 +47,11 @@ class UserModel extends BaseModel {
     district = userJson['district'];
     mandal = '${userJson['mandal']}';
     isAdmin = int.tryParse('${userJson['is_admin']}');
+    if (json['other_distict'] is List) {
+      otherDistricts.addAll(
+        (json['other_distict'] as List).map((e) => e as int).toList(),
+      );
+    }
   }
 
   @override
@@ -61,6 +67,7 @@ class UserModel extends BaseModel {
     userEntity.district = district;
     userEntity.mandalId = int.tryParse(mandal ?? '');
     userEntity.isAdmin = isAdmin;
+    userEntity.otherDistricts = otherDistricts;
     return userEntity;
   }
 }

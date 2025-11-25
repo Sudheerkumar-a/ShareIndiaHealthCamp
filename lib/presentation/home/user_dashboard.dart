@@ -43,6 +43,7 @@ class _UserDashboardState extends State<UserDashboard> {
   final isapiCalled = false;
 
   int? districtId;
+  List<int> otherDistricts = [];
 
   int? mandalId;
 
@@ -119,6 +120,7 @@ class _UserDashboardState extends State<UserDashboard> {
                 .getWidget(context),
           ),
           SizedBox(width: resources.dimen.dp10),
+          if (otherDistricts.isEmpty)
           Expanded(
             child: Align(
               alignment: Alignment.centerRight,
@@ -130,6 +132,44 @@ class _UserDashboardState extends State<UserDashboard> {
           ),
         ],
       ),
+      if (otherDistricts.isNotEmpty) ...[
+        (FormEntity()
+              ..type = 'radio'
+              ..name = 'district'
+              ..verticalSpace = 5
+              ..fieldValue=districts
+                      .where(
+                        (e) => districtId == int.tryParse(e['id'].toString(),
+                        ),
+                      )
+                      .map(
+                        (item) =>
+                            NameIDModel.fromDistrictsJson(
+                              item as Map<String, dynamic>,
+                            ).toEntity(),
+                      ).firstOrNull
+              ..inputFieldData =
+                  districts
+                      .where(
+                        (e) => otherDistricts.contains(
+                          int.tryParse(e['id'].toString()),
+                        ),
+                      )
+                      .map(
+                        (item) =>
+                            NameIDModel.fromDistrictsJson(
+                              item as Map<String, dynamic>,
+                            ).toEntity(),
+                      )
+                      .toList()
+              ..onDatachnage = (value) {
+                districtId = value.id;
+                mandalId = 0;
+                _onDistrictChanged.value = value.id;
+                _requestDataRefresh();
+              })
+            .getWidget(context),
+      ],
       isAdmin
           ? (FormEntity()
                 ..type = 'collection'
@@ -160,37 +200,42 @@ class _UserDashboardState extends State<UserDashboard> {
                   _requestDataRefresh();
                 })
               .getWidget(context)
-          : FutureBuilder(
-            future: _serviceBloc.getMandalList(
-              requestParams: {
-                'dist_id':
-                    UserCredentialsEntity.details(context).user?.district,
-              },
-            ),
-            builder: (context, snapShot) {
-              final items = [
-                NameIDEntity()
-                  ..id = 0
-                  ..name = 'ALL',
-              ];
-              final responseState = snapShot.data;
-              if (responseState is ServicesStateSuccess) {
-                final mandals =
-                    cast<ListEntity>(responseState.responseEntity.entity).items;
-                items.addAll(mandals.cast<NameIDEntity>());
-              }
-              return (FormEntity()
-                    ..type = 'collection'
-                    ..name = 'mandal'
-                    ..placeholder = filterTitle
-                    ..canSearch = true
-                    ..inputFieldData = {'doSort': false, 'items': items}
-                    ..onDatachnage = (value) {
-                      mandalId = value.id;
-                      //_onDistrictChanged.value = value.id;
-                      _requestDataRefresh();
-                    })
-                  .getWidget(context);
+          : ValueListenableBuilder(
+            valueListenable: _onDistrictChanged,
+            builder: (context, value, child) {
+              return FutureBuilder(
+                future: _serviceBloc.getMandalList(
+                  requestParams: {'dist_id': districtId},
+                ),
+                builder: (context, snapShot) {
+                  final items = [
+                    NameIDEntity()
+                      ..id = 0
+                      ..name = 'ALL',
+                  ];
+                  final responseState = snapShot.data;
+                  if (responseState is ServicesStateSuccess) {
+                    final mandals =
+                        cast<ListEntity>(
+                          responseState.responseEntity.entity,
+                        ).items;
+                    items.addAll(mandals.cast<NameIDEntity>());
+                  }
+                  return (FormEntity()
+                        ..type = 'collection'
+                        ..name = 'mandal'
+                        ..placeholder = filterTitle
+                        ..canSearch = true
+                        ..inputFieldData = {'doSort': false, 'items': items}
+                        ..fieldValue = items.firstOrNull
+                        ..onDatachnage = (value) {
+                          mandalId = value.id;
+                          //_onDistrictChanged.value = value.id;
+                          _requestDataRefresh();
+                        })
+                      .getWidget(context);
+                },
+              );
             },
           ),
       SizedBox(height: resources.dimen.dp10),
@@ -369,6 +414,8 @@ class _UserDashboardState extends State<UserDashboard> {
   @override
   void initState() {
     districtId = UserCredentialsEntity.details(context).user?.districtId ?? 0;
+    otherDistricts =
+        UserCredentialsEntity.details(context).user?.otherDistricts ?? [];
     Future.delayed(Duration.zero, () {
       _requestDataRefresh();
     });

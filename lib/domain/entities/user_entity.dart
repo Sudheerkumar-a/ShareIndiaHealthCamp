@@ -19,6 +19,7 @@ class UserEntity extends BaseEntity {
   int? districtId;
   int? mandalId;
   int? isAdmin;
+  List<int> otherDistricts = [];
 
   @override
   List<Object?> get props => [id];
@@ -37,6 +38,7 @@ class UserEntity extends BaseEntity {
     data['district'] = district;
     data['mandal'] = mandalId;
     data['is_admin'] = isAdmin;
+    data['other_distict'] = otherDistricts;
     return data;
   }
 }
