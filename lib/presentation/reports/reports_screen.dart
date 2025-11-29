@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shareindia_health_camp/core/common/common_utils.dart';
 import 'package:shareindia_health_camp/core/constants/data_constants.dart';
 import 'package:shareindia_health_camp/core/extensions/build_context_extension.dart';
+import 'package:shareindia_health_camp/core/extensions/field_entity_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/string_extension.dart';
 import 'package:shareindia_health_camp/core/extensions/text_style_extension.dart';
 import 'package:shareindia_health_camp/data/model/single_data_model.dart';
@@ -47,6 +48,7 @@ class ReportsScreen extends BaseScreenWidget {
   Map<String, dynamic>? filteredData;
   final ValueNotifier<List<String>> filteredDates = ValueNotifier([]);
   final ValueNotifier<List<dynamic>> _mandalList = ValueNotifier([]);
+  List<int> otherDistricts = [];
 
   Widget _getFilters(BuildContext context) {
     final resources = context.resources;
@@ -208,6 +210,45 @@ class ReportsScreen extends BaseScreenWidget {
       if (UserCredentialsEntity.details(context).user?.isAdmin == 1) ...[
         SizedBox(width: resources.dimen.dp20, height: resources.dimen.dp20),
         _getFilters(context),
+      ],
+      
+        if (otherDistricts.isNotEmpty) ...[
+        (FormEntity()
+              ..type = 'radio'
+              ..name = 'district'
+              ..verticalSpace = 5
+              ..fieldValue=districts
+                      .where(
+                        (e) => districtId == int.tryParse(e['id'].toString(),
+                        ),
+                      )
+                      .map(
+                        (item) =>
+                            NameIDModel.fromDistrictsJson(
+                              item as Map<String, dynamic>,
+                            ).toEntity(),
+                      ).firstOrNull
+              ..inputFieldData =
+                  districts
+                      .where(
+                        (e) => otherDistricts.contains(
+                          int.tryParse(e['id'].toString()),
+                        ),
+                      )
+                      .map(
+                        (item) =>
+                            NameIDModel.fromDistrictsJson(
+                              item as Map<String, dynamic>,
+                            ).toEntity(),
+                      )
+                      .toList()
+              ..onDatachnage = (value) {
+                districtId = value.id;
+                mandalId = 0;
+                index = 1;
+                _updateReport(context);
+              })
+            .getWidget(context),
       ],
       SizedBox(height: resources.dimen.dp20),
       Row(
@@ -386,7 +427,7 @@ class ReportsScreen extends BaseScreenWidget {
               int pages = reportData?.pages ?? 100;
               for (int i = 0; i < pages; i++) {
                 final responseState = await _servicesBloc.getReportsData(
-                  requestParams: _getFilteredData(i + 1, limit: 40),
+                  requestParams: _getFilteredData(i + 1, limit: 10),
                 );
                 if (responseState is ServicesStateSuccess) {
                   final reportData = cast<ReportDataEntity>(
@@ -499,6 +540,8 @@ class ReportsScreen extends BaseScreenWidget {
     final resources = context.resources;
     isAdmin = UserCredentialsEntity.details(context).user?.isAdmin ?? 1;
     districtId = UserCredentialsEntity.details(context).user?.districtId;
+    otherDistricts =
+        UserCredentialsEntity.details(context).user?.otherDistricts ?? [];
     //mandalId = UserCredentialsEntity.details(context).user?.mandalId;
     Future.delayed(Duration.zero, () {
       if (context.mounted) {
