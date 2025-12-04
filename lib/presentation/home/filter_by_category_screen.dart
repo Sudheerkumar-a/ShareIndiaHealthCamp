@@ -116,6 +116,24 @@ class FilterByCategoryScreen extends BaseScreenWidget {
           InkWell(
             onTap: () async {
               Dialogs.loader(context);
+              final list = List<ScreeningDetailsEntity>.empty(growable: true);
+              int pages = reportData?.pages ?? 100;
+              for (int i = 0; i < pages; i++) {
+                final responseState = await _servicesBloc.getReportsData(
+                  requestParams: _getFilteredData(i + 1),
+                );
+                if (responseState is ServicesStateSuccess) {
+                  final reportData = cast<ReportDataEntity>(
+                    responseState.responseEntity.entity,
+                  );
+                  pages = reportData.pages ?? pages;
+                  if ((reportData.reportList).isEmpty) {
+                    break;
+                  }
+                  list.addAll(reportData.reportList);
+                }
+              }
+
               await exportToExcel(
                 ExportDataEntity()
                   ..title = 'IHS_Clients_Report'
@@ -126,7 +144,7 @@ class FilterByCategoryScreen extends BaseScreenWidget {
                           .keys
                           .map((e) => e.replaceAll('_', ' ').capitalize())
                           .toList()
-                  ..rows = reportData?.reportList ?? [],
+                  ..rows = list,
                 category: category,
               );
               if (context.mounted) {
@@ -219,7 +237,7 @@ class FilterByCategoryScreen extends BaseScreenWidget {
       }
     }
     Map<String, dynamic> requestParams = {
-      'limit': 1000,
+      'limit': 10,
       'page': index,
       'district': districtId == 0 ? null : districtId,
       'mandal': mandalId == 0 ? null : mandalId,
