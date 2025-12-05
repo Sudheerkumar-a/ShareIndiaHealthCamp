@@ -60,9 +60,7 @@ class _UserDashboardState extends State<UserDashboard> {
       context,
       category,
       districtId:
-          isAdmin
-              ? districtId
-              : UserCredentialsEntity.details(context).user?.districtId,
+          districtId,
       mandalId: mandalId,
     );
   }
